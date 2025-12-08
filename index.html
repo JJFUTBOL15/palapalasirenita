@@ -1,175 +1,1589 @@
+  <a href="/hostal-el-anzuelo">Hostal El Anzuelo</a>
+  
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Palapa La Sirenita | Mariscos Frescos en Barra de Tecoanapa</title>
-  <meta name="description" content="Mariscos frescos en Barra de Tecoanapa, Guerrero. Pescado a la talla, langosta a la diabla, camarones al ajillo y el famoso pescado al chingadazo.">
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Palapa La Sirenita – Mariscos frescos en Barra de Tecoanapa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Palapa La Sirenita en Barra de Tecoanapa, Guerrero. Mariscos frescos, pescados a la talla, langosta, camarones, caldos y paseos en lancha junto al río." />
   <style>
-    :root { --mar:#006ba6; --arena:#e76f51; --palma:#2a9d8f; --crema:#fff8f0; --rojo:#e74c3c; }
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'Montserrat',sans-serif;background:var(--crema);color:#333;line-height:1.6;}
-    header{background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.7)), url('https://i.ibb.co/Djn9zFC/IMG-6737.jpg') center/cover no-repeat;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:white;position:relative;}
-    .logo{width:260px;margin-bottom:20px;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.6));}
-    h1{font-family:'Pacifico',cursive;font-size:5.8rem;margin:0;color:white;text-shadow:4px 4px 15px rgba(0,0,0,0.8);}
-    .sub{font-family:'Dancing Script',cursive;font-size:2.9rem;}
-    nav{background:var(--palma);padding:16px 0;position:sticky;top:0;z-index:100;box-shadow:0 4px 15px rgba(0,0,0,0.2);}
-    nav ul{list-style:none;display:flex;justify-content:center;flex-wrap:wrap;gap:18px;}
-    nav a{color:white;text-decoration:none;padding:12px 24px;font-weight:600;border-radius:8px;transition:0.3s;}
-    nav a:hover{background:var(--mar);}
-    section{padding:90px 20px;max-width:1350px;margin:0 auto;}
-    h2{font-family:'Pacifico',cursive;font-size:3.8rem;text-align:center;margin-bottom:60px;color:var(--mar);}
-    .menu-categoria{margin-bottom:50px;}
-    .menu-categoria h3{font-family:'Pacifico',cursive;font-size:2.4rem;color:var(--arena);margin-bottom:25px;text-align:center;}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:25px;}
-    .platillo{background:white;padding:20px;border-radius:15px;box-shadow:0 8px 20px rgba(0,0,0,0.12);text-align:center;transition:0.3s;}
-    .platillo:hover{transform:translateY(-8px);box-shadow:0 15px 30px rgba(0,0,0,0.2);}
-    .platillo strong{font-size:1.25rem;display:block;margin-bottom:8px;}
-    .precio{color:var(--rojo);font-weight:bold;font-size:1.4rem;}
-    .destacado .platillo{border:4px solid var(--arena);box-shadow:0 12px 30px rgba(231,112,81,0.3);}
-    .reseñas{background:#f8f9fa;}
-    .reseña{background:white;padding:28px;margin:25px auto;max-width:750px;border-radius:18px;box-shadow:0 6px 18px rgba(0,0,0,0.1);font-style:italic;}
-    .stars{color:#f39c12;font-size:1.8rem;margin-bottom:10px;}
-    .hostal{background:var(--palma);color:white;text-align:center;padding:80px 20px;}
-    footer{background:var(--mar);color:white;text-align:center;padding:60px 20px;}
-    .whatsapp{position:fixed;bottom:25px;right:25px;background:#25D366;color:white;width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;box-shadow:0 6px 20px rgba(0,0,0,0.4);z-index:1000;text-decoration:none;}
-    @media(max-width:768px){h1{font-size:4rem;}.sub{font-size:2.2rem;}h2{font-size:3rem;}}
+    :root {
+      --azul-mar: #066f8a;
+      --azul-mar-suave: #0b9bb8;
+      --arena: #f5e7c8;
+      --arena-suave: #fbf4df;
+      --verde-tropical: #1a8f5a;
+      --rojo-precio: #d62828;
+      --texto-oscuro: #1f2a2c;
+      --gris-suave: #f4f6f7;
+      --blanco: #ffffff;
+      --sombra-suave: 0 8px 25px rgba(0, 0, 0, 0.10);
+      --max-width: 1120px;
+      --radius-card: 18px;
+      --transition-base: all 0.25s ease;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--texto-oscuro);
+      background: linear-gradient(to bottom, #e4f4ff 0%, #ffffff 40%, #fffaf1 100%);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+    img {
+      max-width: 100%;
+      display: block;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    /* Layout */
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    section {
+      padding: 64px 0;
+    }
+    @media (min-width: 768px) {
+      section {
+        padding: 80px 0;
+      }
+    }
+    /* Header / Navegación fija */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      background: rgba(6, 111, 138, 0.96);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--blanco);
+    }
+    .nav-logo img {
+      height: 44px;
+      width: auto;
+    }
+    .nav-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-logo-text span:first-child {
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      font-size: 0.90rem;
+      text-transform: uppercase;
+    }
+    .nav-logo-text span:last-child {
+      font-size: 0.72rem;
+      opacity: 0.9;
+    }
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 18px;
+      font-size: 0.88rem;
+      color: var(--blanco);
+    }
+    .nav-links a {
+      position: relative;
+      padding-bottom: 3px;
+    }
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background: var(--arena);
+      border-radius: 999px;
+      transition: width 0.22s ease;
+    }
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    .nav-cta {
+      display: none;
+    }
+    .nav-cta a {
+      background: var(--arena);
+      color: var(--azul-mar);
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+      white-space: nowrap;
+    }
+    .nav-toggle {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+    }
+    .nav-toggle span {
+      width: 20px;
+      height: 2px;
+      background: var(--blanco);
+      border-radius: 999px;
+      transition: var(--transition-base);
+    }
+    /* Mobile menu */
+    .nav-menu-mobile {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      padding: 10px 16px 14px;
+      background: linear-gradient(to bottom, rgba(6, 111, 138, 0.98), rgba(6, 111, 138, 0.95));
+      color: var(--blanco);
+    }
+    .nav-menu-mobile a {
+      font-size: 0.9rem;
+      padding: 4px 0;
+    }
+    .nav-menu-mobile .mobile-cta {
+      margin-top: 8px;
+    }
+    .nav-menu-mobile .mobile-cta a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: var(--arena);
+      color: var(--azul-mar);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+    }
+    @media (min-width: 768px) {
+      .nav-toggle {
+        display: none;
+      }
+      .nav-links {
+        display: flex;
+      }
+      .nav-cta {
+        display: block;
+      }
+      .nav-menu-mobile {
+        display: none !important;
+      }
+      .nav {
+        padding: 10px 20px;
+      }
+      .nav-logo img {
+        height: 52px;
+      }
+      .nav-logo-text span:first-child {
+        font-size: 1rem;
+      }
+    }
+    /* Hero */
+    .hero {
+      padding-top: 86px;
+      padding-bottom: 56px;
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.9) 0, rgba(255, 255, 255, 0.1) 55%, transparent 75%), linear-gradient(135deg, #f0fbff 0%, #e4f7ff 30%, #fff8ea 100%);
+    }
+    .hero-grid {
+      display: grid;
+      gap: 32px;
+    }
+    @media (min-width: 900px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.1fr);
+        align-items: center;
+        gap: 40px;
+      }
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(250, 250, 250, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      font-size: 0.75rem;
+      color: var(--azul-mar);
+      margin-bottom: 10px;
+    }
+    .hero-eyebrow span.dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--verde-tropical);
+    }
+    .hero-title {
+      font-size: clamp(2.1rem, 4vw, 2.8rem);
+      line-height: 1.12;
+      color: #054c60;
+      margin-bottom: 10px;
+      letter-spacing: 0.02em;
+    }
+    .hero-title span.highlight {
+      color: var(--azul-mar-suave);
+    }
+    .hero-subtitle {
+      font-size: 0.98rem;
+      max-width: 520px;
+      margin-bottom: 18px;
+      color: #37535a;
+    }
+    .hero-meta {
+      font-size: 0.86rem;
+      color: #355056;
+      margin-bottom: 20px;
+    }
+    .hero-meta strong {
+      color: var(--azul-mar);
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--azul-mar-suave), var(--azul-mar));
+      color: var(--blanco);
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 10px 24px rgba(6, 111, 138, 0.4);
+      transition: var(--transition-base);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 32px rgba(6, 111, 138, 0.45);
+    }
+    .btn-outline {
+      border-radius: 999px;
+      border: 1px solid rgba(6, 111, 138, 0.35);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--azul-mar);
+      padding: 9px 14px;
+      font-size: 0.86rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: var(--transition-base);
+    }
+    .btn-outline:hover {
+      background: var(--arena);
+      border-color: rgba(6, 111, 138, 0.5);
+    }
+    .hero-contact-line {
+      font-size: 0.82rem;
+      color: #355056;
+    }
+    .hero-contact-line strong {
+      color: var(--azul-mar);
+    }
+    .hero-contact-line span {
+      color: #1d5e35;
+      font-weight: 600;
+    }
+    .hero-visual {
+      position: relative;
+    }
+    .hero-main-card {
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: var(--sombra-suave);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      background: var(--blanco);
+    }
+    .hero-main-image {
+      position: relative;
+      overflow: hidden;
+      max-height: 260px;
+    }
+    .hero-main-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.03);
+      transition: transform 12s ease-out;
+    }
+    .hero-main-card:hover img {
+      transform: scale(1.08);
+    }
+    .hero-main-caption {
+      padding: 12px 14px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .hero-main-caption h2 {
+      font-size: 0.98rem;
+      color: var(--azul-mar);
+      margin-bottom: 2px;
+    }
+    .hero-main-caption p {
+      font-size: 0.82rem;
+      color: #486870;
+    }
+    .hero-badge {
+      background: rgba(26, 143, 90, 0.08);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.7rem;
+      color: var(--verde-tropical);
+      border: 1px solid rgba(26, 143, 90, 0.25);
+      white-space: nowrap;
+    }
+    .hero-floating-card {
+      position: absolute;
+      right: 6%;
+      bottom: -10%;
+      width: min(230px, 80%);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.25);
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+    }
+    .hero-floating-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .hero-floating-title span {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--azul-mar);
+    }
+    .hero-floating-title small {
+      font-size: 0.68rem;
+      color: #647e83;
+    }
+    .hero-floating-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+    }
+    .hero-floating-item {
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+    .hero-floating-item img {
+      width: 100%;
+      height: 64px;
+      object-fit: cover;
+    }
+    .hero-floating-item span {
+      position: absolute;
+      left: 6px;
+      bottom: 4px;
+      right: 6px;
+      font-size: 0.62rem;
+      color: var(--blanco);
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.75);
+    }
+    @media (max-width: 768px) {
+      .hero {
+        padding-bottom: 42px;
+      }
+      .hero-floating-card {
+        position: relative;
+        right: auto;
+        bottom: auto;
+        margin-top: 10px;
+        width: 100%;
+      }
+      .hero-main-image {
+        max-height: 220px;
+      }
+    }
+    /* Secciones genéricas */
+    .section-title {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+      color: #054c60;
+      text-align: center;
+    }
+    .section-subtitle {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #5c7075;
+      max-width: 520px;
+      margin: 0 auto 30px;
+    }
+    /* Platillos estrella */
+    .estrellas {
+      background: radial-gradient(circle at top, rgba(11, 155, 184, 0.08) 0, transparent 55%), var(--arena-suave);
+      border-top: 1px solid rgba(255, 255, 255, 0.9);
+    }
+    .estrellas-grid {
+      display: grid;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      gap: 18px;
+    }
+    @media (min-width: 640px) {
+      .estrellas-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (min-width: 1024px) {
+      .estrellas-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+    .platillo-card {
+      background: var(--blanco);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: var(--sombra-suave);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .platillo-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+    }
+    .platillo-image {
+      position: relative;
+      overflow: hidden;
+      max-height: 220px;
+    }
+    .platillo-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 1.6s ease-out;
+    }
+    .platillo-card:hover .platillo-image img {
+      transform: scale(1.05);
+    }
+    .platillo-badge {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      background: rgba(0, 0, 0, 0.55);
+      color: var(--arena-suave);
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+    }
+    .platillo-body {
+      padding: 10px 12px 12px;
+    }
+    .platillo-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 3px;
+    }
+    .platillo-header h3 {
+      font-size: 1rem;
+      color: var(--azul-mar);
+    }
+    .platillo-chip {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(11, 155, 184, 0.08);
+      color: var(--azul-mar-suave);
+      white-space: nowrap;
+    }
+    .platillo-body p {
+      font-size: 0.82rem;
+      color: #486870;
+      margin-bottom: 4px;
+    }
+    .platillo-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: #647e83;
+    }
+    .platillo-footer span.highlight {
+      color: var(--verde-tropical);
+      font-weight: 600;
+    }
+    /* Menú completo */
+    .menu {
+      background: var(--gris-suave);
+      border-top: 1px solid rgba(255, 255, 255, 0.9);
+    }
+    .menu-layout {
+      display: grid;
+      gap: 26px;
+    }
+    @media (min-width: 900px) {
+      .menu-layout {
+        grid-template-columns: 1.1fr 1fr;
+        align-items: flex-start;
+      }
+    }
+    .menu-intro {
+      font-size: 0.9rem;
+      color: #4c6267;
+      margin-bottom: 14px;
+    }
+    .menu-note {
+      font-size: 0.8rem;
+      color: #6c7f84;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      border-left: 3px solid var(--verde-tropical);
+      margin-bottom: 16px;
+    }
+    .menu-sections {
+      display: grid;
+      gap: 18px;
+    }
+    .menu-section {
+      background: var(--blanco);
+      border-radius: 16px;
+      padding: 12px 12px 10px;
+      box-shadow: 0 3px 14px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+    }
+    .menu-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+      gap: 8px;
+    }
+    .menu-section-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--azul-mar);
+    }
+    .menu-section-tag {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(6, 111, 138, 0.07);
+      color: #365b65;
+    }
+    .menu-items {
+      list-style: none;
+      font-size: 0.84rem;
+    }
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 4px 0;
+      border-bottom: 1px dashed rgba(151, 176, 184, 0.5);
+    }
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+    .menu-item-name {
+      flex: 1;
+      color: #324a50;
+    }
+    .menu-item-price {
+      color: var(--rojo-precio);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .menu-side {
+      display: grid;
+      gap: 14px;
+    }
+    .menu-photo-card {
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--sombra-suave);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      background: var(--blanco);
+    }
+    .menu-photo-card img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+    }
+    .menu-photo-card-body {
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: #4c6267;
+    }
+    .menu-photo-card-body strong {
+      color: var(--azul-mar);
+      font-size: 0.9rem;
+    }
+    @media (max-width: 768px) {
+      .menu-photo-card img {
+        height: 170px;
+      }
+    }
+    /* Galería */
+    .galeria-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    @media (min-width: 768px) {
+      .galeria-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+    .galeria-item {
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    }
+    .galeria-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      max-height: 160px;
+    }
+    .galeria-item span {
+      position: absolute;
+      left: 6px;
+      bottom: 6px;
+      right: 6px;
+      font-size: 0.7rem;
+      color: var(--blanco);
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+    }
+    /* Reseñas */
+    .reseñas {
+      background: linear-gradient(135deg, #e1f6ff 0%, #f8fff5 52%, #fffaf1 100%);
+      border-top: 1px solid rgba(255, 255, 255, 0.9);
+    }
+    .reseñas-layout {
+      display: grid;
+      gap: 26px;
+    }
+    @media (min-width: 900px) {
+      .reseñas-layout {
+        grid-template-columns: 1.1fr 1fr;
+      }
+    }
+    .reseñas-list {
+      display: grid;
+      gap: 12px;
+    }
+    .reseña-card {
+      background: var(--blanco);
+      border-radius: 16px;
+      padding: 10px 12px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      font-size: 0.86rem;
+      position: relative;
+    }
+    .reseña-stars {
+      color: #f6b70d;
+      font-size: 0.86rem;
+      margin-bottom: 2px;
+    }
+    .reseña-text {
+      color: #42565b;
+      margin-bottom: 4px;
+    }
+    .reseña-author {
+      font-size: 0.8rem;
+      color: #607378;
+      font-weight: 600;
+    }
+    .reseñas-side-note {
+      font-size: 0.86rem;
+      color: #3a5860;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(6, 111, 138, 0.06);
+      border: 1px dashed rgba(6, 111, 138, 0.35);
+    }
+    .reseñas-side-note strong {
+      color: var(--azul-mar);
+    }
+    /* Ubicación y contacto */
+    .contacto {
+      background: var(--arena-suave);
+      border-top: 1px solid rgba(255, 255, 255, 0.9);
+    }
+    .contacto-layout {
+      display: grid;
+      gap: 24px;
+    }
+    @media (min-width: 900px) {
+      .contacto-layout {
+        grid-template-columns: 1.05fr 1.1fr;
+        align-items: start;
+      }
+    }
+    .contacto-card {
+      background: var(--blanco);
+      border-radius: 18px;
+      padding: 14px 14px 12px;
+      box-shadow: var(--sombra-suave);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      font-size: 0.88rem;
+    }
+    .contacto-row {
+      margin-bottom: 10px;
+    }
+    .contacto-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #72888e;
+      margin-bottom: 2px;
+    }
+    .contacto-value {
+      color: #2f464c;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      align-items: center;
+    }
+    .contacto-value strong {
+      color: var(--azul-mar);
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(26, 143, 90, 0.08);
+      color: var(--verde-tropical);
+    }
+    .contacto-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .btn-ghost {
+      border-radius: 999px;
+      border: 1px dashed rgba(6, 111, 138, 0.5);
+      background: transparent;
+      color: var(--azul-mar);
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: var(--transition-base);
+    }
+    .btn-ghost:hover {
+      background: rgba(6, 111, 138, 0.06);
+    }
+    .map-wrapper {
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--sombra-suave);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      background: #dcedf2;
+      min-height: 260px;
+    }
+    .map-iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 260px;
+      border: none;
+    }
+    /* Hostal */
+    .hostal {
+      background: #042f3b;
+      color: var(--blanco);
+      padding: 36px 0 48px;
+    }
+    .hostal-card {
+      background: linear-gradient(135deg, rgba(6, 111, 138, 0.6), rgba(26, 143, 90, 0.55));
+      border-radius: 22px;
+      padding: 16px 18px 14px;
+      max-width: 720px;
+      margin: 0 auto;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+    }
+    .hostal-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+    .hostal-card p {
+      font-size: 0.9rem;
+      margin-bottom: 2px;
+    }
+    .hostal-card strong {
+      color: #ffeac0;
+    }
+    .hostal-contact {
+      margin-top: 8px;
+      font-size: 0.88rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .hostal-contact a {
+      background: var(--arena);
+      color: var(--azul-mar);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    /* Footer */
+    footer {
+      background: #021a21;
+      color: #c7d6da;
+      padding: 12px 0 18px;
+      font-size: 0.75rem;
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .footer-inner a {
+      color: #dff4ff;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    /* Botón flotante WhatsApp */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 18px;
+      right: 16px;
+      z-index: 9999;
+    }
+    .whatsapp-button {
+      background: #25d366;
+      color: #ffffff;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .whatsapp-button:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.42);
+    }
+    .whatsapp-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      position: relative;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .whatsapp-icon::before {
+      content: "";
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #25d366;
+      position: absolute;
+    }
+    .whatsapp-icon::after {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid #25d366;
+      border-top-color: transparent;
+      border-left-color: transparent;
+      transform: rotate(25deg);
+      position: absolute;
+      top: 10px;
+      left: 14px;
+    }
+    .whatsapp-label {
+      position: absolute;
+      right: 72px;
+      bottom: 16px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.78);
+      color: #ffffff;
+      font-size: 0.72rem;
+      white-space: nowrap;
+    }
+    @media (max-width: 480px) {
+      .whatsapp-button {
+        width: 58px;
+        height: 58px;
+      }
+      .whatsapp-label {
+        display: none;
+      }
+    }
+    /* Utilidadesí */
+    .icon-inline {
+      font-size: 1.05em;
+    }
   </style>
 </head>
 <body>
-
-  <header id="inicio">
-    <img src="https://i.ibb.co/gXdTC9H/IMG-6725-removebg-preview.png" alt="Palapa La Sirenita" class="logo">
-    <h1>Palapa La Sirenita</h1>
-    <p class="sub">Sabor costeño directo del mar</p>
+  <!-- Navegación fija -->
+  <header>
+    <div class="nav">
+      <a href="#inicio" class="nav-logo">
+        <img src="https://i.ibb.co/gXdTC9H/IMG-6725-removebg-preview.png" alt="Logo Palapa La Sirenita" />
+        <div class="nav-logo-text">
+          <span>Palapa La Sirenita</span>
+          <span>Barra de Tecoanapa · Guerrero</span>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="#estrellas">Platillos estrella</a>
+        <a href="#menu">Menú</a>
+        <a href="#galeria">Galería</a>
+        <a href="#reseñas">Reseñas</a>
+        <a href="#contacto">Cómo llegar</a>
+        <a href="/hostal-el-anzuelo">Hostal El Anzuelo</a>
+      </nav>
+      <div class="nav-cta">
+        <a href="https://wa.me/527411250485" target="_blank" rel="noopener">Reservar por WhatsApp</a>
+      </div>
+      <div class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    <div class="nav-menu-mobile" id="navMenuMobile">
+      <a href="#estrellas">Platillos estrella</a>
+      <a href="#menu">Menú</a>
+      <a href="#galeria">Galería</a>
+      <a href="#reseñas">Reseñas</a>
+      <a href="#contacto">Cómo llegar</a>
+      <a href="/hostal-el-anzuelo">Hostal El Anzuelo</a>
+      <div class="mobile-cta">
+        <a href="https://wa.me/527411250485" target="_blank" rel="noopener">
+          <span class="icon-inline">💬</span>
+          Reservar por WhatsApp
+        </a>
+      </div>
+    </div>
   </header>
-
-  <nav>
-    <ul>
-      <li><a href="#inicio">Inicio</a></li>
-      <li><a href="#destacados">Platillos estrella</a></li>
-      <li><a href="#menu">Menú</a></li>
-      <li><a href="#reseñas">Reseñas</a></li>
-      <li><a href="#ubicacion">Ubicación</a></li>
-      <li><a href="#hostal">¿Dónde dormir?</a></li>
-    </ul>
-  </nav>
-
-  <!-- 5 ESTRELLAS -->
-  <section id="destacados" class="destacado">
-    <h2>Los más pedidos</h2>
-    <div class="grid">
-      <div class="platillo"><img src="https://i.ibb.co/Y4xxCyX5/IMG-6731.jpg" alt="" style="width:100%;border-radius:12px;margin-bottom:15px;"><strong>Pescado a la Talla</strong><p class="precio">Por definir</p></div>
-      <div class="platillo"><img src="https://i.ibb.co/d0rQsTXK/IMG-6721.jpg" alt="" style="width:100%;border-radius:12px;margin-bottom:15px;"><strong>Langosta a la Diabla</strong><p class="precio">Por definir</p></div>
-      <div class="platillo"><img src="https://i.ibb.co/gLVjW9YH/IMG-6728.jpg" alt="" style="width:100%;border-radius:12px;margin-bottom:15px;"><strong>Langosta a la Mantequilla</strong><p class="precio">Por definir</p></div>
-      <div class="platillo"><img src="https://i.ibb.co/gLx4nNwF/IMG-6723.jpg" alt="" style="width:100%;border-radius:12px;margin-bottom:15px;"><strong>Camarones al Ajillo</strong><p class="precio">Por definir</p></div>
-      <div class="platillo"><img src="https://i.ibb.co/G4p8pGKK/IMG-6722.jpg" alt="" style="width:100%;border-radius:12px;margin-bottom:15px;"><strong>Caldo de Mariscos</strong><p class="precio">Por definir</p></div>
-    </div>
-  </section>
-
-  <!-- MENÚ COMPLETO POR SECCIONES -->
-  <section id="menu" style="background:#f8f9fa;">
-    <h2>Menú completo</h2>
-
-    <div class="menu-categoria">
-      <h3>Pescados</h3>
-      <div class="grid">
-        <div class="platillo"><strong>Pescado a la Talla (según tamaño)</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Pescado a la Talla de orden</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Pescado a la Braza (según tamaño)</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Pescado Frito</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Pescado al Mojo de Ajo</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Pescado al Ajillo</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Pescado a la Diabla</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Pescado al Chingadazo</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Pescado a la Mexicana</strong><p class="precio">Por definir</p></div>
+  <!-- Hero -->
+  <main id="inicio">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="hero-eyebrow">
+            <span class="dot"></span>
+            <span>Mariscos frescos junto al río</span>
+          </div>
+          <h1 class="hero-title">
+            Sabor costeño bajo la <span class="highlight">palapa</span>, frente al río.
+          </h1>
+          <p class="hero-subtitle">
+            Disfruta pescados y mariscos frescos en palapas de palma, con el ambiente relajado de la Barra de Tecoanapa, Guerrero.
+          </p>
+          <p class="hero-meta">
+            Ubicados a la orilla del río, en <strong>Barra de Tecoanapa, Guerrero, México</strong>.
+          </p>
+          <div class="hero-actions">
+            <a class="btn-primary" href="https://wa.me/527411250485" target="_blank" rel="noopener">
+              <span>💬</span>
+              Reservar mesa o paseo en lancha
+            </a>
+            <a class="btn-outline" href="#menu">
+              Ver menú completo
+            </a>
+          </div>
+          <p class="hero-contact-line">
+            Llama o manda WhatsApp al <strong>741 125 0485</strong> (principal) · <span>744 909 9848</span>.
+          </p>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-main-card">
+            <div class="hero-main-image">
+              <img src="https://i.ibb.co/KxMLgt1b/IMG-6736.jpg" alt="Palapas de palma frente al río en Palapa La Sirenita" />
+            </div>
+            <div class="hero-main-caption">
+              <div>
+                <h2>Palapas frente al río</h2>
+                <p>Come a la orilla del agua con brisa fresca y mariscos recién preparados.</p>
+              </div>
+              <div class="hero-badge">
+                🍤 Mariscos frescos todos los días
+              </div>
+            </div>
+          </div>
+          <div class="hero-floating-card">
+            <div class="hero-floating-title">
+              <span>Platillos estrella</span>
+              <small>Costeño fresco</small>
+            </div>
+            <div class="hero-floating-grid">
+              <div class="hero-floating-item">
+                <img src="https://i.ibb.co/Y4xxCyX5/IMG-6731.jpg" alt="Pescado a la talla" />
+                <span>Pescado a la talla</span>
+              </div>
+              <div class="hero-floating-item">
+                <img src="https://i.ibb.co/gLVjW9YH/IMG-6728.jpg" alt="Langosta a la mantequilla" />
+                <span>Langosta a la mantequilla</span>
+              </div>
+              <div class="hero-floating-item">
+                <img src="https://i.ibb.co/gLx4nNwF/IMG-6723.jpg" alt="Camarones al ajillo" />
+                <span>Camarones al ajillo</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <div class="menu-categoria">
-      <h3>Camarones</h3>
-      <div class="grid">
-        <div class="platillo"><strong>Camarones Empanizados</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Camarones al Ajillo</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Camarones al Mojo de Ajo</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Camarones a la Diabla</strong><p class="precio">Por definir</p></div>
+    </section>
+    <!-- Platillos estrella -->
+    <section id="estrellas" class="estrellas">
+      <div class="container">
+        <h2 class="section-title">Platillos estrella</h2>
+        <p class="section-subtitle">
+          Nuestros favoritos de la casa, preparados al momento con mariscos frescos de la región.
+        </p>
+        <div class="estrellas-grid">
+          <!-- Pescado a la talla -->
+          <article class="platillo-card">
+            <div class="platillo-image">
+              <img src="https://i.ibb.co/zHFm4Ybz/IMG-6719.jpg" alt="Pescado a la talla" />
+              <div class="platillo-badge">#1 Recomendado</div>
+            </div>
+            <div class="platillo-body">
+              <div class="platillo-header">
+                <h3>Pescado a la Talla</h3>
+                <span class="platillo-chip">Parrilla costeña</span>
+              </div>
+              <p>Pescado entero sazonado al estilo Barra de Tecoanapa, asado lentamente para lograr carne jugosa y piel dorada.</p>
+              <div class="platillo-footer">
+                <span>Ideal para compartir en familia.</span>
+                <span class="highlight">Mariscos frescos</span>
+              </div>
+            </div>
+          </article>
+          <!-- Langosta a la diabla -->
+          <article class="platillo-card">
+            <div class="platillo-image">
+              <img src="https://i.ibb.co/d0rQsTXK/IMG-6721.jpg" alt="Langosta a la diabla" />
+              <div class="platillo-badge">Picante</div>
+            </div>
+            <div class="platillo-body">
+              <div class="platillo-header">
+                <h3>Langosta a la Diabla</h3>
+                <span class="platillo-chip">Salsa especial</span>
+              </div>
+              <p>Langosta bañada en salsa diabla estilo costeño, con el punto justo de picante para resaltar su sabor.</p>
+              <div class="platillo-footer">
+                <span>Perfecta para amantes del picante.</span>
+                <span class="highlight">Hecha al momento</span>
+              </div>
+            </div>
+          </article>
+          <!-- Langosta a la mantequilla -->
+          <article class="platillo-card">
+            <div class="platillo-image">
+              <img src="https://i.ibb.co/gLVjW9YH/IMG-6728.jpg" alt="Langosta a la mantequilla" />
+              <div class="platillo-badge">Suave</div>
+            </div>
+            <div class="platillo-body">
+              <div class="platillo-header">
+                <h3>Langosta a la Mantequilla</h3>
+                <span class="platillo-chip">Clásico de la casa</span>
+              </div>
+              <p>Langosta dorada en mantequilla, con textura suave y jugosa, acompañada de guarniciones frescas.</p>
+              <div class="platillo-footer">
+                <span>Para darse un gusto especial.</span>
+                <span class="highlight">Sabores del mar</span>
+              </div>
+            </div>
+          </article>
+          <!-- Camarones al ajillo -->
+          <article class="platillo-card">
+            <div class="platillo-image">
+              <img src="https://i.ibb.co/gLx4nNwF/IMG-6723.jpg" alt="Camarones al ajillo" />
+              <div class="platillo-badge">Ajo y chile</div>
+            </div>
+            <div class="platillo-body">
+              <div class="platillo-header">
+                <h3>Camarones al Ajillo</h3>
+                <span class="platillo-chip">Sartén caliente</span>
+              </div>
+              <p>Camarones salteados con ajo y chile, con aroma intenso y sabor que invita a mojar el pan.</p>
+              <div class="platillo-footer">
+                <span>Perfectos para compartir al centro.</span>
+                <span class="highlight">Recién salidos</span>
+              </div>
+            </div>
+          </article>
+          <!-- Caldo de mariscos -->
+          <article class="platillo-card">
+            <div class="platillo-image">
+              <img src="https://i.ibb.co/G4p8pGKK/IMG-6722.jpg" alt="Caldo de mariscos" />
+              <div class="platillo-badge">Con todo</div>
+            </div>
+            <div class="platillo-body">
+              <div class="platillo-header">
+                <h3>Caldo de Mariscos</h3>
+                <span class="platillo-chip">Reconfortante</span>
+              </div>
+              <p>Caldo caliente con mezcla de mariscos, ideal para comenzar o para recargar energía después del paseo.</p>
+              <div class="platillo-footer">
+                <span>Perfecto para cualquier hora.</span>
+                <span class="highlight">Sabor casero</span>
+              </div>
+            </div>
+          </article>
+        </div>
       </div>
-    </div>
-
-    <div class="menu-categoria">
-      <h3>Langosta</h3>
-      <div class="grid">
-        <div class="platillo"><strong>Langosta a la Diabla</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Langosta a la Mantequilla</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Langosta al Mojo</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Langosta al Chingadazo</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Langosta al Ajillo</strong><p class="precio">Por definir</p></div>
+    </section>
+    <!-- Menú completo -->
+    <section id="menu" class="menu">
+      <div class="container">
+        <h2 class="section-title">Menú completo</h2>
+        <p class="section-subtitle">
+          Pregunta por el tamaño de tu platillo y acompáñalo con una bebida bien fría.
+        </p>
+        <div class="menu-layout">
+          <div>
+            <p class="menu-intro">
+              Todos nuestros platillos se preparan al momento con mariscos frescos. Los precios pueden variar según temporada y tamaño del pescado o langosta.
+            </p>
+            <div class="menu-note">
+              Los precios aparecen como <strong>“Por definir”</strong> y se confirman directamente en la palapa o por WhatsApp al <strong>741 125 0485</strong>.
+            </div>
+            <div class="menu-sections">
+              <!-- Pescados -->
+              <div class="menu-section">
+                <div class="menu-section-header">
+                  <span class="menu-section-title">Pescados</span>
+                  <span class="menu-section-tag">Preparados al momento</span>
+                </div>
+                <ul class="menu-items">
+                  <li class="menu-item">
+                    <span class="menu-item-name">Pescado a la Talla</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Pescado frito entero</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Filete de pescado a la plancha</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Filete empanizado</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                </ul>
+              </div>
+              <!-- Camarones -->
+              <div class="menu-section">
+                <div class="menu-section-header">
+                  <span class="menu-section-title">Camarones</span>
+                  <span class="menu-section-tag">Sartenazos costeños</span>
+                </div>
+                <ul class="menu-items">
+                  <li class="menu-item">
+                    <span class="menu-item-name">Camarones al Ajillo</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Camarones a la diabla</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Camarones empanizados</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Camarones al mojo de ajo</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                </ul>
+              </div>
+              <!-- Langosta -->
+              <div class="menu-section">
+                <div class="menu-section-header">
+                  <span class="menu-section-title">Langosta</span>
+                  <span class="menu-section-tag">Especialidad de la casa</span>
+                </div>
+                <ul class="menu-items">
+                  <li class="menu-item">
+                    <span class="menu-item-name">Langosta a la Diabla</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Langosta a la Mantequilla</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Langosta al mojo de ajo</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                </ul>
+              </div>
+              <!-- Caldos y Filetes -->
+              <div class="menu-section">
+                <div class="menu-section-header">
+                  <span class="menu-section-title">Caldos y Filetes</span>
+                  <span class="menu-section-tag">Para reconfortar</span>
+                </div>
+                <ul class="menu-items">
+                  <li class="menu-item">
+                    <span class="menu-item-name">Caldo de Mariscos</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Caldo de camarón</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Caldo de pescado</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Filete relleno de mariscos</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                </ul>
+              </div>
+              <!-- Botanas -->
+              <div class="menu-section">
+                <div class="menu-section-header">
+                  <span class="menu-section-title">Botanas</span>
+                  <span class="menu-section-tag">Para compartir</span>
+                </div>
+                <ul class="menu-items">
+                  <li class="menu-item">
+                    <span class="menu-item-name">Coctel de camarón</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Tostadas de ceviche</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Botana de mariscos surtidos</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Guacamole con totopos</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                </ul>
+              </div>
+              <!-- Bebidas -->
+              <div class="menu-section">
+                <div class="menu-section-header">
+                  <span class="menu-section-title">Bebidas</span>
+                  <span class="menu-section-tag">Bien frías</span>
+                </div>
+                <ul class="menu-items">
+                  <li class="menu-item">
+                    <span class="menu-item-name">Cervezas</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Aguas frescas</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Refrescos</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                  <li class="menu-item">
+                    <span class="menu-item-name">Cocos fríos (según temporada)</span>
+                    <span class="menu-item-price">Por definir</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- Lado con foto grande -->
+          <div class="menu-side">
+            <div class="menu-photo-card">
+              <img src="https://i.ibb.co/Y4xxCyX5/IMG-6731.jpg" alt="Pescado a la talla servido en mesa" />
+              <div class="menu-photo-card-body">
+                <div>
+                  <strong>Pescado a la talla</strong>
+                  <div>La estrella de la Barra de Tecoanapa, ideal para compartir en la palapa.</div>
+                </div>
+              </div>
+            </div>
+            <div class="menu-photo-card">
+              <img src="https://i.ibb.co/Djn9zFC/IMG-6737.jpg" alt="Vista de palapas en Palapa La Sirenita" />
+              <div class="menu-photo-card-body">
+                <div>
+                  <strong>Ambiente familiar</strong>
+                  <div>Palapas de palma, mesas amplias y brisa del río para que te quedes más tiempo.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <div class="menu-categoria">
-      <h3>Caldos y más</h3>
-      <div class="grid">
-        <div class="platillo"><strong>Caldo de Camarón</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Caldo de Pescado</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Caldo de Mariscos</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Filete Empanizado</strong><p class="precio">Por definir</p></div>
+    </section>
+    <!-- Galería -->
+    <section id="galeria">
+      <div class="container">
+        <h2 class="section-title">Galería</h2>
+        <p class="section-subtitle">
+          Así se ve un día de mariscos frescos, río tranquilo y buena compañía en Palapa La Sirenita.
+        </p>
+        <div class="galeria-grid">
+          <div class="galeria-item">
+            <img src="https://i.ibb.co/KxMLgt1b/IMG-6736.jpg" alt="Palapa y río en Barra de Tecoanapa" />
+            <span>Palapas frente al río</span>
+          </div>
+          <div class="galeria-item">
+            <img src="https://i.ibb.co/rGGhXz46/IMG-6734.jpg" alt="Área de mesas en Palapa La Sirenita" />
+            <span>Mesas bajo la sombra de la palma</span>
+          </div>
+          <div class="galeria-item">
+            <img src="https://i.ibb.co/RpnSNfYb/IMG-6732.jpg" alt="Vista desde el restaurante" />
+            <span>Ambiente relajado para comer en familia</span>
+          </div>
+          <div class="galeria-item">
+            <img src="https://i.ibb.co/Djn9zFC/IMG-6737.jpg" alt="Río junto a la palapa" />
+            <span>La Barra de Tecoanapa y su río</span>
+          </div>
+          <div class="galeria-item">
+            <img src="https://i.ibb.co/gLVjW9YH/IMG-6728.jpg" alt="Langosta a la mantequilla servida" />
+            <span>Langosta a la mantequilla</span>
+          </div>
+          <div class="galeria-item">
+            <img src="https://i.ibb.co/d0rQsTXK/IMG-6721.jpg" alt="Langosta a la diabla servida" />
+            <span>Langosta a la diabla</span>
+          </div>
+          <div class="galeria-item">
+            <img src="https://i.ibb.co/gLx4nNwF/IMG-6723.jpg" alt="Camarones al ajillo servidos" />
+            <span>Camarones al ajillo</span>
+          </div>
+          <div class="galeria-item">
+            <img src="https://i.ibb.co/G4p8pGKK/IMG-6722.jpg" alt="Plato de caldo de mariscos" />
+            <span>Caldo de mariscos</span>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <div class="menu-categoria">
-      <h3>Botanas</h3>
-      <div class="grid">
-        <div class="platillo"><strong>Pulpo Enamorado</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Ceviche</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Campechanas</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Pescadillas</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Sopes</strong><p class="precio">Por definir</p></div>
+    </section>
+    <!-- Reseñas -->
+    <section id="reseñas" class="reseñas">
+      <div class="container">
+        <h2 class="section-title">Reseñas de visitantes</h2>
+        <p class="section-subtitle">
+          Lo que dicen quienes ya vinieron a disfrutar de los mariscos y el paseo en lancha.
+        </p>
+        <div class="reseñas-layout">
+          <div class="reseñas-list">
+            <article class="reseña-card">
+              <div class="reseña-stars">★★★★★</div>
+              <p class="reseña-text">“Excelente comida, mariscos frescos y con servicio de paseo en lancha”.</p>
+              <p class="reseña-author">— Daniel Mendiola</p>
+            </article>
+            <article class="reseña-card">
+              <div class="reseña-stars">★★★★★</div>
+              <p class="reseña-text">“Muy buen servicio. Muy agradecido con el amigo Javier y su familia.”</p>
+              <p class="reseña-author">— Juve López</p>
+            </article>
+            <article class="reseña-card">
+              <div class="reseña-stars">★★★★★</div>
+              <p class="reseña-text">“Buen lugar para comer en familia”.</p>
+              <p class="reseña-author">— Esteban Castelan</p>
+            </article>
+            <article class="reseña-card">
+              <div class="reseña-stars">★★★★★</div>
+              <p class="reseña-text">“Food: 5 · Service: 5 · Atmosphere: 5”.</p>
+              <p class="reseña-author">— Pelon Gomez</p>
+            </article>
+          </div>
+          <div class="reseñas-side-note">
+            <p>
+              Encuentra más fotos, videos y reseñas en nuestra página de Facebook:
+            </p>
+            <p style="margin-top: 6px;">
+              <strong>
+                <a href="https://www.facebook.com/p/Palapa-La-sirenita-Barra-de-tecoanapa-Guerrero-100063829152591/" target="_blank" rel="noopener" style="color: inherit; text-decoration: underline; text-underline-offset: 3px;">
+                  Palapa La Sirenita · Barra de Tecoanapa, Guerrero
+                </a>
+              </strong>
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <div class="menu-categoria">
-      <h3>Bebidas</h3>
-      <div class="grid">
-        <div class="platillo"><strong>Cerveza Victoria</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Cerveza Corona</strong><p class="precio">Por definir</p></div>
-        <div class="platillo"><strong>Refrescos / Cocos fríos / Agua</strong><p class="precio">Por definir</p></div>
+    </section>
+    <!-- Ubicación y contacto -->
+    <section id="contacto" class="contacto">
+      <div class="container">
+        <h2 class="section-title">Ubicación y contacto</h2>
+        <p class="section-subtitle">
+          Llegar es muy fácil: solo sigue el camino hacia la Barra de Tecoanapa y pregunta por Palapa La Sirenita, a la orilla del río.
+        </p>
+        <div class="contacto-layout">
+          <div class="contacto-card">
+            <div class="contacto-row">
+              <div class="contacto-label">Dirección</div>
+              <div class="contacto-value">
+                Barra de Tecoanapa, Guerrero, México.
+              </div>
+            </div>
+            <div class="contacto-row">
+              <div class="contacto-label">Teléfonos / WhatsApp</div>
+              <div class="contacto-value">
+                <span><strong>741 125 0485</strong> (principal)</span>
+                <span>·</span>
+                <span>744 909 9848</span>
+              </div>
+              <div class="contacto-actions">
+                <a class="btn-ghost" href="https://wa.me/527411250485" target="_blank" rel="noopener">
+                  💬 Enviar WhatsApp
+                </a>
+                <a class="btn-ghost" href="tel:+527411250485">
+                  📞 Llamar ahora
+                </a>
+              </div>
+            </div>
+            <div class="contacto-row">
+              <div class="contacto-label">Facebook</div>
+              <div class="contacto-value">
+                <a href="https://www.facebook.com/p/Palapa-La-sirenita-Barra-de-tecoanapa-Guerrero-100063829152591/" target="_blank" rel="noopener">
+                  Palapa La Sirenita · Barra de Tecoanapa, Guerrero
+                </a>
+              </div>
+            </div>
+            <div class="contacto-row">
+              <div class="contacto-label">Coordenadas</div>
+              <div class="contacto-value">
+                <span>16.5092, -98.7322</span>
+                <span class="badge-pill">A la orilla del río</span>
+              </div>
+            </div>
+          </div>
+          <div class="map-wrapper">
+            <iframe
+              class="map-iframe"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d471.63227745302096!2d-98.7322!3d16.5092!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTbCsDMwJzMzLjIiTiA5OMKwNDMnNTYuMCJX!5e0!3m2!1ses!2smx!4v1700000000000">
+            </iframe>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
-
-  <!-- RESEÑAS, MAPA, HOSTAL y FOOTER quedan igual que antes -->
-  <!-- (los dejo tal cual para no alargar el mensaje, pero están incluidos en el código completo que te paso abajo) -->
-
-  <section id="reseñas" class="reseñas">
-    <h2>Lo que dicen de nosotros</h2>
-    <div class="reseña"><p class="stars">★★★★★</p><p>“Excelente comida, mariscos frescos y con servicio de paseo en lancha”<br><strong>— Daniel Mendiola</strong></p></div>
-    <div class="reseña"><p class="stars">★★★★★</p><p>“Muy buen servicio. Muy agradecido con el amigo Javier y su familia.”<br><strong>— Juve López</strong></p></div>
-    <div class="reseña"><p class="stars">★★★★★</p><p>“Buen lugar para comer en familia”<br><strong>— Esteban Castelan</strong></p></div>
-    <div class="reseña"><p class="stars">★★★★★</p><p>“Food: 5 · Service: 5 · Atmosphere: 5”<br><strong>— Pelon Gomez</strong></p></div>
-  </section>
-
-  <section id="ubicacion">
-    <h2>¿Cómo llegar?</h2>
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3829.78!2d-98.734851!3d16.5092!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTbCsDMwJzMzLjEiTiA5OMKwNDQnMDUuNCJX!5e0!3m2!1ses!2smx!4v1733760000000" width="100%" height="480" style="border:0;border-radius:18px;margin-top:30px;" allowfullscreen="" loading="lazy"></iframe>
-  </section>
-
-  <section id="hostal" class="hostal">
-    <h2>¿No encuentras dónde quedarte?</h2>
-    <h3 style="font-size:2.4rem;margin:30px 0;color:#fff8f0;">Hostal El Anzuelo</h3>
-    <p style="font-size:1.4rem;max-width:800px;margin:0 auto 35px;">A solo 5 minutos caminando de la palapa<br>Habitaciones con ventilador, baño privado y ambiente costeño</p>
-    <a href="https://wa.me/527411250485" style="background:#25D366;color:white;padding:20px 45px;border-radius:50px;font-size:1.5rem;text-decoration:none;font-weight:bold;">Reservar Hostal → WhatsApp</a>
-  </section>
-
+    </section>
+    <!-- Hostal El Anzuelo -->
+    <section class="hostal">
+      <div class="container">
+        <div class="hostal-card">
+          <h3>¿No encuentras dónde hospedarte?</h3>
+          <p><strong>Hostal El Anzuelo</strong> – a solo 5 minutos caminando de Palapa La Sirenita.</p>
+          <p>Habitaciones con ventilador y baño privado.</p>
+          <p>Reserva por WhatsApp <strong>741 125 0485</strong>.</p>
+          <div class="hostal-contact">
+            <span>Termina tu día de mariscos descansando muy cerca del río.</span>
+            <a href="https://wa.me/527411250485?text=Hola%20quiero%20informes%20del%20Hostal%20El%20Anzuelo" target="_blank" rel="noopener">
+              💬 Reservar en Hostal El Anzuelo
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- Footer -->
   <footer>
-    <h2>Palapa La Sirenita</h2>
-    <p>Barra de Tecoanapa, Guerrero</p>
-    <p>WhatsApp / Tel: <a href="tel:+527411250485" style="color:white;">741 125 0485</a> • <a href="tel:+527449099848" style="color:white;">744 909 9848</a></p>
-    <p><a href="https://www.facebook.com/p/Palapa-La-sirenita-Barra-de-tecoanapa-Guerrero-100063829152591/" target="_blank" style="color:white;text-decoration:underline;">Facebook</a></p>
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> Palapa La Sirenita · Barra de Tecoanapa, Guerrero.</span>
+      <span>Sitio optimizado para cargar rápido en celular.</span>
+    </div>
   </footer>
-
-  <a href="https://wa.me/527411250485" class="whatsapp" target="_blank">WhatsApp</a>
-
+  <!-- Botón flotante WhatsApp -->
+  <div class="whatsapp-float">
+    <a class="whatsapp-button" href="https://wa.me/527411250485" target="_blank" rel="noopener" aria-label="Chatear por WhatsApp con Palapa La Sirenita">
+      <div class="whatsapp-icon"></div>
+    </a>
+    <div class="whatsapp-label">
+      Agenda por WhatsApp
+    </div>
+  </div>
+  <script>
+    // Año dinámico
+    document.getElementById('year').textContent = new Date().getFullYear();
+    // Menú móvil
+    const navToggle = document.getElementById('navToggle');
+    const navMenuMobile = document.getElementById('navMenuMobile');
+    navToggle.addEventListener('click', function () {
+      const expanded = this.getAttribute('aria-expanded') === 'true';
+      this.setAttribute('aria-expanded', String(!expanded));
+      if (navMenuMobile.style.display === 'flex') {
+        navMenuMobile.style.display = 'none';
+      } else {
+        navMenuMobile.style.display = 'flex';
+      }
+    });
+    // Cerrar menú móvil al hacer clic en un enlace
+    Array.from(navMenuMobile.querySelectorAll('a')).forEach(function (link) {
+      link.addEventListener('click', function () {
+        navMenuMobile.style.display = 'none';
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  </script>
 </body>
 </html>
+
