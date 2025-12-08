@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hostal El Anzuelo – Hospedaje en Barra de Tecoanapa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Hostal El Anzuelo en Barra de Tecoanapa, Guerrero. Habitaciones con ventilador, baño privado, estacionamiento y mascotas bienvenidas. A 5 minutos de Palapa La Sirenita." />
+  <style>
+    :root {
+      --azul-mar: #066f8a;
+      --azul-mar-suave: #0b9bb8;
+      --arena: #f5e7c8;
+      --arena-suave: #fbf4df;
+      --verde-tropical: #1a8f5a;
+      --rojo-precio: #d62828;
+      --texto-oscuro: #1f2a2c;
+      --gris-suave: #f4f6f7;
+      --blanco: #ffffff;
+      --sombra-suave: 0 8px 25px rgba(0, 0, 0, 0.10);
+      --max-width: 1120px;
+      --radius-card: 18px;
+      --transition-base: all 0.25s ease;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--texto-oscuro);
+      background: linear-gradient(to bottom, #e4f4ff 0%, #ffffff 40%, #fffaf1 100%);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+    img {
+      max-width: 100%;
+      display: block;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    section {
+      padding: 64px 0;
+    }
+    @media (min-width: 768px) {
+      section {
+        padding: 80px 0;
+      }
+    }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      background: rgba(6, 111, 138, 0.96);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--blanco);
+    }
+    .nav-logo img {
+      height: 44px;
+      width: auto;
+    }
+    .nav-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-logo-text span:first-child {
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      font-size: 0.90rem;
+      text-transform: uppercase;
+    }
+    .nav-logo-text span:last-child {
+      font-size: 0.72rem;
+      opacity: 0.9;
+    }
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 18px;
+      font-size: 0.88rem;
+      color: var(--blanco);
+    }
+    .nav-links a {
+      position: relative;
+      padding-bottom: 3px;
+    }
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background: var(--arena);
+      border-radius: 999px;
+      transition: width 0.22s ease;
+    }
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    .nav-cta {
+      display: none;
+    }
+    .nav-cta a {
+      background: var(--arena);
+      color: var(--azul-mar);
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+      white-space: nowrap;
+    }
+    .nav-toggle {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+    }
+    .nav-toggle span {
+      width: 20px;
+      height: 2px;
+      background: var(--blanco);
+      border-radius: 999px;
+      transition: var(--transition-base);
+    }
+    .nav-menu-mobile {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      padding: 10px 16px 14px;
+      background: linear-gradient(to bottom, rgba(6, 111, 138, 0.98), rgba(6, 111, 138, 0.95));
+      color: var(--blanco);
+    }
+    .nav-menu-mobile a {
+      font-size: 0.9rem;
+      padding: 4px 0;
+    }
+    .nav-menu-mobile .mobile-cta {
+      margin-top: 8px;
+    }
+    .nav-menu-mobile .mobile-cta a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: var(--arena);
+      color: var(--azul-mar);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+    }
+    @media (min-width: 768px) {
+      .nav-toggle {
+        display: none;
+      }
+      .nav-links {
+        display: flex;
+      }
+      .nav-cta {
+        display: block;
+      }
+      .nav-menu-mobile {
+        display: none !important;
+      }
+      .nav {
+        padding: 10px 20px;
+      }
+      .nav-logo img {
+        height: 52px;
+      }
+      .nav-logo-text span:first-child {
+        font-size: 1rem;
+      }
+    }
+    .hero {
+      padding-top: 86px;
+      padding-bottom: 56px;
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.9) 0, rgba(255, 255, 255, 0.1) 55%, transparent 75%), linear-gradient(135deg, #f0fbff 0%, #e4f7ff 30%, #fff8ea 100%);
+    }
+    .hero-grid {
+      display: grid;
+      gap: 32px;
+    }
+    @media (min-width: 900px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.1fr);
+        align-items: center;
+        gap: 40px;
+      }
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(250, 250, 250, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      font-size: 0.75rem;
+      color: var(--azul-mar);
+      margin-bottom: 10px;
+    }
+    .hero-eyebrow span.dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--verde-tropical);
+    }
+    .hero-title {
+      font-size: clamp(2.1rem, 4vw, 2.8rem);
+      line-height: 1.12;
+      color: #054c60;
+      margin-bottom: 10px;
+      letter-spacing: 0.02em;
+    }
+    .hero-title span.highlight {
+      color: var(--azul-mar-suave);
+    }
+    .hero-subtitle {
+      font-size: 0.98rem;
+      max-width: 520px;
+      margin-bottom: 18px;
+      color: #37535a;
+    }
+    .hero-meta {
+      font-size: 0.86rem;
+      color: #355056;
+      margin-bottom: 20px;
+    }
+    .hero-meta strong {
+      color: var(--azul-mar);
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--azul-mar-suave), var(--azul-mar));
+      color: var(--blanco);
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 10px 24px rgba(6, 111, 138, 0.4);
+      transition: var(--transition-base);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 32px rgba(6, 111, 138, 0.45);
+    }
+    .btn-outline {
+      border-radius: 999px;
+      border: 1px solid rgba(6, 111, 138, 0.35);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--azul-mar);
+      padding: 9px 14px;
+      font-size: 0.86rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: var(--transition-base);
+    }
+    .btn-outline:hover {
+      background: var(--arena);
+      border-color: rgba(6, 111, 138, 0.5);
+    }
+    .hero-contact-line {
+      font-size: 0.82rem;
+      color: #355056;
+    }
+    .hero-contact-line strong {
+      color: var(--azul-mar);
+    }
+    .hero-contact-line span {
+      color: #1d5e35;
+      font-weight: 600;
+    }
+    .hero-visual {
+      position: relative;
+    }
+    .hero-main-card {
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: var(--sombra-suave);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      background: var(--blanco);
+    }
+    .hero-main-image {
+      position: relative;
+      overflow: hidden;
+      max-height: 260px;
+    }
+    .hero-main-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.03);
+      transition: transform 12s ease-out;
+    }
+    .hero-main-card:hover img {
+      transform: scale(1.08);
+    }
+    .hero-main-caption {
+      padding: 12px 14px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .hero-main-caption h2 {
+      font-size: 0.98rem;
+      color: var(--azul-mar);
+      margin-bottom: 2px;
+    }
+    .hero-main-caption p {
+      font-size: 0.82rem;
+      color: #486870;
+    }
+    .hero-badge {
+      background: rgba(26, 143, 90, 0.08);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.7rem;
+      color: var(--verde-tropical);
+      border: 1px solid rgba(26, 143, 90, 0.25);
+      white-space: nowrap;
+    }
+    .section-title {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+      color: #054c60;
+      text-align: center;
+    }
+    .section-subtitle {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #5c7075;
+      max-width: 520px;
+      margin: 0 auto 30px;
+    }
+    .galeria-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    @media (min-width: 768px) {
+      .galeria-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+    .galeria-item {
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    }
+    .galeria-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      max-height: 180px;
+    }
+    .galeria-item span {
+      position: absolute;
+      left: 6px;
+      bottom: 6px;
+      right: 6px;
+      font-size: 0.7rem;
+      color: var(--blanco);
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+    }
+    .servicios {
+      background: var(--arena-suave);
+      border-top: 1px solid rgba(255, 255, 255, 0.9);
+    }
+    .servicios-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .servicio-card {
+      background: var(--blanco);
+      padding: 14px;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      border: 1px solid rgba(255,255,255,0.9);
+      text-align: center;
+    }
+    .servicio-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: var(--azul-mar);
+    }
+    .servicio-card p {
+      font-size: 0.9rem;
+      color: #4a5f63;
+    }
+    .contacto {
+      background: linear-gradient(135deg, #e1f6ff 0%, #f8fff5 52%, #fffaf1 100%);
+      border-top: 1px solid rgba(255, 255, 255, 0.9);
+    }
+    .contacto-layout {
+      display: grid;
+      gap: 24px;
+    }
+    @media (min-width: 900px) {
+      .contacto-layout {
+        grid-template-columns: 1.05fr 1.1fr;
+        align-items: start;
+      }
+    }
+    .contacto-card {
+      background: var(--blanco);
+      border-radius: 18px;
+      padding: 14px 14px 12px;
+      box-shadow: var(--sombra-suave);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      font-size: 0.88rem;
+    }
+    .contacto-row {
+      margin-bottom: 10px;
+    }
+    .contacto-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #72888e;
+      margin-bottom: 2px;
+    }
+    .contacto-value {
+      color: #2f464c;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      align-items: center;
+    }
+    .contacto-value strong {
+      color: var(--azul-mar);
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(26, 143, 90, 0.08);
+      color: var(--verde-tropical);
+    }
+    .contacto-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .btn-ghost {
+      border-radius: 999px;
+      border: 1px dashed rgba(6, 111, 138, 0.5);
+      background: transparent;
+      color: var(--azul-mar);
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: var(--transition-base);
+    }
+    .btn-ghost:hover {
+      background: rgba(6, 111, 138, 0.06);
+    }
+    .map-wrapper {
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--sombra-suave);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      background: #dcedf2;
+      min-height: 260px;
+    }
+    .map-iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 260px;
+      border: none;
+    }
+    .recomendacion {
+      background: #042f3b;
+      color: var(--blanco);
+      padding: 36px 0 48px;
+    }
+    .recomendacion-card {
+      background: linear-gradient(135deg, rgba(6, 111, 138, 0.6), rgba(26, 143, 90, 0.55));
+      border-radius: 22px;
+      padding: 16px 18px 14px;
+      max-width: 720px;
+      margin: 0 auto;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+    }
+    .recomendacion-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+    .recomendacion-card p {
+      font-size: 0.9rem;
+      margin-bottom: 2px;
+    }
+    .recomendacion-card strong {
+      color: #ffeac0;
+    }
+    .recomendacion-contact {
+      margin-top: 8px;
+      font-size: 0.88rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .recomendacion-contact a {
+      background: var(--arena);
+      color: var(--azul-mar);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    footer {
+      background: #021a21;
+      color: #c7d6da;
+      padding: 12px 0 18px;
+      font-size: 0.75rem;
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .footer-inner a {
+      color: #dff4ff;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .whatsapp-float {
+      position: fixed;
+      bottom: 18px;
+      right: 16px;
+      z-index: 9999;
+    }
+    .whatsapp-button {
+      background: #25d366;
+      color: #ffffff;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .whatsapp-button:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.42);
+    }
+    .whatsapp-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      position: relative;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .whatsapp-icon::before {
+      content: "";
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #25d366;
+      position: absolute;
+    }
+    .whatsapp-icon::after {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid #25d366;
+      border-top-color: transparent;
+      border-left-color: transparent;
+      transform: rotate(25deg);
+      position: absolute;
+      top: 10px;
+      left: 14px;
+    }
+    .whatsapp-label {
+      position: absolute;
+      right: 72px;
+      bottom: 16px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.78);
+      color: #ffffff;
+      font-size: 0.72rem;
+      white-space: nowrap;
+    }
+    @media (max-width: 480px) {
+      .whatsapp-button {
+        width: 58px;
+        height: 58px;
+      }
+      .whatsapp-label {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navegación fija -->
+  <header>
+    <div class="nav">
+      <a href="#inicio" class="nav-logo">
+        <img src="https://i.ibb.co/v41wsS3R/5026483222916827919-removebg-preview.png" alt="Logo Hostal El Anzuelo" />
+        <div class="nav-logo-text">
+          <span>Hostal El Anzuelo</span>
+          <span>Barra de Tecoanapa · Guerrero</span>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="#galeria">Galería</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <div class="nav-cta">
+        <a href="https://wa.me/527411006898" target="_blank" rel="noopener">Reservar por WhatsApp</a>
+      </div>
+      <div class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    <div class="nav-menu-mobile" id="navMenuMobile">
+      <a href="#galeria">Galería</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#contacto">Contacto</a>
+      <div class="mobile-cta">
+        <a href="https://wa.me/527411006898" target="_blank" rel="noopener">
+          💬 Reservar por WhatsApp
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main id="inicio">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="hero-eyebrow">
+            <span class="dot"></span>
+            <span>Hospedaje junto al río</span>
+          </div>
+          <h1 class="hero-title">
+            Descansa bajo el cielo costeño en <span class="highlight">Hostal El Anzuelo</span>.
+          </h1>
+          <p class="hero-subtitle">
+            Habitaciones cómodas, ventiladas y con baño privado, a solo 5 minutos caminando de Palapa La Sirenita.
+          </p>
+          <p class="hero-meta">
+            Ubicados en <strong>Barra de Tecoanapa, Guerrero, México</strong>.
+          </p>
+          <div class="hero-actions">
+            <a class="btn-primary" href="https://wa.me/527411006898" target="_blank" rel="noopener">
+              💬 Reservar por WhatsApp
+            </a>
+            <a class="btn-outline" href="#servicios">
+              Ver servicios
+            </a>
+          </div>
+          <p class="hero-contact-line">
+            WhatsApp o llama al <strong>741 100 6898</strong> · <span>744 181 3068</span>.
+          </p>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-main-card">
+            <div class="hero-main-image">
+              <img src="https://i.ibb.co/DPQBy39F/b0083afa-21e2-468c-8a10-ac2b8f828d7d.jpg" alt="Exterior de Hostal El Anzuelo" />
+            </div>
+            <div class="hero-main-caption">
+              <div>
+                <h2>Exterior tranquilo</h2>
+                <p>Con estacionamiento y ambiente familiar, ideal para viajeros y familias.</p>
+              </div>
+              <div class="hero-badge">
+                ✅ Mascotas bienvenidas
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Galería -->
+    <section id="galeria">
+      <div class="container">
+        <h2 class="section-title">Galería del hostal</h2>
+        <p class="section-subtitle">
+          Así se ve tu descanso en la Barra de Tecoanapa: simple, fresco y auténtico.
+        </p>
+        <div class="galeria-grid">
+          <div class="galeria-item">
+            <img src="https://i.ibb.co/qYHqZwDP/91ad94d5-0fe6-4e9b-ad57-a4874d728b78.jpg" alt="Habitación con ventilador" />
+            <span>Habitación con ventilador</span>
+          </div>
+          <div class="galeria-item">
+            <img src="https://i.ibb.co/b5sKC5B1/bd020689-81a4-448c-b899-84f3bc0a0398.jpg" alt="Interior del hostal" />
+            <span>Área común interior</span>
+          </div>
+          <div class="galeria-item">
+            <img src="https://i.ibb.co/N6kJHSrV/6673ca16-f3a1-4a9d-8c4e-9c809a45cd8a.jpg" alt="Otra vista interior" />
+            <span>Detalle acogedor</span>
+          </div>
+          <div class="galeria-item">
+            <img src="https://i.ibb.co/pr55SrHr/36327938-ead6-48b4-9b63-4d7c25b18fac.jpg" alt="Baño privado limpio" />
+            <span>Baño privado</span>
+          </div>
+          <div class="galeria-item">
+            <img src="https://i.ibb.co/ynFxgkjv/718b02a0-a39a-4fd4-98aa-644f27f542ac.jpg" alt="Vista desde afuera" />
+            <span>Ambiente natural</span>
+          </div>
+          <div class="galeria-item">
+            <img src="https://i.ibb.co/rGd4wqvT/0e9187ea-3cfc-4671-ad91-93b89efb02bd.jpg" alt="Interior fresco" />
+            <span>Interior ventilado</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Servicios -->
+    <section id="servicios" class="servicios">
+      <div class="container">
+        <h2 class="section-title">Servicios</h2>
+        <p class="section-subtitle">
+          Todo lo que necesitas para un descanso sencillo y cómodo.
+        </p>
+        <div class="servicios-grid">
+          <div class="servicio-card">
+            <h3>Habitación</h3>
+            <p>Ventilador de techo, camas cómodas y ventilación natural.</p>
+          </div>
+          <div class="servicio-card">
+            <h3>Baño privado</h3>
+            <p>Limpio, con agua fría y caliente.</p>
+          </div>
+          <div class="servicio-card">
+            <h3>Estacionamiento</h3>
+            <p>Seguro y gratuito en el frente del hostal.</p>
+          </div>
+          <div class="servicio-card">
+            <h3>Mascotas</h3>
+            <p>¡Bienvenidas! (bajo supervisión del dueño).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contacto y mapa -->
+    <section id="contacto" class="contacto">
+      <div class="container">
+        <h2 class="section-title">Contacto y ubicación</h2>
+        <p class="section-subtitle">
+          Estamos a solo 5 minutos caminando de Palapa La Sirenita.
+        </p>
+        <div class="contacto-layout">
+          <div class="contacto-card">
+            <div class="contacto-row">
+              <div class="contacto-label">Teléfonos / WhatsApp</div>
+              <div class="contacto-value">
+                <span><strong>741 100 6898</strong></span>
+                <span>·</span>
+                <span>744 181 3068</span>
+              </div>
+              <div class="contacto-actions">
+                <a class="btn-ghost" href="https://wa.me/527411006898" target="_blank" rel="noopener">💬 WhatsApp</a>
+                <a class="btn-ghost" href="tel:+527411006898">📞 Llamar</a>
+              </div>
+            </div>
+            <div class="contacto-row">
+              <div class="contacto-label">Redes sociales</div>
+              <div class="contacto-value">
+                <a href="https://www.facebook.com/HostalElAnzuelo/" target="_blank" rel="noopener">Facebook</a>
+                <span>·</span>
+                <a href="https://www.instagram.com/hostalelanzuelo" target="_blank" rel="noopener">Instagram</a>
+              </div>
+            </div>
+            <div class="contacto-row">
+              <div class="contacto-label">Dirección</div>
+              <div class="contacto-value">
+                Barra de Tecoanapa, Guerrero, México
+              </div>
+            </div>
+          </div>
+          <div class="map-wrapper">
+            <iframe
+              class="map-iframe"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3761.7000000000007!2d-98.7310466!3d16.5063076!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85c9db8ae45b5b77%3A0x9124681d4b8bff42!2sHostal%20%22El%20Anzuelo%22!5e0!3m2!1ses!2smx!4v1733680000000">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recomendación Palapa La Sirenita -->
+    <section class="recomendacion">
+      <div class="container">
+        <div class="recomendacion-card">
+          <h3>¿Buscas un restaurante?</h3>
+          <p>Te recomendamos <strong>Palapa La Sirenita</strong> — a solo 5 minutos caminando.</p>
+          <p>Mariscos frescos, pescado a la talla, paseos en lancha y ambiente costeño.</p>
+          <div class="recomendacion-contact">
+            <span>¡Ideal para comer antes o después de descansar!</span>
+            <a href="/palapa-la-sirenita" target="_blank">
+              🦞 Ver Palapa La Sirenita
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> Hostal El Anzuelo · Barra de Tecoanapa, Guerrero.</span>
+      <span>Sitio optimizado para celular.</span>
+    </div>
+  </footer>
+
+  <!-- WhatsApp flotante -->
+  <div class="whatsapp-float">
+    <a class="whatsapp-button" href="https://wa.me/527411006898" target="_blank" rel="noopener" aria-label="Chatear por WhatsApp con Hostal El Anzuelo">
+      <div class="whatsapp-icon"></div>
+    </a>
+    <div class="whatsapp-label">
+      Reservar por WhatsApp
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const navToggle = document.getElementById('navToggle');
+    const navMenuMobile = document.getElementById('navMenuMobile');
+    navToggle.addEventListener('click', function () {
+      const isExpanded = this.getAttribute('aria-expanded') === 'true';
+      this.setAttribute('aria-expanded', String(!isExpanded));
+      navMenuMobile.style.display = isExpanded ? 'none' : 'flex';
+    });
+    Array.from(navMenuMobile.querySelectorAll('a')).forEach(link => {
+      link.addEventListener('click', () => {
+        navMenuMobile.style.display = 'none';
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  </script>
+</body>
+</html>
+
