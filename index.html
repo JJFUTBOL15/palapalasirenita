@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Palapa La Sirenita | Mariscos Frescos en Barra de Tecoanapa</title>
+  <meta name="description" content="Mariscos frescos en Barra de Tecoanapa, Guerrero. Pescado a la talla, langosta a la diabla, camarones al ajillo y el famoso pescado al chingadazo.">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root { --mar:#006ba6; --arena:#e76f51; --palma:#2a9d8f; --crema:#fff8f0; --rojo:#e74c3c; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Montserrat',sans-serif;background:var(--crema);color:#333;line-height:1.6;}
+    header{background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.7)), url('https://i.ibb.co/Djn9zFC/IMG-6737.jpg') center/cover no-repeat;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:white;position:relative;}
+    .logo{width:260px;margin-bottom:20px;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.6));}
+    h1{font-family:'Pacifico',cursive;font-size:5.8rem;margin:0;color:white;text-shadow:4px 4px 15px rgba(0,0,0,0.8);}
+    .sub{font-family:'Dancing Script',cursive;font-size:2.9rem;}
+    nav{background:var(--palma);padding:16px 0;position:sticky;top:0;z-index:100;box-shadow:0 4px 15px rgba(0,0,0,0.2);}
+    nav ul{list-style:none;display:flex;justify-content:center;flex-wrap:wrap;gap:18px;}
+    nav a{color:white;text-decoration:none;padding:12px 24px;font-weight:600;border-radius:8px;transition:0.3s;}
+    nav a:hover{background:var(--mar);}
+    section{padding:90px 20px;max-width:1350px;margin:0 auto;}
+    h2{font-family:'Pacifico',cursive;font-size:3.8rem;text-align:center;margin-bottom:60px;color:var(--mar);}
+    .menu-categoria{margin-bottom:50px;}
+    .menu-categoria h3{font-family:'Pacifico',cursive;font-size:2.4rem;color:var(--arena);margin-bottom:25px;text-align:center;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:25px;}
+    .platillo{background:white;padding:20px;border-radius:15px;box-shadow:0 8px 20px rgba(0,0,0,0.12);text-align:center;transition:0.3s;}
+    .platillo:hover{transform:translateY(-8px);box-shadow:0 15px 30px rgba(0,0,0,0.2);}
+    .platillo strong{font-size:1.25rem;display:block;margin-bottom:8px;}
+    .precio{color:var(--rojo);font-weight:bold;font-size:1.4rem;}
+    .destacado .platillo{border:4px solid var(--arena);box-shadow:0 12px 30px rgba(231,112,81,0.3);}
+    .reseñas{background:#f8f9fa;}
+    .reseña{background:white;padding:28px;margin:25px auto;max-width:750px;border-radius:18px;box-shadow:0 6px 18px rgba(0,0,0,0.1);font-style:italic;}
+    .stars{color:#f39c12;font-size:1.8rem;margin-bottom:10px;}
+    .hostal{background:var(--palma);color:white;text-align:center;padding:80px 20px;}
+    footer{background:var(--mar);color:white;text-align:center;padding:60px 20px;}
+    .whatsapp{position:fixed;bottom:25px;right:25px;background:#25D366;color:white;width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;box-shadow:0 6px 20px rgba(0,0,0,0.4);z-index:1000;text-decoration:none;}
+    @media(max-width:768px){h1{font-size:4rem;}.sub{font-size:2.2rem;}h2{font-size:3rem;}}
+  </style>
+</head>
+<body>
+
+  <header id="inicio">
+    <img src="https://i.ibb.co/gXdTC9H/IMG-6725-removebg-preview.png" alt="Palapa La Sirenita" class="logo">
+    <h1>Palapa La Sirenita</h1>
+    <p class="sub">Sabor costeño directo del mar</p>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#destacados">Platillos estrella</a></li>
+      <li><a href="#menu">Menú</a></li>
+      <li><a href="#reseñas">Reseñas</a></li>
+      <li><a href="#ubicacion">Ubicación</a></li>
+      <li><a href="#hostal">¿Dónde dormir?</a></li>
+    </ul>
+  </nav>
+
+  <!-- 5 ESTRELLAS -->
+  <section id="destacados" class="destacado">
+    <h2>Los más pedidos</h2>
+    <div class="grid">
+      <div class="platillo"><img src="https://i.ibb.co/Y4xxCyX5/IMG-6731.jpg" alt="" style="width:100%;border-radius:12px;margin-bottom:15px;"><strong>Pescado a la Talla</strong><p class="precio">Por definir</p></div>
+      <div class="platillo"><img src="https://i.ibb.co/d0rQsTXK/IMG-6721.jpg" alt="" style="width:100%;border-radius:12px;margin-bottom:15px;"><strong>Langosta a la Diabla</strong><p class="precio">Por definir</p></div>
+      <div class="platillo"><img src="https://i.ibb.co/gLVjW9YH/IMG-6728.jpg" alt="" style="width:100%;border-radius:12px;margin-bottom:15px;"><strong>Langosta a la Mantequilla</strong><p class="precio">Por definir</p></div>
+      <div class="platillo"><img src="https://i.ibb.co/gLx4nNwF/IMG-6723.jpg" alt="" style="width:100%;border-radius:12px;margin-bottom:15px;"><strong>Camarones al Ajillo</strong><p class="precio">Por definir</p></div>
+      <div class="platillo"><img src="https://i.ibb.co/G4p8pGKK/IMG-6722.jpg" alt="" style="width:100%;border-radius:12px;margin-bottom:15px;"><strong>Caldo de Mariscos</strong><p class="precio">Por definir</p></div>
+    </div>
+  </section>
+
+  <!-- MENÚ COMPLETO POR SECCIONES -->
+  <section id="menu" style="background:#f8f9fa;">
+    <h2>Menú completo</h2>
+
+    <div class="menu-categoria">
+      <h3>Pescados</h3>
+      <div class="grid">
+        <div class="platillo"><strong>Pescado a la Talla (según tamaño)</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Pescado a la Talla de orden</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Pescado a la Braza (según tamaño)</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Pescado Frito</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Pescado al Mojo de Ajo</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Pescado al Ajillo</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Pescado a la Diabla</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Pescado al Chingadazo</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Pescado a la Mexicana</strong><p class="precio">Por definir</p></div>
+      </div>
+    </div>
+
+    <div class="menu-categoria">
+      <h3>Camarones</h3>
+      <div class="grid">
+        <div class="platillo"><strong>Camarones Empanizados</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Camarones al Ajillo</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Camarones al Mojo de Ajo</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Camarones a la Diabla</strong><p class="precio">Por definir</p></div>
+      </div>
+    </div>
+
+    <div class="menu-categoria">
+      <h3>Langosta</h3>
+      <div class="grid">
+        <div class="platillo"><strong>Langosta a la Diabla</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Langosta a la Mantequilla</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Langosta al Mojo</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Langosta al Chingadazo</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Langosta al Ajillo</strong><p class="precio">Por definir</p></div>
+      </div>
+    </div>
+
+    <div class="menu-categoria">
+      <h3>Caldos y más</h3>
+      <div class="grid">
+        <div class="platillo"><strong>Caldo de Camarón</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Caldo de Pescado</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Caldo de Mariscos</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Filete Empanizado</strong><p class="precio">Por definir</p></div>
+      </div>
+    </div>
+
+    <div class="menu-categoria">
+      <h3>Botanas</h3>
+      <div class="grid">
+        <div class="platillo"><strong>Pulpo Enamorado</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Ceviche</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Campechanas</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Pescadillas</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Sopes</strong><p class="precio">Por definir</p></div>
+      </div>
+    </div>
+
+    <div class="menu-categoria">
+      <h3>Bebidas</h3>
+      <div class="grid">
+        <div class="platillo"><strong>Cerveza Victoria</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Cerveza Corona</strong><p class="precio">Por definir</p></div>
+        <div class="platillo"><strong>Refrescos / Cocos fríos / Agua</strong><p class="precio">Por definir</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEÑAS, MAPA, HOSTAL y FOOTER quedan igual que antes -->
+  <!-- (los dejo tal cual para no alargar el mensaje, pero están incluidos en el código completo que te paso abajo) -->
+
+  <section id="reseñas" class="reseñas">
+    <h2>Lo que dicen de nosotros</h2>
+    <div class="reseña"><p class="stars">★★★★★</p><p>“Excelente comida, mariscos frescos y con servicio de paseo en lancha”<br><strong>— Daniel Mendiola</strong></p></div>
+    <div class="reseña"><p class="stars">★★★★★</p><p>“Muy buen servicio. Muy agradecido con el amigo Javier y su familia.”<br><strong>— Juve López</strong></p></div>
+    <div class="reseña"><p class="stars">★★★★★</p><p>“Buen lugar para comer en familia”<br><strong>— Esteban Castelan</strong></p></div>
+    <div class="reseña"><p class="stars">★★★★★</p><p>“Food: 5 · Service: 5 · Atmosphere: 5”<br><strong>— Pelon Gomez</strong></p></div>
+  </section>
+
+  <section id="ubicacion">
+    <h2>¿Cómo llegar?</h2>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3829.78!2d-98.734851!3d16.5092!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTbCsDMwJzMzLjEiTiA5OMKwNDQnMDUuNCJX!5e0!3m2!1ses!2smx!4v1733760000000" width="100%" height="480" style="border:0;border-radius:18px;margin-top:30px;" allowfullscreen="" loading="lazy"></iframe>
+  </section>
+
+  <section id="hostal" class="hostal">
+    <h2>¿No encuentras dónde quedarte?</h2>
+    <h3 style="font-size:2.4rem;margin:30px 0;color:#fff8f0;">Hostal El Anzuelo</h3>
+    <p style="font-size:1.4rem;max-width:800px;margin:0 auto 35px;">A solo 5 minutos caminando de la palapa<br>Habitaciones con ventilador, baño privado y ambiente costeño</p>
+    <a href="https://wa.me/527411250485" style="background:#25D366;color:white;padding:20px 45px;border-radius:50px;font-size:1.5rem;text-decoration:none;font-weight:bold;">Reservar Hostal → WhatsApp</a>
+  </section>
+
+  <footer>
+    <h2>Palapa La Sirenita</h2>
+    <p>Barra de Tecoanapa, Guerrero</p>
+    <p>WhatsApp / Tel: <a href="tel:+527411250485" style="color:white;">741 125 0485</a> • <a href="tel:+527449099848" style="color:white;">744 909 9848</a></p>
+    <p><a href="https://www.facebook.com/p/Palapa-La-sirenita-Barra-de-tecoanapa-Guerrero-100063829152591/" target="_blank" style="color:white;text-decoration:underline;">Facebook</a></p>
+  </footer>
+
+  <a href="https://wa.me/527411250485" class="whatsapp" target="_blank">WhatsApp</a>
+
+</body>
+</html>
