@@ -4,95 +4,226 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>JJADMINISTRACION</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    :root {
+      --primary: #1a73e8;
+      --success: #34a853;
+      --danger: #ea4335;
+      --light: #f8f9fa;
+      --dark: #202124;
+      --card: white;
+      --border: #e0e0e0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      background: #f8f9fa;
-      color: #212121;
+      background: var(--light);
+      color: var(--dark);
+      padding: 16px;
     }
-    h1, h2 {
+    .container { max-width: 700px; margin: 0 auto; }
+    header {
       text-align: center;
-      color: #1a73e8;
+      margin: 16px 0 24px;
+    }
+    h1 {
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 28px;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .summary {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      margin-top: 12px;
+    }
+    .summary-item {
+      padding: 8px;
+    }
+    .summary-value {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .ingresos { color: var(--success); }
+    .gastos { color: var(--danger); }
+    .saldo {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 10px 0;
+    }
+    canvas {
+      max-width: 100%;
+      margin: 16px 0;
     }
     input, select, button {
       width: 100%;
       padding: 12px;
       margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      box-sizing: border-box;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 16px;
     }
     button {
-      background: #1a73e8;
+      background: var(--primary);
       color: white;
       border: none;
-      font-weight: bold;
+      font-weight: 600;
       cursor: pointer;
     }
     button:hover { opacity: 0.9; }
-    button.logout {
-      background: #ea4335;
+    .btn-danger { background: var(--danger); }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
     }
     ul {
       list-style: none;
       padding: 0;
     }
     li {
-      padding: 12px;
-      margin: 8px 0;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 14px;
+      margin: 10px 0;
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .ingreso { border-left: 4px solid #34a853; }
-    .gasto { border-left: 4px solid #ea4335; }
+    .item-ingreso { border-left: 4px solid var(--success); }
+    .item-gasto { border-left: 4px solid var(--danger); }
+    .item-info { flex: 1; }
+    .item-actions button {
+      padding: 4px 8px;
+      font-size: 14px;
+      border-radius: 6px;
+    }
     .hidden { display: none; }
-    #user-info {
-      text-align: center;
-      margin: 16px 0;
-      font-weight: bold;
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .filters select {
+      flex: 1;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white; }
+      .card { box-shadow: none; border: 1px solid #ccc; }
     }
   </style>
 </head>
 <body>
-  <h1>JJADMINISTRACION</h1>
+  <div class="container">
+    <header>
+      <h1>JJADMINISTRACION</h1>
+    </header>
 
-  <!-- Pantalla de autenticación -->
-  <div id="auth-section">
-    <input type="email" id="email" placeholder="Correo electrónico" />
-    <input type="password" id="password" placeholder="Contraseña (mín. 6 caracteres)" />
-    <button id="btn-login">Iniciar sesión</button>
-    <button id="btn-register">Crear cuenta</button>
+    <!-- Pantalla de autenticación -->
+    <div id="auth-section">
+      <div class="card">
+        <input type="email" id="email" placeholder="Correo electrónico" />
+        <input type="password" id="password" placeholder="Contraseña (mín. 6 caracteres)" />
+        <button id="btn-login">Iniciar sesión</button>
+        <button id="btn-register">Crear cuenta</button>
+      </div>
+    </div>
+
+    <!-- App principal -->
+    <div id="app-section" class="hidden no-print">
+      <div class="card">
+        <div id="user-info" style="text-align: center; margin-bottom: 12px;"></div>
+        <button id="btn-logout" class="btn-danger">Cerrar sesión</button>
+      </div>
+
+      <!-- Filtros -->
+      <div class="card no-print">
+        <div class="filters">
+          <select id="mes-filtro">
+            <option value="0">Enero</option>
+            <option value="1">Febrero</option>
+            <option value="2">Marzo</option>
+            <option value="3">Abril</option>
+            <option value="4">Mayo</option>
+            <option value="5">Junio</option>
+            <option value="6">Julio</option>
+            <option value="7">Agosto</option>
+            <option value="8">Septiembre</option>
+            <option value="9">Octubre</option>
+            <option value="10">Noviembre</option>
+            <option value="11">Diciembre</option>
+          </select>
+          <select id="anio-filtro"></select>
+        </div>
+      </div>
+
+      <!-- Resumen financiero -->
+      <div class="card">
+        <div class="summary">
+          <div class="summary-item">
+            <div>Ingresos</div>
+            <div class="summary-value ingresos" id="total-ingresos">$0.00</div>
+          </div>
+          <div class="summary-item">
+            <div>Gastos</div>
+            <div class="summary-value gastos" id="total-gastos">$0.00</div>
+          </div>
+        </div>
+        <div class="saldo" id="saldo-total">$0.00</div>
+      </div>
+
+      <!-- Gráfico -->
+      <div class="card">
+        <h3 style="text-align: center; margin-bottom: 12px;">Gastos por categoría</h3>
+        <canvas id="gastosChart"></canvas>
+      </div>
+
+      <!-- Formulario -->
+      <div class="card no-print">
+        <h3>Agregar movimiento</h3>
+        <select id="tipo">
+          <option value="ingreso">Ingreso</option>
+          <option value="gasto">Gasto</option>
+        </select>
+        <input type="number" id="monto" step="0.01" min="0.01" placeholder="Monto" required />
+        <input type="text" id="categoria" placeholder="Categoría" required />
+        <button id="btn-agregar">Agregar</button>
+      </div>
+
+      <!-- Acciones de impresión -->
+      <div class="card no-print" style="text-align: center;">
+        <button id="btn-imprimir" class="btn-outline">🖨️ Imprimir reporte</button>
+      </div>
+
+      <!-- Lista de movimientos -->
+      <div class="card">
+        <h3>Mis movimientos</h3>
+        <ul id="lista-movimientos">
+          <li>No tienes movimientos aún.</li>
+        </ul>
+      </div>
+    </div>
   </div>
 
-  <!-- App principal -->
-  <div id="app-section" class="hidden">
-    <div id="user-info"></div>
-    <button id="btn-logout" class="logout">Cerrar sesión</button>
-
-    <h2>Agregar movimiento</h2>
-    <select id="tipo">
-      <option value="ingreso">Ingreso</option>
-      <option value="gasto">Gasto</option>
-    </select>
-    <input type="number" id="monto" step="0.01" min="0.01" placeholder="Monto" required />
-    <input type="text" id="categoria" placeholder="Categoría (ej: salario, comida)" required />
-    <button id="btn-agregar">Agregar</button>
-
-    <h2>Mis movimientos</h2>
-    <ul id="lista-movimientos"></ul>
-  </div>
-
-  <!-- Firebase desde CDN (modo compat) -->
+  <!-- Firebase CDN -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
   <script>
-    // 🔑 Configuración de Firebase (NO CAMBIES ESTO)
+    // 🔑 Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyCR5UayNNMBEOs1-TZ_-zHMPEoJIDYGTp0",
       authDomain: "miapppelis-f4eee.firebaseapp.com",
@@ -102,74 +233,80 @@
       appId: "1:289806130895:web:c70c56293fb764ff7f21ba",
       measurementId: "G-NTJ62Z1LKF"
     };
-
-    // Inicializar Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // Referencias al DOM
+    // DOM
     const authSection = document.getElementById('auth-section');
     const appSection = document.getElementById('app-section');
     const userInfo = document.getElementById('user-info');
     const lista = document.getElementById('lista-movimientos');
+    const btnImprimir = document.getElementById('btn-imprimir');
+    const mesFiltro = document.getElementById('mes-filtro');
+    const anioFiltro = document.getElementById('anio-filtro');
 
-    // === EVENTOS DE AUTENTICACIÓN ===
+    // === Auth ===
     document.getElementById('btn-login').addEventListener('click', () => {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      if (!email || !password) {
-        alert('Completa todos los campos');
-        return;
-      }
-      auth.signInWithEmailAndPassword(email, password)
-        .catch(err => alert('Error: ' + err.message));
+      if (!email || !password) return alert('Completa todos los campos');
+      auth.signInWithEmailAndPassword(email, password).catch(err => alert(err.message));
     });
 
     document.getElementById('btn-register').addEventListener('click', () => {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      if (!email || !password || password.length < 6) {
-        alert('La contraseña debe tener al menos 6 caracteres');
-        return;
-      }
-      auth.createUserWithEmailAndPassword(email, password)
-        .catch(err => alert('Error: ' + err.message));
+      if (!email || !password || password.length < 6) return alert('Contraseña mín. 6 caracteres');
+      auth.createUserWithEmailAndPassword(email, password).catch(err => alert(err.message));
     });
 
-    document.getElementById('btn-logout').addEventListener('click', () => {
-      auth.signOut();
-    });
+    document.getElementById('btn-logout').addEventListener('click', () => auth.signOut());
 
-    // === ESCUCHADOR DE SESIÓN ===
+    // === App ===
+    let chart = null;
+    let currentUID = null;
+
     auth.onAuthStateChanged(user => {
       if (user) {
-        userInfo.textContent = `¡Hola, ${user.email}!`;
+        currentUID = user.uid;
+        userInfo.textContent = user.email;
         authSection.classList.add('hidden');
         appSection.classList.remove('hidden');
-        cargarMovimientos(user.uid);
+        setupFiltros();
+        cargarMovimientos();
       } else {
+        currentUID = null;
         authSection.classList.remove('hidden');
         appSection.classList.add('hidden');
       }
     });
 
-    // === FUNCIONALIDAD PRINCIPAL ===
-    document.getElementById('btn-agregar').addEventListener('click', () => {
-      const user = auth.currentUser;
-      if (!user) return;
+    function setupFiltros() {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      anioFiltro.innerHTML = '';
+      for (let y = currentYear; y >= currentYear - 3; y--) {
+        const opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = y;
+        if (y === currentYear) opt.selected = true;
+        anioFiltro.appendChild(opt);
+      }
+      mesFiltro.value = now.getMonth();
 
+      mesFiltro.addEventListener('change', cargarMovimientos);
+      anioFiltro.addEventListener('change', cargarMovimientos);
+    }
+
+    document.getElementById('btn-agregar').addEventListener('click', () => {
       const tipo = document.getElementById('tipo').value;
       const monto = parseFloat(document.getElementById('monto').value);
       const categoria = document.getElementById('categoria').value.trim();
-
-      if (!monto || monto <= 0 || !categoria) {
-        alert('Ingresa un monto válido y categoría');
-        return;
-      }
-
+      if (!monto || monto <= 0 || !categoria) return alert('Datos inválidos');
+      
       db.collection('movimientos').add({
-        uid: user.uid,
+        uid: currentUID,
         tipo,
         monto,
         categoria,
@@ -177,39 +314,126 @@
       }).then(() => {
         document.getElementById('monto').value = '';
         document.getElementById('categoria').value = '';
-      }).catch(err => alert('Error al guardar: ' + err.message));
+      }).catch(err => alert('Error: ' + err.message));
     });
 
-    // === CARGAR MOVIMIENTOS EN TIEMPO REAL ===
-    function cargarMovimientos(uid) {
+    btnImprimir.addEventListener('click', () => {
+      window.print();
+    });
+
+    function cargarMovimientos() {
+      if (!currentUID) return;
+
       lista.innerHTML = '<li>Cargando...</li>';
+      
+      const mes = parseInt(mesFiltro.value);
+      const anio = parseInt(anioFiltro.value);
+      
+      // Rango de fechas para el mes seleccionado
+      const start = new Date(anio, mes, 1);
+      const end = new Date(anio, mes + 1, 0, 23, 59, 59, 999);
+
       db.collection('movimientos')
-        .where('uid', '==', uid)
+        .where('uid', '==', currentUID)
+        .where('fecha', '>=', firebase.firestore.Timestamp.fromDate(start))
+        .where('fecha', '<=', firebase.firestore.Timestamp.fromDate(end))
         .orderBy('fecha', 'desc')
-        .limit(100)
         .onSnapshot(snapshot => {
-          lista.innerHTML = '';
-          if (snapshot.empty) {
-            lista.innerHTML = '<li>No tienes movimientos aún.</li>';
-            return;
-          }
-          snapshot.forEach(doc => {
-            const data = doc.data();
-            const li = document.createElement('li');
-            li.className = data.tipo === 'ingreso' ? 'ingreso' : 'gasto';
-            const signo = data.tipo === 'ingreso' ? '+' : '–';
-            const fecha = data.fecha?.seconds 
-              ? new Date(data.fecha.seconds * 1000).toLocaleDateString('es-ES')
-              : 'Sin fecha';
-            li.innerHTML = `
-              <strong>${signo} $${data.monto.toFixed(2)}</strong><br>
-              <small>${data.categoria} • ${fecha}</small>
-            `;
-            lista.appendChild(li);
-          });
-        }, err => {
-          lista.innerHTML = `<li>Error al cargar: ${err.message}</li>`;
+          renderMovimientos(snapshot.docs);
+        }, err => lista.innerHTML = `<li>Error: ${err.message}</li>`);
+    }
+
+    function renderMovimientos(docs) {
+      let ingresos = 0, gastos = 0;
+      const categorias = {};
+      const movimientos = [];
+
+      docs.forEach(doc => {
+        const data = doc.data();
+        movimientos.push({ id: doc.id, ...data });
+        if (data.tipo === 'ingreso') {
+          ingresos += data.monto;
+        } else {
+          gastos += data.monto;
+          categorias[data.categoria] = (categorias[data.categoria] || 0) + data.monto;
+        }
+      });
+
+      // Actualizar resumen
+      document.getElementById('total-ingresos').textContent = `$${ingresos.toFixed(2)}`;
+      document.getElementById('total-gastos').textContent = `$${gastos.toFixed(2)}`;
+      document.getElementById('saldo-total').textContent = `$${(ingresos - gastos).toFixed(2)}`;
+
+      // Actualizar lista
+      if (movimientos.length === 0) {
+        lista.innerHTML = '<li>No hay movimientos este mes.</li>';
+      } else {
+        lista.innerHTML = '';
+        movimientos.forEach(m => {
+          const li = document.createElement('li');
+          li.className = m.tipo === 'ingreso' ? 'item-ingreso' : 'item-gasto';
+          const fecha = m.fecha?.seconds ? new Date(m.fecha.seconds * 1000).toLocaleDateString() : '';
+          const signo = m.tipo === 'ingreso' ? '+' : '–';
+          li.innerHTML = `
+            <div class="item-info">
+              <strong>${signo}$${m.monto.toFixed(2)}</strong><br>
+              <small>${m.categoria} • ${fecha}</small>
+            </div>
+            <div class="item-actions">
+              <button class="btn-delete" data-id="${m.id}">🗑️</button>
+            </div>
+          `;
+          lista.appendChild(li);
         });
+        // Añadir evento a botones de eliminar
+        document.querySelectorAll('.btn-delete').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            if (confirm('¿Eliminar este movimiento?')) {
+              db.collection('movimientos').doc(e.target.dataset.id).delete();
+            }
+          });
+        });
+      }
+
+      // Actualizar gráfico
+      actualizarGrafico(categorias);
+    }
+
+    function actualizarGrafico(categorias) {
+      const ctx = document.getElementById('gastosChart').getContext('2d');
+      if (chart) chart.destroy();
+      
+      const labels = Object.keys(categorias);
+      const data = Object.values(categorias);
+      
+      if (labels.length === 0) {
+        document.getElementById('gastosChart').parentElement.innerHTML = '<p style="text-align:center;color:#888;">Sin datos de gastos</p>';
+        return;
+      }
+      
+      // Restaurar canvas
+      document.getElementById('gastosChart').parentElement.innerHTML = '<canvas id="gastosChart"></canvas>';
+      const newCtx = document.getElementById('gastosChart').getContext('2d');
+      
+      chart = new Chart(newCtx, {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{
+            data,
+            backgroundColor: [
+              '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom' }
+          }
+        }
+      });
     }
   </script>
 </body>
