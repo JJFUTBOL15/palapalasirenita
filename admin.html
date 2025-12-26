@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>JJADMINISTRACION</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>">
+  <link rel="icon" href="image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
@@ -15,6 +15,7 @@
       --dark: #202124;
       --card: white;
       --border: #e0e0e0;
+      --shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -22,6 +23,7 @@
       background: var(--light);
       color: var(--dark);
       padding: 16px;
+      line-height: 1.6;
     }
     .container { max-width: 700px; margin: 0 auto; }
     header {
@@ -32,26 +34,34 @@
       color: var(--primary);
       font-weight: 700;
       font-size: 28px;
+      letter-spacing: -0.5px;
     }
     .card {
       background: var(--card);
       border-radius: 16px;
       padding: 20px;
       margin-bottom: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease;
     }
+    .card:hover { transform: translateY(-2px); }
     .summary {
       display: flex;
       justify-content: space-around;
       text-align: center;
       margin-top: 12px;
+      gap: 10px;
     }
     .summary-item {
-      padding: 8px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #f1f3f4;
+      flex: 1;
     }
     .summary-value {
       font-size: 20px;
       font-weight: bold;
+      margin-top: 4px;
     }
     .ingresos { color: var(--success); }
     .gastos { color: var(--danger); }
@@ -72,6 +82,11 @@
       border: 1px solid var(--border);
       border-radius: 10px;
       font-size: 16px;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
     }
     button {
       background: var(--primary);
@@ -79,14 +94,18 @@
       border: none;
       font-weight: 600;
       cursor: pointer;
+      padding: 12px;
+      border-radius: 10px;
+      transition: all 0.2s;
     }
-    button:hover { opacity: 0.9; }
+    button:hover { opacity: 0.9; transform: scale(1.02); }
     .btn-danger { background: var(--danger); }
     .btn-outline {
       background: transparent;
       border: 1px solid var(--primary);
       color: var(--primary);
     }
+    .btn-outline:hover { background: var(--primary); color: white; }
     ul {
       list-style: none;
       padding: 0;
@@ -100,7 +119,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-left: 4px solid transparent;
+      transition: background 0.2s;
     }
+    li:hover { background: #f8f9fa; }
     .item-ingreso { border-left: 4px solid var(--success); }
     .item-gasto { border-left: 4px solid var(--danger); }
     .item-info { flex: 1; }
@@ -108,6 +130,7 @@
       padding: 4px 8px;
       font-size: 14px;
       border-radius: 6px;
+      margin-left: 4px;
     }
     .hidden { display: none; }
     .filters {
@@ -122,6 +145,21 @@
       .no-print { display: none !important; }
       body { background: white; }
       .card { box-shadow: none; border: 1px solid #ccc; }
+    }
+    .chart-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .chart-card {
+      flex: 1 1 45%;
+      min-width: 300px;
+    }
+    .chart-title {
+      text-align: center;
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: var(--dark);
     }
   </style>
 </head>
@@ -184,10 +222,19 @@
         <div class="saldo" id="saldo-total">$0.00</div>
       </div>
 
-      <!-- Gráfico -->
-      <div class="card">
-        <h3 style="text-align: center; margin-bottom: 12px;">Gastos por categoría</h3>
-        <canvas id="gastosChart"></canvas>
+      <!-- Gráficos -->
+      <div class="chart-container">
+        <!-- Gráfico de barras: Ingresos vs Gastos por mes -->
+        <div class="chart-card">
+          <div class="chart-title">Ingresos vs Gastos (mensuales)</div>
+          <canvas id="barChart"></canvas>
+        </div>
+
+        <!-- Gráfico circular: Gastos por categoría -->
+        <div class="chart-card">
+          <div class="chart-title">Gastos por categoría</div>
+          <canvas id="pieChart"></canvas>
+        </div>
       </div>
 
       <!-- Formulario -->
@@ -264,7 +311,8 @@
     document.getElementById('btn-logout').addEventListener('click', () => auth.signOut());
 
     // === App ===
-    let chart = null;
+    let barChart = null;
+    let pieChart = null;
     let currentUID = null;
 
     auth.onAuthStateChanged(user => {
@@ -395,27 +443,71 @@
         });
       }
 
-      // Actualizar gráfico
-      actualizarGrafico(categorias);
+      // Actualizar gráficos
+      actualizarGraficoBarras(ingresos, gastos);
+      actualizarGraficoCircular(categorias);
     }
 
-    function actualizarGrafico(categorias) {
-      const ctx = document.getElementById('gastosChart').getContext('2d');
-      if (chart) chart.destroy();
+    function actualizarGraficoBarras(ingresos, gastos) {
+      const ctx = document.getElementById('barChart').getContext('2d');
+      if (barChart) barChart.destroy();
+      
+      barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Ingresos', 'Gastos'],
+          datasets: [{
+            label: 'Monto ($)',
+            data: [ingresos, gastos],
+            backgroundColor: [
+              '#34a853',
+              '#ea4335'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return `$${context.raw.toFixed(2)}`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Monto ($)'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function actualizarGraficoCircular(categorias) {
+      const ctx = document.getElementById('pieChart').getContext('2d');
+      if (pieChart) pieChart.destroy();
       
       const labels = Object.keys(categorias);
       const data = Object.values(categorias);
       
       if (labels.length === 0) {
-        document.getElementById('gastosChart').parentElement.innerHTML = '<p style="text-align:center;color:#888;">Sin datos de gastos</p>';
+        document.getElementById('pieChart').parentElement.innerHTML = '<p style="text-align:center;color:#888;">Sin datos de gastos</p>';
         return;
       }
       
       // Restaurar canvas
-      document.getElementById('gastosChart').parentElement.innerHTML = '<canvas id="gastosChart"></canvas>';
-      const newCtx = document.getElementById('gastosChart').getContext('2d');
+      document.getElementById('pieChart').parentElement.innerHTML = '<canvas id="pieChart"></canvas>';
+      const newCtx = document.getElementById('pieChart').getContext('2d');
       
-      chart = new Chart(newCtx, {
+      pieChart = new Chart(newCtx, {
         type: 'doughnut',
         data: {
           labels,
@@ -430,7 +522,17 @@
         options: {
           responsive: true,
           plugins: {
-            legend: { position: 'bottom' }
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const value = context.raw;
+                  const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                  const percentage = ((value / total) * 100).toFixed(1);
+                  return `${context.label}: $${value.toFixed(2)} (${percentage}%)`;
+                }
+              }
+            }
           }
         }
       });
