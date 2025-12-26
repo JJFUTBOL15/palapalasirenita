@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JJADMINISTRACION</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f9f9f9;
+      color: #333;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+    button {
+      background: #1a73e8;
+      color: white;
+      border: none;
+      font-weight: bold;
+    }
+    button.logout {
+      background: #ea4335;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      padding: 12px;
+      margin: 6px 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .hidden { display: none; }
+    .ingreso { border-left: 4px solid #34a853; }
+    .gasto { border-left: 4px solid #ea4335; }
+  </style>
+</head>
+<body>
+  <h1>JJADMINISTRACION</h1>
+
+  <!-- Pantalla de login/registro -->
+  <div id="auth-section">
+    <input type="email" id="email" placeholder="Correo electrónico" />
+    <input type="password" id="password" placeholder="Contraseña" />
+    <button id="btn-login">Iniciar sesión</button>
+    <button id="btn-register">Crear cuenta</button>
+  </div>
+
+  <!-- App principal (solo si logueado) -->
+  <div id="app-section" class="hidden">
+    <div id="user-info"></div>
+    <button id="btn-logout" class="logout">Cerrar sesión</button>
+
+    <h2>Agregar movimiento</h2>
+    <select id="tipo">
+      <option value="ingreso">Ingreso</option>
+      <option value="gasto">Gasto</option>
+    </select>
+    <input type="number" id="monto" step="0.01" placeholder="Monto" required />
+    <input type="text" id="categoria" placeholder="Categoría (ej: comida, sueldo)" required />
+    <button id="btn-agregar">Agregar</button>
+
+    <h2>Mis movimientos</h2>
+    <ul id="lista-movimientos"></ul>
+  </div>
+
+  <!-- Firebase desde CDN (versión modular compatible) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <script>
+    // 🔑 Configuración de Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCR5UayNNMBEOs1-TZ_-zHMPEoJIDYGTp0",
+      authDomain: "miapppelis-f4eee.firebaseapp.com",
+      projectId: "miapppelis-f4eee",
+      storageBucket: "miapppelis-f4eee.firebasestorage.app",
+      messagingSenderId: "289806130895",
+      appId: "1:289806130895:web:c70c56293fb764ff7f21ba",
+      measurementId: "G-NTJ62Z1LKF"
+    };
+
+    // Inicializar Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Elementos del DOM
+    const authSection = document.getElementById('auth-section');
+    const appSection = document.getElementById('app-section');
+    const userInfo = document.getElementById('user-info');
+    const lista = document.getElementById('lista-movimientos');
+
+    // === AUTENTICACIÓN ===
+    document.getElementById('btn-login').addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      auth.signInWithEmailAndPassword(email, password)
+        .catch(alert);
+    });
+
+    document.getElementById('btn-register').addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      auth.createUserWithEmailAndPassword(email, password)
+        .catch(alert);
+    });
+
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      auth.signOut();
+    });
+
+    // === APP PRINCIPAL ===
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        // Usuario logueado
+        userInfo.textContent = `Hola, ${user.email}`;
+        authSection.classList.add('hidden');
+        appSection.classList.remove('hidden');
+        cargarMovimientos(user.uid);
+      } else {
+        // No logueado
+        authSection.classList.remove('hidden');
+        appSection.classList.add('hidden');
+      }
+    });
+
+    document.getElementById('btn-agregar').addEventListener('click', () => {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const tipo = document.getElementById('tipo').value;
+      const monto = parseFloat(document.getElementById('monto').value);
+      const categoria = document.getElementById('categoria').value.trim();
+
+      if (!monto || !categoria) {
+        alert('Completa todos los campos');
+        return;
+      }
+
+      db.collection('movimientos').add({
+        uid: user.uid,
+        tipo,
+        monto,
+        categoria,
+        fecha: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        document.getElementById('monto').value = '';
+        document.getElementById('categoria').value = '';
+        cargarMovimientos(user.uid);
+      }).catch(alert);
+    });
+
+    function cargarMovimientos(uid) {
+      lista.innerHTML = '';
+      db.collection('movimientos')
+        .where('uid', '==', uid)
+        .orderBy('fecha', 'desc')
+        .limit(50)
+        .onSnapshot(snapshot => {
+          lista.innerHTML = '';
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            const li = document.createElement('li');
+            li.className = data.tipo === 'ingreso' ? 'ingreso' : 'gasto';
+            const signo = data.tipo === 'ingreso' ? '+' : '–';
+            const formato = new Date(data.fecha?.seconds * 1000).toLocaleDateString();
+            li.innerHTML = `
+              <strong>${signo}${data.monto.toFixed(2)}</strong><br>
+              <small>${data.categoria} • ${formato}</small>
+            `;
+            lista.appendChild(li);
+          });
+        });
+    }
+  </script>
+</body>
+</html>
